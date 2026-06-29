@@ -1,37 +1,41 @@
-# PICO — *What Matters in Practical Learned Image Compression* (study + simulation)
+# PICO — *What Matters in Practical Learned Image Compression* (study notes + simulation)
 
-A learning companion for Apple's **PICO** paper,
+Reading notes + runnable concept demos for Apple's **PICO** paper,
 [*What Matters in Practical Learned Image Compression*](https://arxiv.org/abs/2605.05148)
-(arXiv:2605.05148). It **teaches the concepts** (see [`index.html`](index.html)) and ships small,
-**runnable Python demos** that simulate each idea the paper says matters.
+(arXiv:2605.05148, 2026). Built as a **teaching companion for undergraduates**: it explains the
+history of image compression, how PICO works, what matters, and how it's scored — backed by
+citations — and ships small **free/local Python demos** that simulate each idea.
 
-This is **not** a reproduction of the codec — it is an educational explainer. Everything runs
-**free and local** on CPU or Apple-MPS in seconds to a few minutes.
+This is **not** a reproduction of the codec; it is an educational explainer. Everything runs free and
+local on CPU or Apple-MPS in seconds to a few minutes.
 
----
+## The two pages (open these)
 
-## What PICO is (in one paragraph)
+- **[`index.html`](index.html)** — the reading notes: history → JPEG walkthrough → how PICO works step by
+  step → what matters → how it's scored → discussion questions → references.
+- **[`methodology.html`](methodology.html)** — a behind-the-scenes report (with workflow diagrams) on how
+  these notes were researched, built, and fact-checked, plus a faster parallel plan for next time.
 
-PICO is the first learned image codec that is both *practical* (fast enough to run on a phone) and
-optimised *directly for human perception* instead of PSNR. The paper is essentially a large ablation
-study: of all the design choices in a learned codec, which ones actually improve rate–distortion? It
-reports **2.3–3× bitrate savings vs AV1/AV2/VVC/ECM/JPEG-AI** and **20–40% vs prior learned codecs**
-in human studies, encoding a 12 MP image in ~230 ms on an iPhone 17 Pro Max.
+## What PICO is (one paragraph)
 
-## The "what matters" ranking (paper Table 1 — BD-rate increase when removed)
+PICO is the first *practical* learned image codec optimised *directly for human perception* instead of
+PSNR. The paper is a large ablation study — of all the design choices in a learned codec, which actually
+improve rate–distortion? It reports **2.3–3× bitrate savings vs AV1/AV2/VVC/ECM/JPEG-AI** and **20–40%
+vs prior learned codecs** in human studies, encoding a 12 MP image in as little as ~230 ms on an
+iPhone 17 Pro Max.
 
-| Component | BD-rate ↑ when removed | Simulated in |
+## "What matters" (paper Table 1 — BD-rate vs the naive alternative)
+
+| Design choice | BD-rate | Simulated in |
 |---|---|---|
-| Conv + **Haar resampling** | ~19.5% | `demo2` |
-| One-shot **autoregressive context** | ~10.3% | `demo4` |
-| **Learned scales** (ConvScale) | ~9.6% | architecture (`demo5`) |
+| **Haar resampling** | ~19.5% vs pixel-reshuffle (~8.9% vs stride-2 conv) | `demo2` |
+| **One-shot autoregressive context** | ~10.3% | `demo4` |
+| **Learned scales** (ConvScale) | ~9.6% | `demo5` (architecture) |
 | **Learned quantization width** | ~8.2% | `demo3` |
 | all of the above together | ~31.7% | — |
 
-Plus the deepest finding: training for **perception (LPIPS/MS-SSIM/GAN)** beats training for PSNR by a
-wide margin in human studies — *PSNR poorly reflects what people see.*
-
----
+Plus the deepest finding: training for **perception** (LPIPS / MS-SSIM / GAN), evaluated by **human
+studies**, beats training for PSNR by a wide margin.
 
 ## Setup
 
@@ -47,70 +51,62 @@ Requirements: `torch`, `torchvision`, `numpy`, `pillow`, `matplotlib` (all free;
 Each script prints a short lesson and writes a figure into `assets/`.
 
 ```bash
-python demos/demo1_transform_coding.py     # transform coding & the rate-distortion trade-off
-python demos/demo2_haar_resampling.py      # invertible Haar wavelets vs lossy strided conv (#1 lever)
-python demos/demo3_quantization.py         # STE, additive-noise rate proxy, adaptive bin width
+python demos/demo1_transform_coding.py     # transform coding & the rate–distortion trade-off
+python demos/demo2_haar_resampling.py      # invertible Haar wavelets vs lossy strided conv
+python demos/demo3_quantization.py         # STE, additive-noise rate proxy, adaptive bit allocation
 python demos/demo4_hyperprior_entropy.py   # entropy model: factorized -> hyperprior -> context
 python demos/demo5_ablation_rd.py          # pipeline diagram + "what matters" charts (no training)
 python demos/demo6_jpeg_pipeline.py        # how JPEG works on real pixels (and how it fails at low bitrate)
 
 # optional: actually train the tiny end-to-end codec (~3 min on MPS)
 python demos/demo5_ablation_rd.py --train
-python demos/demo5_ablation_rd.py --train --quick   # ~20s smoke test
 ```
 
-Then open **[`index.html`](index.html)** in a browser — it embeds the generated figures and explains
-each concept end to end.
+Then open **[`index.html`](index.html)** in a browser — it embeds the generated figures.
 
 ## What each demo shows
 
-- **demo1 — transform coding.** Quantizing 8×8 DCT coefficients beats quantizing raw pixels by several
-  dB at the same bitrate. Learned codecs replace the DCT with a learned transform.
+- **demo1 — transform coding.** Quantizing 8×8 DCT coefficients beats quantizing raw pixels by several dB
+  at the same bitrate.
 - **demo2 — Haar resampling.** A 2D Haar transform down-then-up reconstructs an image *exactly* (~99 dB),
-  while stride-2 + bilinear loses detail (~28.6 dB). Visualises the four sub-bands. PICO's biggest lever.
+  while stride-2 + bilinear loses detail (~28.6 dB). PICO's biggest architectural lever.
 - **demo3 — quantization.** STE (gradient through rounding), the additive-noise rate proxy, and why
   content-adaptive bit allocation (reverse water-filling) lifts the whole RD curve.
 - **demo4 — entropy model.** On a correlated, heteroscedastic latent, estimated bits/symbol drop
-  monotonically: factorized → hyperprior (per-region scale) → +autoregressive context.
+  monotonically: factorized → hyperprior → +autoregressive context.
 - **demo5 — the codec.** Draws the mean-scale-hyperprior pipeline and the paper's ablation ranking. The
-  file also contains `TinyCodec`, a faithful-in-spirit codec (Haar resampling, masked-conv context,
-  learned `q`) you can train with `--train`.
-- **demo6 — how JPEG works.** Runs the real JPEG pipeline on actual pixels: YCbCr split + chroma
-  subsampling, one 8×8 block's DCT + quantization table, and genuine low-bitrate JPEGs (Pillow encoder)
-  showing the blocky artefacts — the "describe-and-approximate" baseline PICO moves away from.
+  file also contains `TinyCodec`, a faithful-in-spirit codec you can train with `--train`.
+- **demo6 — how JPEG works.** Runs the real JPEG pipeline on actual pixels (YCbCr/chroma subsampling, one
+  8×8 block's DCT + quantization, real low-bitrate blocky artefacts) — the baseline PICO moves away from.
 
 ## Repo layout
 
 ```
 pico-repro/
-  index.html          teaching page (open this) — embeds the figures below
-  requirements.txt
+  index.html          reading notes (open this) — embeds the figures
+  methodology.html    how the notes were built, with workflow diagrams
   README.md
-  demos/
-    common.py         device, image load (Kodak download / synthetic fallback), metrics, plotting
-    demo1_transform_coding.py
-    demo2_haar_resampling.py
-    demo3_quantization.py
-    demo4_hyperprior_entropy.py
-    demo5_ablation_rd.py
+  requirements.txt
+  demos/              common.py + demo1..demo6
   assets/             PNG figures generated by the demos
-  data/               cached Kodak test image(s)
+  data/               cached Kodak test image(s) — git-ignored, fetched on first run
 ```
 
 ## Scope & honesty
 
-**Reproduced (in spirit, at tiny scale):** the mean-scale hyperprior pipeline, transform coding, Haar
+**Reproduced (in spirit, at small scale):** the mean-scale hyperprior pipeline, transform coding, Haar
 resampling, STE/noise quantization, learned `q`, hyperprior + autoregressive context, and the
 rate-as-estimated-entropy formulation.
 
-**Not reproduced (explained only):** the neural architecture search over millions of configs, on-device
-runtime/latency targets, a real range-coder bitstream (we report estimated entropy as bpp), the GAN
-discriminator and text/tiling losses, the 71 quality levels, and large-scale (~120k image) training.
-A 3-minute toy will **not** reproduce the paper's ablation *ordering* — that needs full-scale training;
-the clean per-component evidence is in demos 2–4.
+**Not reproduced (explained only):** the neural architecture search, on-device runtime targets, a real
+range-coder bitstream (we report estimated entropy as bpp), the GAN discriminator and text/tiling losses,
+the quality levels (8 coarse, interpolated to 71), and large-scale training. A 3-minute toy will not
+reproduce the paper's ablation *ordering*; the clean per-component evidence is in demos 2–4.
 
 ## Sources
 
 - Paper: <https://arxiv.org/abs/2605.05148>
 - Apple ML Research: <https://machinelearning.apple.com/research/compression>
 - Project page: <https://apple.github.io/ml-pico/>
+
+Full numbered citations are in [`index.html`](index.html) (References section).

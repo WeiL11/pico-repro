@@ -76,6 +76,7 @@
     <a href="#write">4 Write</a>
     <a href="#verify">5 Verify</a>
     <a href="#publish">6 Publish</a>
+    <a href="#faster">If I did it again</a>
     <a href="#principles">Principles</a>
     <a href="#tools">Tools</a>
   </nav>
@@ -319,7 +320,7 @@
   <ul>
     <li><strong>Haar &ldquo;19.5%&rdquo;</strong> is vs a naive <em>pixel-reshuffle</em> &mdash; vs a stride-2 conv it is only
         <strong>8.9%</strong>. (Relabelled everywhere + in the chart.)</li>
-    <li><strong>Tiles are non-overlapping</strong> 504&times;504, padded to 512 with a 4-px contextual margin &mdash; not
+    <li><strong>Tiles are non-overlapping</strong> 504&#215;504, padded to 512 with a 4-px contextual margin &mdash; not
         &ldquo;a small overlap.&rdquo;</li>
     <li><strong>&ldquo;71 quality levels&rdquo;</strong> are 8 coarse levels interpolated to 71, not 71 native.</li>
     <li><strong>230/150 ms</strong> is best-case (&ldquo;as fast as&rdquo;), not a fixed latency.</li>
@@ -366,6 +367,105 @@
   </table>
   <p class="muted">Companion to the main notes: <a href="index.html">index.html</a>. Source:
      <a href="https://github.com/WeiL11/pico-repro">github.com/WeiL11/pico-repro</a>.</p>
+</section>
+
+<section id="faster">
+  <h2>If I did this again: a faster parallel plan</h2>
+  <p>Having done it once, the critical path is clear &mdash; and I ran too much serially. Almost everything is
+     parallelizable; only a thin spine is truly sequential.</p>
+  <figure>
+    <svg viewBox="0 0 940 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Optimized parallel workflow">
+      <defs><marker id="fA" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+        <path d="M0,0 L7,3 L0,6 Z" fill="#5b6776"/></marker></defs>
+      <g font-family="inherit" font-size="13" text-anchor="middle">
+        <text x="72"  y="54" font-size="10" fill="#6a4c93" font-weight="700">SEQUENTIAL</text>
+        <text x="216" y="44" font-size="10" fill="#2e86ab" font-weight="700">PARALLEL &#215;5</text>
+        <text x="646" y="44" font-size="10" fill="#3a7d44" font-weight="700">PARALLEL &#215;6</text>
+
+        <rect x="12" y="64" width="120" height="72" rx="11" fill="#e9e3f6" stroke="#6a4c93"/>
+        <text x="72" y="96" font-weight="700">Scope gate</text>
+        <text x="72" y="114" font-size="11">needs you</text>
+
+        <rect x="162" y="52" width="132" height="72" rx="11" fill="#eaf4fa" stroke="#9cc6dc"/>
+        <rect x="156" y="58" width="132" height="72" rx="11" fill="#dcecf6" stroke="#6aa8c9"/>
+        <rect x="150" y="64" width="132" height="72" rx="11" fill="#cfe8f3" stroke="#2e86ab"/>
+        <text x="216" y="96" font-weight="700">Research</text>
+        <text x="216" y="114" font-size="11">readers + history</text>
+
+        <rect x="312" y="64" width="120" height="72" rx="11" fill="#f6cdd0" stroke="#d1495b"/>
+        <text x="372" y="96" font-weight="700">Verify facts</text>
+        <text x="372" y="114" font-size="11">skeptic &#8212; gate</text>
+        <text x="372" y="156" font-size="11" fill="#d1495b" font-style="italic">before writing</text>
+
+        <rect x="452" y="64" width="104" height="72" rx="11" fill="#ffe7b3" stroke="#e09f3e"/>
+        <text x="504" y="96" font-weight="700">common.py</text>
+        <text x="504" y="114" font-size="11">shared dep</text>
+
+        <rect x="588" y="52" width="140" height="72" rx="11" fill="#e3f0df" stroke="#9ec79a"/>
+        <rect x="582" y="58" width="140" height="72" rx="11" fill="#d6ecd2" stroke="#6fb06a"/>
+        <rect x="576" y="64" width="140" height="72" rx="11" fill="#cfe8cf" stroke="#3a7d44"/>
+        <text x="646" y="96" font-weight="700">Demos + reviewer</text>
+        <text x="646" y="114" font-size="11">run &amp; self-check</text>
+
+        <rect x="760" y="64" width="166" height="72" rx="11" fill="#eee" stroke="#888"/>
+        <text x="843" y="96" font-weight="700">Assemble &amp; publish</text>
+        <text x="843" y="114" font-size="11">HTML &#8594; git push</text>
+
+        <g stroke="#5b6776" stroke-width="2" fill="none">
+          <line x1="132" y1="100" x2="148" y2="100" marker-end="url(#fA)"/>
+          <line x1="296" y1="100" x2="310" y2="100" marker-end="url(#fA)"/>
+          <line x1="432" y1="100" x2="450" y2="100" marker-end="url(#fA)"/>
+          <line x1="556" y1="100" x2="574" y2="100" marker-end="url(#fA)"/>
+          <line x1="728" y1="100" x2="758" y2="100" marker-end="url(#fA)"/>
+        </g>
+      </g>
+    </svg>
+    <figcaption>The thin sequential spine; research (5 readers) and the demo build (6 in parallel) fan out off it.</figcaption>
+  </figure>
+
+  <h3>The sequential spine (critical path)</h3>
+  <p>Scope decision (needs you) &#8594; <code>common.py</code> (shared dependency) &#8594; the slowest single demo &#8594;
+     assemble the HTML &#8594; push. Everything else hides underneath this.</p>
+
+  <h3>Research fan-out (5 agents in parallel)</h3>
+  <table>
+    <tr><th>Agent</th><th>Reads for</th></tr>
+    <tr><td>A</td><td>architecture / pipeline (g<sub>a</sub>, g<sub>s</sub>, Haar, tiling, sizes, NAS)</td></tr>
+    <tr><td>B</td><td>losses + quantization + entropy model</td></tr>
+    <tr><td>C</td><td>ablation numbers + evaluation (BD-rate, Elo, metrics)</td></tr>
+    <tr><td>D</td><td>compression history timeline + citations</td></tr>
+    <tr><td>E</td><td>Oren Rippel bibliography / lineage</td></tr>
+  </table>
+  <p>&hellip; merged into one structured <em>facts file with citations</em>.</p>
+
+  <h3>Verify <em>before</em> writing (the key change)</h3>
+  <p>Last time I fact-checked at the <em>end</em> and paid for rework. Next time a skeptic agent checks every number against
+     the paper immediately, so nuances like &ldquo;Haar 19.5% is vs pixel-reshuffle, not stride-2 conv&rdquo; never reach the
+     prose or the figures.</p>
+
+  <h3>Build as a pipeline</h3>
+  <p>Write <code>common.py</code> once, then <strong>6 demo agents in parallel</strong>, each with &ldquo;run it &amp; check
+     the lesson&rdquo; baked into its own task, plus a concept-correctness reviewer &mdash; which is exactly what would
+     auto-catch the demo3 / demo4 bugs instead of me finding them serially.</p>
+
+  <h3>The workflow skeleton</h3>
+  <pre><code>phase('Research')  facts = parallel(5 readers) -&gt; merge
+phase('Verify')    verified = skeptic(facts)        // gate BEFORE writing
+phase('Build')     common.py; pipeline(6 demos, [write, run+inspect, fix-until-correct]) + reviewer
+phase('Write')     assemble HTML from verified facts + figures
+phase('Publish')   consistency check -&gt; push</code></pre>
+
+  <h3>The four changes that make it fast</h3>
+  <ol>
+    <li><strong>Front-load verification</strong> (verify facts before writing) &mdash; kills rework.</li>
+    <li><strong>Build the 6 demos concurrently</strong>, not one at a time.</li>
+    <li><strong>Run history + Rippel research in parallel from minute one</strong> (I did them late).</li>
+    <li><strong>Bake &ldquo;run it and check the lesson&rdquo; into each demo agent</strong>, so the debug loop is parallel, not a serial bottleneck.</li>
+  </ol>
+  <p>Net effect: wall-clock collapses to <em>scope &#8594; common.py &#8594; slowest demo &#8594; assemble &#8594; push</em>,
+     with research and verification hidden underneath &mdash; roughly <strong>2&ndash;3&#215; faster</strong>.</p>
+  <div class="callout warn">Two caveats: the scope gate still needs a human round-trip (so ask the right questions once),
+     and a true multi-agent Workflow needs explicit opt-in &mdash; otherwise it is approximated with a handful of parallel agents.</div>
 </section>
 
 </main>
