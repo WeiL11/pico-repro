@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How the Chen-Yu Yen notes were made — method (v0.6)</title>
+<style>
+  :root{--blue:#2e86ab;--red:#d1495b;--amber:#e09f3e;--green:#3a7d44;--purple:#6a4c93;
+        --ink:#1c2430;--muted:#5b6776;--line:#e3e8ee;--bg:#f7f9fb;--card:#fff}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6}
+  a{color:var(--blue)}
+  header{background:linear-gradient(135deg,#221a33,#2e4a63);color:#fff;padding:48px 24px 34px}
+  header .wrap{max-width:900px;margin:0 auto}
+  header h1{margin:0 0 6px;font-size:25px}header .sub{font-size:15px;opacity:.9;margin:0}
+  header .nav{font-size:13.5px;margin-top:6px}
+  main{max-width:900px;margin:0 auto;padding:8px 24px 60px}
+  section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 24px;margin:18px 0;box-shadow:0 1px 2px rgba(20,30,45,.04)}
+  h2{font-size:19px;margin:2px 0 10px}h3{font-size:14.5px;margin:14px 0 6px}
+  p{margin:9px 0}.lead{font-size:16px}.muted{color:var(--muted)}
+  figure{margin:14px 0 4px;text-align:center}svg{max-width:100%;height:auto}figcaption{font-size:12.5px;color:var(--muted);margin-top:6px}
+  code{background:#eef2f6;border:1px solid #dde4ec;border-radius:5px;padding:1px 6px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px}
+  .callout{border-left:4px solid var(--amber);background:#fff8ec;padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0}
+  .callout.ok{border-color:var(--green);background:#eef6ef}.callout.warn{border-color:var(--red);background:#fdeef0}
+  table{border-collapse:collapse;width:100%;font-size:13.5px;margin:12px 0}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}th{background:#f1f6fa}
+  ul,ol{margin:8px 0;padding-left:22px}li{margin:5px 0}
+  footer{max-width:900px;margin:0 auto;padding:0 24px 46px;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>How these notes were made — v0.6 method</h1>
+    <p class="sub">The first direction built under the <strong>v0.6</strong> method (per-claim provenance, evidence files, a completeness critic + quality gate, telemetry).</p>
+    <p class="nav"><a href="index.html" style="color:#bfe0f2">← Content (the reading notes)</a> · <a href="../methodology.html" style="color:#bfe0f2">project methodology tracker</a></p>
+  </div>
+</header>
+
+<main>
+
+<section>
+  <h2>TL;DR</h2>
+  <p class="lead">Built fresh from only the name &ldquo;Chen-Yu (Robin) Yen&rdquo;, running the current
+     <a href="../methodology.html">v0.6 method</a>: a <strong>slim</strong> Pass 1 (one agent), <strong>pipelined</strong> into a
+     4-agent Pass 2 deep read, with every agent&rsquo;s output <strong>archived as evidence</strong>, a <strong>completeness
+     critic + quality gate</strong>, a <a href="DECISIONS.md">decision log</a>, and <strong>telemetry</strong>.</p>
+</section>
+
+<section>
+  <h2>The workflow (v0.6)</h2>
+  <figure>
+    <svg viewBox="0 0 960 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="v0.6 workflow">
+      <defs><marker id="a1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#5b6776"/></marker></defs>
+      <g font-family="inherit" font-size="12" text-anchor="middle">
+        <text x="206" y="50" font-size="10" fill="#2e86ab" font-weight="700">PASS 1 &#183; &#215;1 (SLIM)</text>
+        <text x="500" y="50" font-size="10" fill="#3a7d44" font-weight="700">PASS 2 &#183; &#215;4 (PIPELINED)</text>
+        <text x="700" y="50" font-size="10" fill="#d1495b" font-weight="700">CRITIC + QUALITY GATE</text>
+        <rect x="10" y="70" width="104" height="58" rx="10" fill="#e9e3f6" stroke="#6a4c93"/>
+        <text x="62" y="95" font-weight="700">Scope</text><text x="62" y="112" font-size="10.5">a name</text>
+        <rect x="150" y="70" width="120" height="58" rx="10" fill="#cfe8f3" stroke="#2e86ab"/>
+        <text x="210" y="91" font-weight="700">Identify + map</text><text x="210" y="108" font-size="10">list · arc · who</text>
+        <rect x="306" y="70" width="96" height="58" rx="10" fill="#f6cdd0" stroke="#d1495b"/>
+        <text x="354" y="95" font-weight="700">Verify</text><text x="354" y="112" font-size="10">+ disambiguate</text>
+        <rect x="438" y="70" width="124" height="58" rx="10" fill="#cfe8cf" stroke="#3a7d44"/>
+        <text x="500" y="91" font-weight="700">Deep-read ×4</text><text x="500" y="108" font-size="9.5">intro·method·results·missing</text>
+        <rect x="598" y="70" width="118" height="58" rx="10" fill="#fde7ea" stroke="#d1495b"/>
+        <text x="657" y="91" font-weight="700">Critic + gate</text><text x="657" y="108" font-size="10">what's missing?</text>
+        <rect x="752" y="70" width="100" height="58" rx="10" fill="#fff3d6" stroke="#e09f3e"/>
+        <text x="802" y="91" font-weight="700">Assemble</text><text x="802" y="108" font-size="10">+ _research/</text>
+        <rect x="888" y="70" width="62" height="58" rx="10" fill="#eee" stroke="#888"/>
+        <text x="919" y="95" font-weight="700">Push</text>
+        <g stroke="#5b6776" stroke-width="1.8" fill="none">
+          <line x1="114" y1="99" x2="148" y2="99" marker-end="url(#a1)"/>
+          <line x1="270" y1="99" x2="304" y2="99" marker-end="url(#a1)"/>
+          <line x1="402" y1="99" x2="436" y2="99" marker-end="url(#a1)"/>
+          <line x1="562" y1="99" x2="596" y2="99" marker-end="url(#a1)"/>
+          <line x1="716" y1="99" x2="750" y2="99" marker-end="url(#a1)"/>
+          <line x1="852" y1="99" x2="886" y2="99" marker-end="url(#a1)"/>
+        </g>
+      </g>
+    </svg>
+    <figcaption>v0.6: slim Pass 1 → verify → pipelined 4-agent Pass 2 → completeness critic + quality gate → assemble (with evidence in <code>_research/</code>).</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2>What the critic + quality gate caught (and we fixed)</h2>
+  <ul>
+    <li><strong>The unifying theme was implicit.</strong> The critic&rsquo;s top finding: the real through-line is &ldquo;augment,
+       don&rsquo;t replace &mdash; learn from what experts already built.&rdquo; Now stated up front.</li>
+    <li><strong>Author order is a landmine.</strong> Orca &amp; DeepCC list Yen <em>second</em> (co-first); Sage lists him <em>first</em>
+       (co-first). Verified and stated precisely — not flattened to &ldquo;first author.&rdquo;</li>
+    <li><strong>ASMR is a different lab</strong> (Pinto/Chopra), not advisor Chao — now called out.</li>
+    <li><strong>The 2014 graphics paper is most likely a namesake</strong> (absent from his CV) — demoted to &ldquo;unverified.&rdquo;</li>
+    <li><strong>Paywalled SIGCOMM numbers</strong> (Orca, Sage) are flagged unverified rather than quoted.</li>
+  </ul>
+  <div class="callout ok">This is the v0.6 difference: a dedicated pass asked &ldquo;what&rsquo;s missing / what&rsquo;s most likely
+     wrong?&rdquo; <em>before</em> publishing, and its answers changed the page.</div>
+</section>
+
+<section>
+  <h2>Provenance (per-claim sourcing)</h2>
+  <p>Per the strengthened principle, claims carry a source from agent output to the final page. Each signature paper&rsquo;s full
+     deep-read is archived so every card is traceable:</p>
+  <ul>
+    <li><a href="_research/orca-sigcomm2020.md">_research/orca-sigcomm2020.md</a></li>
+    <li><a href="_research/sage-sigcomm2023.md">_research/sage-sigcomm2023.md</a></li>
+    <li><a href="_research/cellular-tcp-deepcc.md">_research/cellular-tcp-deepcc.md</a></li>
+    <li><a href="_research/asmr.md">_research/asmr.md</a></li>
+  </ul>
+  <p class="muted">Decisions (paper selection, disambiguation, budgets) are logged in <a href="DECISIONS.md">DECISIONS.md</a>.</p>
+</section>
+
+<section>
+  <h2>Telemetry</h2>
+  <table>
+    <tr><th>Step</th><th>Agents</th><th>Wall-clock</th><th>Notes</th></tr>
+    <tr><td>Pass 1 (identify + map)</td><td>1</td><td>~117 s</td><td>11 fetches; Scholar reachable here</td></tr>
+    <tr><td>Pass 2 (deep reads)</td><td>4 ∥</td><td>~311 s</td><td>Orca/Sage slow (SIGCOMM paywalled → reconstructed from code/survey)</td></tr>
+    <tr><td>Completeness critic + gate</td><td>1</td><td>~73 s</td><td>ran during page assembly</td></tr>
+    <tr><td><strong>Total agent compute</strong></td><td>6</td><td><strong>≈ 16 min summed / ≈ 8 min parallel</strong></td><td>+ assembly edits</td></tr>
+  </table>
+  <p class="muted">Slimmer than the earlier Alisa runs (1 + 4 + 1 = 6 agents vs 3 + 6 = 9), per the v0.6 efficiency changes.</p>
+</section>
+
+<section>
+  <h2>Honest limitations</h2>
+  <div class="callout warn">
+    <ul>
+      <li><strong>Two SIGCOMM PDFs were paywalled</strong> to the agents → their exact %-numbers are unverified (method reconstructed
+          from the authors&rsquo; survey + open-source code + independent third-party benchmarks).</li>
+      <li><strong>Sage&rsquo;s co-first footnote</strong> couldn&rsquo;t be confirmed from a free PDF (claimed on his homepage; he is first-listed).</li>
+      <li>Citation counts are approximate Google-Scholar figures. The 2014 graphics paper is probably a different person.</li>
+    </ul>
+  </div>
+  <p class="muted">General method &amp; how it evolves: <a href="../methodology.html">the project methodology tracker</a>. This direction&rsquo;s notes: <a href="index.html">content page</a>.</p>
+</section>
+
+</main>
+
+<footer>
+  <div style="height:1px;background:var(--line);margin:0 0 14px"></div>
+  <p>Method report for the Chen-Yu Yen reading notes &mdash; the first direction built under v0.6.</p>
+</footer>
+
+</body>
+</html>

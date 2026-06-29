@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chen-Yu (Robin) Yen — research reading notes</title>
+<style>
+  :root{--blue:#2e86ab;--red:#d1495b;--amber:#e09f3e;--green:#3a7d44;--purple:#6a4c93;
+        --ink:#1c2430;--muted:#5b6776;--line:#e3e8ee;--bg:#f7f9fb;--card:#fff}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6}
+  a{color:var(--blue)}
+  header{background:linear-gradient(135deg,#1d2b3a,#2f5066);color:#fff;padding:52px 24px 38px}
+  header .wrap{max-width:940px;margin:0 auto}
+  header h1{margin:0 0 6px;font-size:30px}
+  header .sub{font-size:16.5px;opacity:.92;margin:0 0 14px}
+  header .meta{font-size:13.5px;opacity:.82}
+  .tags{margin-top:14px}.tag{display:inline-block;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:4px 12px;font-size:12.5px;margin:0 6px 6px 0}
+  main{max-width:940px;margin:0 auto;padding:8px 24px 64px}
+  section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 26px;margin:20px 0;box-shadow:0 1px 2px rgba(20,30,45,.04)}
+  h2{font-size:21px;margin:2px 0 12px}h3{font-size:15.5px;margin:16px 0 6px}
+  p{margin:9px 0}.lead{font-size:17px}.muted{color:var(--muted)}
+  .studynote{background:#eef4fb;border:1px solid #cfe0f0;border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:16px 20px;margin:20px 0}
+  .studynote h2{font-size:18px;margin:0 0 6px}.studynote p{font-size:14.5px;margin:6px 0}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin:14px 0}
+  .stat{background:#f1f6fa;border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  .stat b{display:block;font-size:17px;color:var(--blue)}.stat span{font-size:12.5px;color:var(--muted)}
+  .timeline{position:relative;margin:18px 0 4px;padding-left:30px}
+  .timeline::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:var(--line)}
+  .era{position:relative;margin:0 0 18px}
+  .era::before{content:"";position:absolute;left:-26px;top:5px;width:14px;height:14px;border-radius:50%;background:var(--blue);border:3px solid #fff;box-shadow:0 0 0 1px var(--line)}
+  .era.hl::before{background:var(--red)}
+  .era .yr{font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+  .era h3{margin:2px 0 4px;font-size:15.5px}.era p{margin:5px 0}
+  details.paper{border:1px solid var(--line);border-radius:11px;margin:12px 0;background:#fff;overflow:hidden}
+  details.paper>summary{list-style:none;cursor:pointer;padding:14px 16px}
+  details.paper>summary::-webkit-details-marker{display:none}
+  details.paper>summary::before{content:"\25B8\00a0";color:var(--blue);font-weight:700}
+  details.paper[open]>summary::before{content:"\25BE\00a0"}
+  details.paper>summary h3{display:inline;font-size:16px;margin:0}
+  details.paper>summary .concept{display:block;font-size:13px;color:var(--muted);margin:5px 0 0 16px}
+  details.paper .body{padding:2px 16px 14px;border-top:1px solid var(--line);margin-top:10px}
+  details.paper h4{margin:14px 0 3px;font-size:12.5px;color:var(--purple);text-transform:uppercase;letter-spacing:.04em}
+  details.paper .body p{margin:4px 0;font-size:14px}
+  .badge{display:inline-block;font-size:11px;border-radius:999px;padding:1px 8px;margin-left:6px;background:#eaf4ea;color:#2c6b34;border:1px solid #bfe0c2;vertical-align:middle}
+  .badge.first{background:#fde9ec;color:#a83246;border-color:#f3c4cc}
+  .miss{border-left:4px solid var(--red);background:#fdeef0;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:13.5px}
+  .unv{background:#fff3cd;border:1px solid #f0d98c;border-radius:4px;padding:0 5px;font-size:11.5px;color:#7a5a00}
+  .cite-line{font-size:12.5px;color:var(--muted);margin-top:12px;border-top:1px dashed var(--line);padding-top:8px}
+  table{border-collapse:collapse;width:100%;font-size:13.5px;margin:12px 0}
+  th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}th{background:#f1f6fa}
+  ol.qbox{counter-reset:q;list-style:none;padding:0;margin:12px 0}
+  ol.qbox li{position:relative;background:#f7fafc;border:1px solid var(--line);border-radius:10px;padding:12px 16px 12px 52px;margin:10px 0}
+  ol.qbox li::before{counter-increment:q;content:"Q" counter(q);position:absolute;left:14px;top:12px;font-weight:800;color:var(--blue)}
+  .callout{border-left:4px solid var(--amber);background:#fff8ec;padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0}
+  .callout.warn{border-color:var(--red);background:#fdeef0}
+  nav.toc{font-size:14px}nav.toc a{display:inline-block;margin:0 14px 6px 0}
+  footer{max-width:940px;margin:0 auto;padding:0 24px 50px;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>Chen-Yu (Robin) Yen &mdash; research reading notes</h1>
+    <p class="sub">A guided tour of a machine-learning-for-systems researcher: what he keeps trying to solve, the arc of his papers, and what to read first.</p>
+    <p class="meta">PhD, New York University (Tandon, ECE), advised by <strong>H. Jonathan Chao</strong>; now at <strong>ByteDance</strong>.
+       Works on <strong>RL for networked systems</strong> (Internet congestion control) and <strong>ML for MRI</strong>.
+       <a href="https://wp.nyu.edu/cyy/" style="color:#bfe0f2">homepage</a> ·
+       <a href="https://scholar.google.com/citations?user=OqRO_psAAAAJ&amp;hl=en" style="color:#bfe0f2">Scholar</a> ·
+       <a href="https://dblp.org/pid/255/5705.html" style="color:#bfe0f2">DBLP</a></p>
+    <div class="tags"><span class="tag">congestion control</span><span class="tag">reinforcement learning</span><span class="tag">networked systems</span><span class="tag">accelerated MRI</span></div>
+  </div>
+</header>
+
+<main>
+
+<div class="studynote">
+  <h2>📚 For our study group</h2>
+  <p>Reading notes on <strong>Chen-Yu (Robin) Yen</strong>&rsquo;s research. Read the <a href="#arc">arc</a> first to see how the work
+     connects, then use <a href="#start">&ldquo;Start here&rdquo;</a> for a reading order. Each paper folds open into a full
+     Intro / Method / Results / Future breakdown with a &ldquo;what&rsquo;s missing&rdquo; box.</p>
+  <p class="muted">🛠 How these notes were researched &amp; built (v0.6 method, with per-paper evidence in
+     <a href="_research/">_research/</a>): <a href="methodology.html">methodology.html</a>.</p>
+</div>
+
+<section style="border-left:5px solid var(--amber)">
+  <h2>💡 What I find most interesting</h2>
+  <p class="lead">Across his papers, Yen makes the <strong>same intellectual move: inject learning into systems that already
+     work, rather than replacing them.</strong> <a href="#papers">Orca</a> keeps classic TCP Cubic and adds an RL supervisor on
+     top; <a href="#papers">DeepCC</a> leaves your TCP alone and just caps its window; <a href="#papers">Sage</a> <em>learns from</em>
+     decades of existing heuristics instead of from scratch; <a href="#papers">ASMR</a> learns <em>which</em> measurements to take to
+     speed up an existing MRI pipeline. &ldquo;<strong>Augment, don&rsquo;t replace &mdash; and learn from what experts already
+     built</strong>&rdquo; is his signature.</p>
+  <p>Underneath is a consistent taste for <strong>sequential, real-time decisions under uncertainty from partial, expensive
+     observations</strong> &mdash; act well <em>now</em>, given only what you&rsquo;ve seen so far. He is fundamentally a
+     <strong>networked-systems</strong> researcher (most of his work, and most of his citations, are RL congestion control, nearly
+     all <em>co-first with Soheil Abbasloo</em> under advisor H. J. Chao); ASMR (ICML 2024) is a genuine, recent <em>domain jump</em>
+     into medical imaging with a <em>different</em> NYU lab. <span class="muted">(Synthesis from his
+     <a href="https://wp.nyu.edu/cyy/">homepage</a> + the papers below.)</span></p>
+</section>
+
+<section>
+  <h2>Who he is</h2>
+  <div class="grid">
+    <div class="stat"><b>NYU → ByteDance</b><span>PhD at NYU Tandon (ECE); now industry (AI/networks)</span></div>
+    <div class="stat"><b>Advisor: H. J. Chao</b><span>frequent co-author Soheil Abbasloo</span></div>
+    <div class="stat"><b>2 threads</b><span>RL congestion control · ML for MRI</span></div>
+    <div class="stat"><b>~828 citations</b><span>Google Scholar, h-index 7 (approx.)</span></div>
+  </div>
+  <p class="muted">Education: B.S. EE, National Taiwan University → M.S., Columbia → Ph.D., NYU.
+     <span class="unv">source: homepage + LinkedIn; some details self-reported</span></p>
+  <nav class="toc">
+    <div style="height:1px;background:var(--line);margin:8px 0 10px"></div>
+    <strong>Contents:</strong>
+    <a href="#arc">Research arc</a> <a href="#start">Start here</a> <a href="#papers">Signature papers</a>
+    <a href="#list">Full publication list</a> <a href="#discuss">Your turn</a> <a href="#complete">What&rsquo;s not covered</a> <a href="#sources">Sources &amp; honesty</a>
+  </nav>
+</section>
+
+<section id="arc">
+  <h2>The research arc</h2>
+  <p class="muted">Chronology &amp; positions from <a href="https://dblp.org/pid/255/5705.html">DBLP</a> +
+     <a href="https://wp.nyu.edu/cyy/">homepage</a>.</p>
+  <div class="timeline">
+    <div class="era hl"><div class="yr">2019–2023 · the core PhD</div>
+      <h3>RL-based Internet congestion control</h3>
+      <p>A focused, escalating program, nearly all <strong>co-first with Soheil Abbasloo</strong> under H. J. Chao:
+         a deep-RL cellular-TCP preprint (2019) → the hybrid <strong>Orca</strong> (SIGCOMM 2020, his most-cited) →
+         cellular-TCP <strong>DeepCC</strong> (JSAC 2021) → <strong>Sage</strong> (SIGCOMM 2023). Note the
+         <strong>Orca→Sage self-correction</strong>: online hybrid RL (Orca) → realising pure online learning is brittle →
+         <em>offline</em> RL distilling many heuristics (Sage). A parallel line, RL for SDN traffic engineering
+         (<strong>CFR-RL</strong>, JSAC 2020, his most-cited co-authored work, ~241), shows the RL-for-networks interest beyond congestion control.</p></div>
+    <div class="era hl"><div class="yr">2024 · breadth / pivot</div>
+      <h3>Same instinct, new domain &amp; lab: ML for MRI</h3>
+      <p>Applies the adaptive sequential-decision mindset to accelerated MRI &mdash; <strong>ASMR</strong> (ICML 2024, his first
+         first-author ML-venue paper), with a <em>different</em> NYU group (Lerrel Pinto, Rajesh Ranganath, Sumit Chopra) &mdash;
+         not his networking advisor.</p></div>
+    <div class="era hl"><div class="yr">2025 · industry</div>
+      <h3>Back to large-scale networked systems</h3>
+      <p>At ByteDance: <strong>SGLB</strong> (SIGCOMM 2025) on scalable global load balancing in commodity AI clusters (middle author).</p></div>
+  </div>
+</section>
+
+<section id="start">
+  <h2>Start here (a reading order)</h2>
+  <ol>
+    <li><strong><a href="#papers">Orca</a></strong> (2020) &mdash; the core idea: a learned agent <em>on top of</em> classic TCP.</li>
+    <li><strong><a href="#papers">DeepCC</a></strong> (2021) &mdash; the same idea made deployable for cellular, as a TCP plug-in.</li>
+    <li><strong><a href="#papers">Sage</a></strong> (2023) &mdash; the next step: <em>learn from</em> many heuristics offline, standalone.</li>
+    <li><strong><a href="#papers">ASMR</a></strong> (2024) &mdash; the same &ldquo;adaptive sampling&rdquo; instinct, applied to MRI.</li>
+  </ol>
+</section>
+
+<section id="papers">
+  <h2>Signature papers — deep dive</h2>
+  <p class="muted">Folded by default &mdash; <strong>click a title</strong> to expand Intro → Method → Results → Discussion &amp;
+     future + a red &ldquo;most important thing missing&rdquo; box. Each card links its primary source and its archived
+     <a href="_research/">evidence file</a>. <span class="unv">Two SIGCOMM PDFs were paywalled, so their exact % numbers are marked unverified.</span></p>
+
+  <details class="paper">
+    <summary><h3>Orca — &ldquo;Classic Meets Modern&rdquo; <span class="badge">co-first</span></h3>
+      <span class="concept">A hybrid congestion-control scheme: classic TCP Cubic does the per-packet work while a deep-RL agent periodically scales Cubic&rsquo;s congestion window &mdash; learning&rsquo;s adaptivity without discarding proven TCP.</span></summary>
+    <div class="body">
+      <h4>Intro &mdash; why</h4>
+      <p><em>Congestion control</em> decides how fast to send so you fill the network pipe (the bandwidth-delay product) without
+         overflowing router queues; the tension is throughput (want high) vs latency/RTT (want low, hurt by queuing). Classic
+         <strong>Cubic</strong> is loss-based: it fills big buffers (high delay) and backs off on non-congestion loss (wastes
+         bandwidth). Pure &ldquo;clean-slate&rdquo; learned schemes (Aurora, Remy, PCC) have overhead and <em>generalize badly</em>
+         to unseen networks. Orca&rsquo;s thesis: keep a battle-tested classic scheme as the safe controller, add a learned supervisor.</p>
+      <h4>Method &mdash; how</h4>
+      <p><strong>Two-level control.</strong> Fine-grained: plain Cubic runs underneath per-ACK (stability, low overhead,
+         TCP-friendliness). Coarse-grained: every monitoring interval a deep-RL agent applies a <em>multiplicative factor</em>
+         to Cubic&rsquo;s window (action ≈ 2<sup>α</sup>, −2&lt;α&lt;2) &mdash; it <em>scales</em> Cubic, never sets the raw rate, which
+         keeps behaviour inside a safe envelope. State = recent throughput/loss/delay; reward ≈ &ldquo;power&rdquo; (rate ÷ delay).
+         A recurrent net trained offline (TD3/DDPG-style) in emulation; agent in user space, Cubic in kernel.</p>
+      <h4>Results</h4>
+      <p>Consistently strong across diverse Internet/emulated networks, greatly reducing the generalization/overhead problems of
+         clean-slate schemes; only ~6 hours of training; overhead on par with Cubic/BBR; friendly to competing Cubic flows.
+         <span class="unv">Exact %-gains vs Cubic/BBR/Aurora: unverified (SIGCOMM PDF paywalled).</span></p>
+      <h4>Discussion &amp; future</h4>
+      <p>Near-deployable (low overhead, TCP-friendly). Open: still many quasi-hand-tuned design choices; kernel↔user-space split
+         adds overhead; emulator-vs-reality gap. Future: transfer/meta-learning to adapt to new networks.</p>
+      <div class="miss"><strong>⚠ Most important thing missing:</strong> Orca&rsquo;s adaptivity is <em>bounded by the classic scheme
+         it sits on</em>. Restricting the RL action to a bounded tweak of Cubic&rsquo;s window is <em>why</em> it generalizes better
+         than clean-slate schemes &mdash; but it&rsquo;s a ceiling: Orca can correct Cubic, not discover a radically different
+         strategy, so where Cubic&rsquo;s loss-based premise is simply wrong, the gains shrink. The bet: bounded-but-reliable beats
+         unbounded-but-fragile for the real Internet.</div>
+      <p class="cite-line">S. Abbasloo*, <strong>Chen-Yu Yen*</strong> (co-first, 2nd-listed; per his homepage), H. J. Chao.
+         SIGCOMM 2020. <a href="https://dl.acm.org/doi/10.1145/3387514.3405892">ACM</a> · <a href="https://github.com/Soheil-ab/Orca">code</a> · <a href="_research/orca-sigcomm2020.md">evidence</a></p>
+    </div>
+  </details>
+
+  <details class="paper">
+    <summary><h3>DeepCC — TCP great for cellular networks <span class="badge">co-first</span></h3>
+      <span class="concept">A deep-RL plug-in that sits on top of any TCP and caps its congestion window to keep latency low on volatile cellular links &mdash; without replacing TCP.</span></summary>
+    <div class="body">
+      <h4>Intro &mdash; why</h4>
+      <p>Cellular bandwidth swings wildly at millisecond timescales, and towers keep deep buffers &rarr; <strong>bufferbloat</strong>:
+         throughput-greedy TCPs (Cubic, BBR) fill those buffers, getting high throughput but huge self-inflicted latency &mdash; bad
+         for gaming/VR/video calls. The bet: don&rsquo;t reinvent TCP (hard to deploy); <em>boost the TCP you already have</em> to hit
+         an app&rsquo;s delay target.</p>
+      <h4>Method &mdash; how</h4>
+      <p>Treat the underlying TCP as a black box and only <strong>cap</strong> its window: <code>cwnd_max = 2<sup>α</sup>·cwnd</code>,
+         α∈[−1,1]. The TCP still probes bandwidth between caps (so it beats a pure clean-slate version by ~10% utilization). RL loop
+         per RTT: state = avg delay, #samples, delivery rate, cwnd (normalized vs Target, stacked over 20 steps); action = continuous
+         α; reward + below Target, − above. Trained with <strong>DDPG</strong>. A lightweight kernel &ldquo;Monitor&rdquo; shim makes it
+         work under Cubic/BBR/Westwood/Illinois unchanged. <span class="unv">The RL agent here is a user-space prototype.</span></p>
+      <h4>Results</h4>
+      <p>Boosting Cubic / BBR → <strong>~300% / ~175% lower queuing delay</strong>; Illinois → ~4× lower delay at ~9% lower
+         throughput. Dcubic: 4× lower delay, throughput −~11%. Beats Sprout, Verus, C2TCP, Copa, LEDBAT, PCC-Vivace, Remy, Indigo,
+         Aurora; fairness Jain 0.936–0.987; real-world ≈ emulation. <span class="muted">(Evaluated on 23+ real LTE traces + NYC field tests.)</span></p>
+      <h4>Discussion &amp; future</h4>
+      <p>No theoretical guarantees (true of all CC); only boosts throughput-oriented TCP to cut delay; leans on cellular per-client
+         isolation. Overhead: user-space agent is the bottleneck → kernel implementation is future work.</p>
+      <div class="miss"><strong>⚠ Most important thing missing:</strong> the numbers come from a <em>user-space prototype</em>
+         validated mostly on <em>single-flow</em> cellular links &mdash; the setting that hides the hard problems. (1) Running a
+         2×1000 DDPG net every RTT in user space is costly; line-rate, many-socket behaviour isn&rsquo;t shown. (2) On a <em>shared</em>
+         bottleneck, a flow voluntarily holding back to hit a delay target can be starved by an aggressive Cubic/BBR flow &mdash; the
+         fairness numbers were measured among DeepCC flows, not a hostile mix.</div>
+      <p class="cite-line">S. Abbasloo, <strong>Chen-Yu Yen</strong> (co-first per homepage; 2nd-listed), H. J. Chao. IEEE JSAC 39(1), 2021.
+         <a href="https://arxiv.org/abs/1912.11735">arXiv (precursor)</a> · <a href="_research/cellular-tcp-deepcc.md">evidence</a></p>
+    </div>
+  </details>
+
+  <details class="paper">
+    <summary><h3>Sage — &ldquo;Computers Can Learn from the Heuristic Designs…&rdquo; <span class="badge">co-first</span></h3>
+      <span class="concept">A congestion-control policy a computer learned by watching decades of human-designed CC schemes (offline RL) &mdash; distilling many heuristics into one standalone agent that improves on its teachers.</span></summary>
+    <div class="body">
+      <h4>Intro &mdash; why</h4>
+      <p>Hand-designed heuristics (Cubic, BBR) are robust but plateau; clean-slate learned CC generalizes badly. Sage asks: instead of
+         designing by hand <em>or</em> learning from zero, can a computer <em>learn from the existing heuristic designs themselves?</em>
+         It&rsquo;s the next step after <a href="#papers">Orca</a>: rather than running alongside one heuristic at runtime, learn from
+         <em>many</em> heuristics offline into a single data-driven policy.</p>
+      <h4>Method &mdash; how</h4>
+      <p>Treat every Linux CC scheme as a <em>teacher</em>; log their (state, action) traces; use <strong>offline RL</strong> to
+         distill a policy that improves on all of them &mdash; <em>not</em> behavioural cloning (would only match the best teacher) and
+         <em>not</em> online RL. The learner (from the released code) is <strong>Recurrent CRR</strong> (critic-regularized regression):
+         a critic learns <em>which</em> teacher decisions were actually good and the policy amplifies those. Net: MLP→LSTM; 69-dim state;
+         action = a multiplier (×0.25…×4) on the rate every 10 ms. Teacher pool included BBRv2, Cubic, Vegas; traces split into
+         single-flow-tracking and fairness sets. Deployed as a kernel module + user-space inference.</p>
+      <h4>Results</h4>
+      <p><span class="unv">Sage&rsquo;s own headline %-improvements: unverified (ACM/arXiv paywalled).</span> What independent third-party
+         re-runs found: <em>strengths</em> &mdash; resilient to non-congestion (random) loss where Cubic suffers; good same-RTT fairness.
+         <em>Weaknesses</em> &mdash; &ldquo;unstable outside its training range, oscillating its sending rate&rdquo;; lowest goodput under
+         frequent bandwidth/RTT change; weak inter-RTT fairness (no such teacher traces). <span class="muted">(per arXiv:2510.25105 &amp; 2510.25498)</span></p>
+      <h4>Discussion &amp; future</h4>
+      <p>Insight: offline RL over logged heuristic behaviour can <em>exceed</em> the heuristics, because a critic picks the good
+         decisions of many teachers. But you only learn what&rsquo;s in the pool. Future: a richer, more diverse trace pool (the offline
+         design makes adding teachers cheap).</p>
+      <div class="miss"><strong>⚠ Most important thing missing:</strong> Sage is only as good as the heuristics in its training pool &mdash;
+         its &ldquo;mastery&rdquo; does not transfer to regimes it never saw a teacher operate in (independent re-evals show it
+         destabilizes / underperforms Cubic under continuously changing conditions and unequal-RTT competition). Read &ldquo;computers can
+         master CC&rdquo; as &ldquo;distill and surpass the <em>union of their teachers</em> &mdash; within the envelope those teachers covered.&rdquo;</div>
+      <p class="cite-line"><strong>Chen-Yu Yen</strong> (first-listed; co-first per homepage <span class="unv">PDF footnote unverified</span>), S. Abbasloo, H. J. Chao.
+         SIGCOMM 2023. <a href="https://dl.acm.org/doi/10.1145/3603269.3604838">ACM</a> · <a href="https://github.com/Soheil-ab/sage">code</a> · <a href="_research/sage-sigcomm2023.md">evidence</a></p>
+    </div>
+  </details>
+
+  <details class="paper">
+    <summary><h3>ASMR — Adaptive Sampling of k-Space for Rapid MRI Pathology Prediction <span class="badge first">1st author</span></h3>
+      <span class="concept">An RL agent decides, one measurement at a time, which MRI k-space columns to collect next &mdash; chosen to maximize disease detection rather than image quality &mdash; diagnosing with only ~8% of the data.</span></summary>
+    <div class="body">
+      <h4>Intro &mdash; why</h4>
+      <p>MRI is slow because it samples <em>k-space</em> (the frequency-domain data); more lines = longer scan. Faster scans could
+         enable population-scale screening. The usual &ldquo;accelerated MRI&rdquo; reconstructs an image from undersampled k-space, but
+         reconstruction is optimized for image <em>similarity</em>, not diagnosis &mdash; at low sampling rates reconstructions start
+         <em>missing pathologies</em>. Prior work skipped reconstruction and detected pathology directly from sparse k-space, but with a
+         <em>fixed heuristic</em> sampling pattern. ASMR makes that choice <strong>adaptive and learned</strong>.</p>
+      <h4>Method &mdash; how</h4>
+      <p>k-space is acquired sequentially → frame it as a Markov decision process and train a policy that picks the next column given what
+         it has measured so far. <strong>State</strong> = acquired columns (the full k-space is never disclosed, like a real scanner).
+         <strong>Action</strong> = next column (action space shrinks via dynamic masking). <strong>Reward</strong> = the log-likelihood a
+         <em>frozen classifier</em> gives the true pathology label &mdash; rewarding measurements that improve the <em>diagnosis</em>, not
+         fidelity. Trained with <strong>PPO</strong>; frequency-domain inputs via KSPACE-NET (Fourier conv → |iFFT| → ResNet-18). Two tricks
+         (ablated): label-balanced training (data is 2–16% positive) and explicit action masking.</p>
+      <h4>Results</h4>
+      <p>fastMRI knee/brain/prostate, 8 pathology tasks (AUROC, 5 seeds). Headline: <strong>within 2% of a fully-sampled classifier using
+         only 8% of k-space</strong> on 6/8 tasks (~12.5× acceleration). Beats non-adaptive learned sampling (EMRT 7/8; LOUPE/DPS 6/8) and
+         reconstruction-RL (+2.88% knee, +7% brain AUC). Ablations confirm the two design tricks matter.</p>
+      <h4>Discussion &amp; future</h4>
+      <p>Single-coil only (modern scanners are multi-coil); slice-level not volume-level; Cartesian column sampling. The authors stress it
+         needs extensive clinical trials before use.</p>
+      <div class="miss"><strong>⚠ Most important thing missing:</strong> ASMR optimizes detection of a <em>fixed, pre-specified</em> pathology
+         list, not a diagnostic image. So it can only &ldquo;see&rdquo; what it was trained to look for &mdash; an <strong>incidental finding</strong>
+         outside the label set may sit in k-space regions it chose <em>not</em> to sample (bad for screening, whose whole point is catching the
+         unexpected). And with reconstruction bypassed there is <em>no human-readable image</em> to inspect or override. Best read as fast
+         <em>triage for known conditions</em>, paired with full imaging on positives &mdash; not a replacement for diagnostic MRI.</div>
+      <p class="cite-line"><strong>Chen-Yu Yen</strong> (first author; co-equal* with Singhal), R. Singhal, U. Sharma, R. Ranganath, S. Chopra, L. Pinto.
+         ICML 2024 (PMLR v235). <em>A different NYU lab (Pinto/Chopra orbit) &mdash; not his networking advisor Chao.</em>
+         <a href="https://proceedings.mlr.press/v235/yen24a.html">PMLR</a> · <a href="https://arxiv.org/abs/2406.04318">arXiv</a> · <a href="https://adaptive-sampling-mr.github.io/">project</a> · <a href="_research/asmr.md">evidence</a></p>
+    </div>
+  </details>
+</section>
+
+<section id="list">
+  <h2>Full publication list (newest first)</h2>
+  <p class="muted">From his <a href="https://wp.nyu.edu/cyy/">homepage</a>, <a href="https://dblp.org/pid/255/5705.html">DBLP</a>, and
+     <a href="https://scholar.google.com/citations?user=OqRO_psAAAAJ&amp;hl=en">Scholar</a>. Citation counts approximate (Scholar).</p>
+  <table>
+    <tr><th>Year</th><th>Paper</th><th>Venue</th><th>Role</th><th>~Cites</th></tr>
+    <tr><td>2025</td><td>SGLB: Scalable &amp; Robust Global Load Balancing in Commodity AI Clusters</td><td>SIGCOMM</td><td>middle</td><td>7</td></tr>
+    <tr><td>2024</td><td><a href="https://arxiv.org/abs/2406.04318">ASMR: Adaptive Sampling of k-Space for Rapid Pathology Prediction</a></td><td>ICML</td><td><strong>1st</strong></td><td>17</td></tr>
+    <tr><td>2023</td><td><a href="https://dl.acm.org/doi/10.1145/3603269.3604838">Computers Can Learn from the Heuristic Designs… (Sage)</a></td><td>SIGCOMM</td><td><strong>co-1st</strong></td><td>102</td></tr>
+    <tr><td>2021</td><td><a href="https://arxiv.org/abs/1912.11735">Wanna Make Your TCP Scheme Great for Cellular… (DeepCC)</a></td><td>IEEE JSAC</td><td><strong>co-1st</strong></td><td>80</td></tr>
+    <tr><td>2020</td><td>CFR-RL: Traffic Engineering with RL in SDN</td><td>IEEE JSAC</td><td>middle</td><td>241</td></tr>
+    <tr><td>2020</td><td><a href="https://dl.acm.org/doi/10.1145/3387514.3405892">Classic Meets Modern (Orca)</a></td><td>SIGCOMM</td><td><strong>co-1st</strong></td><td>369</td></tr>
+    <tr><td>2019</td><td>Make TCP Great (again?!) in Cellular Networks (preprint)</td><td>arXiv</td><td>2nd</td><td>12</td></tr>
+    <tr><td>2014</td><td>Visibility Filtering for Producing Indirect Illumination <span class="unv">likely a namesake — not on his CV; unverified</span></td><td>Pacific Graphics</td><td>—</td><td>—</td></tr>
+  </table>
+</section>
+
+<section id="discuss">
+  <h2>Your turn: discussion questions</h2>
+  <ol class="qbox">
+    <li><strong>Bounded vs clean-slate.</strong> Orca puts a <em>bounded</em> RL tweak on top of classic Cubic; clean-slate schemes let a
+       net pick the raw rate. When is &ldquo;bounded but reliable&rdquo; the right engineering call, and when does it leave too much on the table?</li>
+    <li><strong>Can you learn beyond your teachers?</strong> Sage distills many heuristics but destabilizes outside their envelope. Is it
+       possible for a learned controller to generalize <em>beyond</em> any heuristic it was shown &mdash; or is &ldquo;union of teachers&rdquo; the ceiling?</li>
+    <li><strong>Detection vs a readable image.</strong> ASMR buys ~12× MRI speed by collecting only data that confirms a <em>known</em> disease list,
+       giving up the human-readable image that catches the unexpected. Is that trade acceptable for screening? Where&rsquo;s the line in medicine?</li>
+  </ol>
+</section>
+
+<section id="complete">
+  <h2>What these notes don&rsquo;t cover (completeness)</h2>
+  <p class="muted">A deliberate scope note (v0.6 completeness check). We deep-read his four first/co-first papers because they best show
+     <em>his</em> contribution; that leaves gaps a reader should know about:</p>
+  <ul>
+    <li><strong>CFR-RL</strong> (RL traffic engineering in SDN, JSAC 2020) is his <em>most-cited co-authored</em> work (~241) but he is a
+       middle author, so it&rsquo;s listed, not deep-read &mdash; it shows the RL-for-networks theme beyond congestion control.</li>
+    <li><strong>SGLB</strong> (SIGCOMM 2025, ByteDance) is recent industry systems work (middle author) &mdash; the &ldquo;networks at scale&rdquo;
+       chapter of his career, summarized only.</li>
+    <li>The notes lean toward <strong>congestion control</strong> (4 of his papers); a reader might over-index on that and miss that ASMR is a
+       genuine domain jump, not a one-off.</li>
+  </ul>
+  <p class="muted" id="complete-critic"><strong>Completeness-critic notes (folded in):</strong> the biggest omission was the
+     <em>unifying theme</em> &mdash; now stated at the top (&ldquo;augment, don&rsquo;t replace&rdquo;). Also: most of his citation
+     weight sits in <strong>Orca and CFR-RL</strong>; the <strong>Orca→Sage</strong> arc is him <em>correcting his own approach</em>
+     (online → offline RL); and his CC papers are nearly all co-first <em>with Soheil Abbasloo</em> &mdash; the collaboration is
+     central, not incidental. The 2014 graphics paper is most likely a <em>namesake</em> (absent from his CV), marked unverified.</p>
+</section>
+
+<section id="sources">
+  <h2>Sources &amp; honesty</h2>
+  <p>Identity and list built from his <a href="https://wp.nyu.edu/cyy/">homepage</a>, <a href="https://dblp.org/pid/255/5705.html">DBLP</a>,
+     <a href="https://scholar.google.com/citations?user=OqRO_psAAAAJ&amp;hl=en">Google Scholar</a>, arXiv, and the NYU/LinkedIn pages; each
+     signature paper was deep-read and archived in <a href="_research/">_research/</a>.</p>
+  <div class="callout warn"><strong>Caveats (verify before citing):</strong>
+    <ul>
+      <li><strong>Two SIGCOMM papers (Orca, Sage) were paywalled</strong> to the research agents, so their <em>exact</em> %-gains are
+          <span class="unv">unverified</span> and not quoted; the method/qualitative findings were reconstructed from the authors&rsquo; own
+          survey/code and independent third-party benchmarks.</li>
+      <li><strong>Co-first authorship</strong> on Orca / DeepCC is per his homepage ("*Co-first authors"); on Sage the co-first footnote
+          could not be confirmed from a free copy of the PDF (he is first-listed).</li>
+      <li><strong>Citation counts</strong> are approximate Google-Scholar figures.</li>
+      <li><strong>Same-name collisions excluded</strong> — a Purdue genetics &ldquo;Yu-Chen Yen&rdquo; and others are different people; the
+          2014 graphics paper&rsquo;s attribution to him is only moderately confident.</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div style="height:1px;background:var(--line);margin:0 0 14px"></div>
+  <p>Reading notes prepared for an undergraduate study group &mdash; a learning aid, not an official bibliography. Every paper links its
+     primary source and an archived evidence file; please check the claims.</p>
+</footer>
+
+</body>
+</html>
