@@ -7,6 +7,9 @@ The real deliverable here is not any single paper — it's a **repeatable resear
 Each *instance* below applies the same workflow to a new target. This repo holds the workflow's
 methodology plus the instances built so far.
 
+> 🚧 **Ongoing project — kept up to date.** New instances are added over time as the workflow is applied
+> to more papers and researchers, and the workflow itself keeps improving. Expect this list to grow.
+
 > Repo name is still `pico-repro` for history; it now hosts the umbrella project.
 
 ## The method (how every instance is built)
@@ -46,6 +49,10 @@ timeline, signature-paper summaries, full publication list, and discussion quest
 
 - Lives in `MyClaude/alisa-liu-notes/index.html` (local). **Not yet published to GitHub** — open an issue /
   ask if you'd like it added here or as its own repo.
+
+### More instances coming…
+
+This is a living project — additional papers and researchers will be added as the workflow is applied to them.
 
 ---
 
