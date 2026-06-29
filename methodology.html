@@ -60,7 +60,7 @@
 </section>
 
 <section>
-  <h2>The current method (v0.6) — two passes under four principles</h2>
+  <h2>The current method (v0.7) — two passes, four principles, a self-improving loop</h2>
   <figure>
     <svg viewBox="0 0 960 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two-pass research workflow">
       <defs><marker id="a1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
@@ -128,6 +128,51 @@
     <li><strong>Citation counts</strong> — a sanctioned source (e.g. Semantic Scholar) or explicit omission with a note.</li>
   </ul>
   <p class="muted">Not adopted: skipping re-identification for already-known subjects; a separate whole-page consistency re-read (covered by per-claim verification).</p>
+
+  <h3>v0.7 additions (adopted)</h3>
+  <ul>
+    <li><strong>HTML generator</strong> &mdash; the content page is built from a spec via <code>tools/build_notes.py</code>
+        (fill the deep-read outputs into <code>notes.py</code> → generate <code>index.html</code>), instead of hand-writing.</li>
+    <li><strong>A self-improving loop</strong> &mdash; a per-run scorecard (<code>METRICS.md</code>), an auto-retro agent that
+        proposes method deltas (<code>METHOD_BACKLOG.md</code>), the user as approval gate, and a versioned method. See below.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>The self-improving loop (v0.7)</h2>
+  <p>The method now improves itself: every run produces a deliverable <em>and</em> evidence about the method, and a retro step
+     turns that evidence into the next version &mdash; with the user as the only manual gate.</p>
+  <figure>
+    <svg viewBox="0 0 940 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Self-improving loop">
+      <defs><marker id="lp" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#5b6776"/></marker>
+        <marker id="lpr" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#3a7d44"/></marker></defs>
+      <g font-family="inherit" font-size="12" text-anchor="middle">
+        <rect x="8" y="40" width="142" height="56" rx="10" fill="#cfe8f3" stroke="#2e86ab"/>
+        <text x="79" y="64" font-weight="700">Run a direction</text><text x="79" y="81" font-size="10.5">Pass1→Pass2→gate</text>
+        <rect x="166" y="40" width="138" height="56" rx="10" fill="#e9e3f6" stroke="#6a4c93"/>
+        <text x="235" y="64" font-weight="700">Measure</text><text x="235" y="81" font-size="10.5">scorecard (METRICS)</text>
+        <rect x="320" y="40" width="138" height="56" rx="10" fill="#fde7ea" stroke="#d1495b"/>
+        <text x="389" y="64" font-weight="700">Retro agent</text><text x="389" y="81" font-size="10.5">critique the run</text>
+        <rect x="474" y="40" width="138" height="56" rx="10" fill="#fff3d6" stroke="#e09f3e"/>
+        <text x="543" y="64" font-weight="700">Propose deltas</text><text x="543" y="81" font-size="10.5">(BACKLOG)</text>
+        <rect x="628" y="40" width="120" height="56" rx="10" fill="#e3f0df" stroke="#3a7d44"/>
+        <text x="688" y="64" font-weight="700">Approve</text><text x="688" y="81" font-size="10.5">you</text>
+        <rect x="764" y="40" width="168" height="56" rx="10" fill="#eee" stroke="#888"/>
+        <text x="848" y="64" font-weight="700">Update method</text><text x="848" y="81" font-size="10.5">bump version (changelog)</text>
+        <g stroke="#5b6776" stroke-width="1.8" fill="none">
+          <line x1="150" y1="68" x2="164" y2="68" marker-end="url(#lp)"/>
+          <line x1="304" y1="68" x2="318" y2="68" marker-end="url(#lp)"/>
+          <line x1="458" y1="68" x2="472" y2="68" marker-end="url(#lp)"/>
+          <line x1="612" y1="68" x2="626" y2="68" marker-end="url(#lp)"/>
+          <line x1="748" y1="68" x2="762" y2="68" marker-end="url(#lp)"/>
+        </g>
+        <path d="M848,96 C848,150 200,150 79,98" stroke="#3a7d44" stroke-width="1.8" fill="none" stroke-dasharray="6 4" marker-end="url(#lpr)"/>
+        <text x="470" y="168" font-size="11" fill="#3a7d44" font-style="italic">next run uses the new version &#8212; its metrics show if the change helped (regression check)</text>
+      </g>
+    </svg>
+    <figcaption>Run → Measure → Critique → Propose → Approve → Update method → repeat. The artifacts:
+      <code>METRICS.md</code>, <code>METHOD_BACKLOG.md</code>, this <code>methodology.html</code>.</figcaption>
+  </figure>
 </section>
 
 <section>
@@ -152,6 +197,11 @@
     <tr><td class="ver">v0.6<br><span class="muted">retrospective · adopted, to apply next</span></td>
         <td>From a process review: <strong>pipeline (no barrier)</strong>, <strong>per-agent budgets</strong>, <strong>slimmer Pass 1</strong>, <strong>per-claim provenance verified once</strong>, <strong>evidence + decision log in the repo</strong> (<code>_research/</code>), a <strong>completeness critic</strong>, an <strong>output-quality gate</strong>, <strong>cross-run diff</strong>, <strong>telemetry</strong>, and <strong>batched status</strong>.</td>
         <td>Faster (pipeline + budgets), more traceable (every claim sourced &amp; verified), and self-checking (critic + quality gate + diff). Applies from the next direction.</td></tr>
+    <tr><td class="ver">v0.7<br><span class="muted">generator + self-improving loop · current</span></td>
+        <td>Build the content page from a spec (<code>tools/build_notes.py</code>) instead of hand-writing; add the
+        <strong>self-improving loop</strong> &mdash; per-run scorecard (<code>METRICS.md</code>) + auto-retro proposing deltas
+        (<code>METHOD_BACKLOG.md</code>) + user approval → versioned method.</td>
+        <td>Cuts assembly time, and makes the <em>method</em> improve run-over-run with a measurable signal and a human gate.</td></tr>
   </table>
   <div class="callout">Next planned improvement: apply v0.4 from the <em>start</em> of the next direction (no shallow first
      draft), and consider a final "completeness critic" agent that asks what the whole note still omits.</div>
