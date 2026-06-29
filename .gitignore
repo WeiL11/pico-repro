@@ -1,0 +1,10 @@
+# Downloaded test images (Kodak) — fetched on first run, not redistributed here
+data/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# OS / editor
+.DS_Store

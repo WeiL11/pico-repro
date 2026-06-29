@@ -1,0 +1,6 @@
+# PICO concept reproduction — all free / local, CPU or Apple-MPS.
+torch>=2.2
+torchvision>=0.17
+numpy>=1.24
+pillow>=9.0
+matplotlib>=3.7

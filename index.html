@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PICO: What Matters in Practical Learned Image Compression — reading notes</title>
+<style>
+  :root{
+    --blue:#2e86ab; --red:#d1495b; --amber:#e09f3e; --green:#3a7d44;
+    --ink:#1c2430; --muted:#5b6776; --line:#e3e8ee; --bg:#f7f9fb; --card:#fff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       color:var(--ink);background:var(--bg);line-height:1.6}
+  a{color:var(--blue)}
+  header{background:linear-gradient(135deg,#1c2a3a,#2e4a63);color:#fff;padding:54px 24px 40px}
+  header .wrap{max-width:960px;margin:0 auto}
+  header h1{margin:0 0 6px;font-size:30px;line-height:1.25}
+  header .sub{font-size:17px;opacity:.9;margin:0 0 16px}
+  header .meta{font-size:13.5px;opacity:.8}
+  .tags{margin-top:16px}
+  .tag{display:inline-block;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);
+       border-radius:999px;padding:4px 12px;font-size:12.5px;margin:0 6px 6px 0}
+  main{max-width:960px;margin:0 auto;padding:8px 24px 64px}
+  section{background:var(--card);border:1px solid var(--line);border-radius:14px;
+          padding:24px 26px;margin:22px 0;box-shadow:0 1px 2px rgba(20,30,45,.04)}
+  h2{font-size:22px;margin:2px 0 12px;display:flex;align-items:center;gap:10px}
+  h2 .n{background:var(--blue);color:#fff;border-radius:8px;font-size:14px;
+        width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}
+  h3{font-size:16px;margin:18px 0 6px}
+  p{margin:10px 0}
+  .lead{font-size:17px;color:var(--ink)}
+  .muted{color:var(--muted)}
+  figure{margin:16px 0 6px;text-align:center}
+  figure img{max-width:100%;border:1px solid var(--line);border-radius:10px;background:#fff}
+  figcaption{font-size:13px;color:var(--muted);margin-top:8px}
+  code,kbd{background:#eef2f6;border:1px solid #dde4ec;border-radius:5px;padding:1px 6px;
+       font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px}
+  pre{background:#11161d;color:#e6edf3;border-radius:10px;padding:16px 18px;overflow:auto;font-size:13px}
+  pre code{background:none;border:none;color:inherit;padding:0}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:14px 0}
+  .stat{background:#f1f6fa;border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  .stat b{display:block;font-size:22px;color:var(--blue)}
+  .stat span{font-size:13px;color:var(--muted)}
+  .callout{border-left:4px solid var(--amber);background:#fff8ec;padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0}
+  .callout.warn{border-color:var(--red);background:#fdeef0}
+  .callout.ok{border-color:var(--green);background:#eef6ef}
+  table{border-collapse:collapse;width:100%;font-size:14px;margin:12px 0}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left}
+  th{background:#f1f6fa}
+  .pill{font-size:12px;color:#fff;background:var(--red);border-radius:999px;padding:2px 9px;white-space:nowrap}
+  nav.toc{font-size:14px}
+  nav.toc a{display:inline-block;margin:0 14px 6px 0}
+  footer{max-width:960px;margin:0 auto;padding:0 24px 50px;color:var(--muted);font-size:13px}
+  .keyline{height:1px;background:var(--line);margin:8px 0 0}
+  .timeline{position:relative;margin:20px 0 6px;padding-left:30px}
+  .timeline::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:var(--line)}
+  .era{position:relative;margin:0 0 22px}
+  .era::before{content:"";position:absolute;left:-26px;top:5px;width:14px;height:14px;border-radius:50%;
+       background:var(--blue);border:3px solid #fff;box-shadow:0 0 0 1px var(--line)}
+  .era.hl::before{background:var(--red)}
+  .era .yr{font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+  .era h3{margin:2px 0 4px;font-size:16px}
+  .era p{margin:6px 0}
+  .cite{font-size:.68em;vertical-align:super;text-decoration:none;font-weight:700;color:var(--blue);margin:0 1px}
+  .cite:hover{text-decoration:underline}
+  .studynote{background:#eef4fb;border:1px solid #cfe0f0;border-left:4px solid var(--blue);
+       border-radius:0 12px 12px 0;padding:18px 22px;margin:22px 0}
+  .studynote h2{font-size:18px;margin:0 0 6px;display:block}
+  .studynote p{margin:6px 0;font-size:14.5px}
+  ol.qbox{counter-reset:q;list-style:none;padding:0;margin:14px 0}
+  ol.qbox li{position:relative;background:#f7fafc;border:1px solid var(--line);border-radius:10px;
+       padding:12px 16px 12px 54px;margin:10px 0}
+  ol.qbox li::before{counter-increment:q;content:"Q" counter(q);position:absolute;left:14px;top:12px;
+       font-weight:800;color:var(--blue);font-size:14px}
+  ol.refs{font-size:13.5px;line-height:1.55;padding-left:26px}
+  ol.refs li{margin:7px 0}
+  ol.refs li:target{background:#fff8ec;border-radius:6px;padding:4px 8px;margin-left:-8px}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>What Matters in Practical Learned Image Compression</h1>
+    <p class="sub">Reading notes on Apple&rsquo;s <strong>PICO</strong> codec &mdash; the history of image compression,
+       what PICO changes, and small Python simulations of each idea.</p>
+    <p class="meta">Paper: K. Tatwawadi et al., <em>What Matters in Practical Learned Image Compression</em> (PICO),
+       arXiv:2605.05148, 2026 <a href="#r17" style="color:#bfe0f2;text-decoration:none">[17]</a>. &nbsp;·&nbsp;
+       Prepared as a study-group companion &mdash; a learning aid, not the official codec. Every claim about prior
+       work is cited; see <a href="#refs" style="color:#bfe0f2">References</a>.</p>
+    <div class="tags">
+      <span class="tag">learned image compression</span>
+      <span class="tag">rate&ndash;distortion</span>
+      <span class="tag">hyperprior + context</span>
+      <span class="tag">Haar resampling</span>
+      <span class="tag">perceptual quality</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<div class="studynote">
+  <h2>📚 For our study group</h2>
+  <p>These are my reading notes on the PICO paper, written for the undergraduates I mentor. Read them top to bottom:
+     the <a href="#story">history</a> explains <em>how</em> we got here, the numbered sections explain <em>what</em>
+     PICO does, and the demos let you see each idea. Every claim about prior work is cited (<a href="#refs">References</a>).</p>
+  <p><strong>Then it&rsquo;s your turn:</strong> go to <a href="#discuss">&ldquo;Your turn&rdquo;</a> and tell me what you
+     think &mdash; is PICO a genuine breakthrough, or clever engineering on top of known ideas? Come with an argument.</p>
+</div>
+
+<section>
+  <h2>TL;DR</h2>
+  <p class="lead">PICO is the first learned image codec that is both <strong>practical</strong> (fast enough to run on a phone)
+     and <strong>optimised directly for human perception</strong> rather than for PSNR.<a class="cite" href="#r17">[17]</a>
+     The paper is essentially a giant ablation study answering one question: <em>of all the design choices in a learned
+     codec, which ones actually move the needle?</em></p>
+  <div class="grid">
+    <div class="stat"><b>2.3&ndash;3&times;</b><span>bitrate savings vs AV1, AV2, VVC, ECM, JPEG-AI (human study)</span></div>
+    <div class="stat"><b>20&ndash;40%</b><span>savings vs the best prior learned codecs</span></div>
+    <div class="stat"><b>as fast as<br>230 / 150 ms</b><span>encode / decode of a 12&nbsp;MP image on an iPhone&nbsp;17 Pro Max (best case)</span></div>
+    <div class="stat"><b>+31.7%</b><span>BD-rate lost if you drop all four key components at once</span></div>
+  </div>
+  <nav class="toc">
+    <div class="keyline" style="margin-bottom:10px"></div>
+    <strong>Jump to:</strong>
+    <a href="#story">★ The story</a>
+    <a href="#jpeg">★ JPEG → PICO</a>
+    <a href="#problem">1 · The problem</a>
+    <a href="#pipeline">2 · The pipeline</a>
+    <a href="#haar">3 · Haar resampling</a>
+    <a href="#quant">4 · Quantization</a>
+    <a href="#entropy">5 · Entropy model</a>
+    <a href="#matters">6 · What matters</a>
+    <a href="#perceptual">7 · Perceptual &amp; scoring</a>
+    <a href="#vs">8 · vs prior codecs</a>
+    <a href="#run">9 · Run it</a>
+    <a href="#discuss">★ Your turn</a>
+    <a href="#refs">★ References</a>
+  </nav>
+</section>
+
+<section id="story">
+  <h2>★ The story: how we got to PICO</h2>
+  <p class="lead">Image compression has had three big eras &mdash; hand-crafted codecs, the learned-codec
+     revolution, and the perceptual turn. PICO is what happens when all three finally meet on a phone.
+     <strong>Oren Rippel</strong> (PICO&rsquo;s senior author) has a paper in almost every chapter of this story.</p>
+
+  <div class="timeline">
+    <div class="era">
+      <div class="yr">1992 &ndash; 2020 · Era 0</div>
+      <h3>The classical age: hand-crafted transforms</h3>
+      <p>JPEG (1992) set the recipe every later standard merely refines: a fixed transform (the DCT of
+         <a href="#problem">demo&nbsp;1</a>), quantization, entropy coding.<a class="cite" href="#r1">[1]</a>
+         JPEG&nbsp;2000 (wavelets, 2000),<a class="cite" href="#r2">[2]</a> WebP (2010),<a class="cite" href="#r3">[3]</a>
+         BPG / HEVC-intra (2014),<a class="cite" href="#r4">[4]</a> AV1 (2018)<a class="cite" href="#r8">[8]</a> and
+         VVC/H.266 (2020)<a class="cite" href="#r15">[15]</a> each squeezed out a little more &mdash; all designed by
+         human experts, all implicitly chasing pixel fidelity, all hitting diminishing returns.</p>
+    </div>
+    <div class="era hl">
+      <div class="yr">2016 &ndash; 2018 · Era 1</div>
+      <h3>The learned revolution: train the whole pipeline</h3>
+      <p>If the transform, quantization and entropy model are all differentiable, why not <em>learn</em> them
+         end-to-end from images? Toderici et al. (Google, 2016) used RNNs;<a class="cite" href="#r5">[5]</a>
+         Ballé, Laparra &amp; Simoncelli (2017) gave us the autoencoder-with-noise-quantization formulation still
+         used today.<a class="cite" href="#r6">[6]</a> <strong>Rippel &amp; Bourdev&rsquo;s &ldquo;Real-Time Adaptive
+         Image Compression&rdquo; (ICML 2017)</strong> was the first learned codec to beat every standard <em>and</em>
+         run in real time &mdash; already using adversarial training at low bitrates.<a class="cite" href="#r7">[7]</a>
+         Then Ballé et al. (2018) added the <strong>scale hyperprior</strong><a class="cite" href="#r9">[9]</a> and
+         Minnen et al. (2018) the <strong>autoregressive context</strong><a class="cite" href="#r10">[10]</a> &mdash;
+         the very pieces in <a href="#entropy">demo&nbsp;4</a>.</p>
+    </div>
+    <div class="era hl">
+      <div class="yr">2019 &ndash; 2021 · Era 2</div>
+      <h3>The perceptual turn: stop optimizing for PSNR</h3>
+      <p>Blau &amp; Michaeli (2019) proved a <strong>rate&ndash;distortion&ndash;perception trade-off</strong>: at low
+         bitrate you cannot maximise fidelity <em>and</em> realism &mdash; you must choose.<a class="cite" href="#r13">[13]</a>
+         <strong>HiFiC (Mentzer et al., NeurIPS 2020)</strong> showed the payoff: a GAN-based codec at 0.237&nbsp;bpp was
+         preferred to BPG that used <em>2.1× more bits</em>.<a class="cite" href="#r14">[14]</a> Meanwhile Rippel&rsquo;s
+         WaveOne pushed the same ideas into <strong>video</strong> &mdash; &ldquo;Learned Video Compression&rdquo;
+         (ICCV 2019, first to beat HEVC)<a class="cite" href="#r12">[12]</a> and <strong>ELF-VC</strong>
+         (ICCV 2021),<a class="cite" href="#r16">[16]</a> which made a <em>single</em> model span many bitrates
+         efficiently: a deliberate step toward deployability.</p>
+    </div>
+    <div class="era">
+      <div class="yr">~2021 · The wall</div>
+      <h3>The practicality wall</h3>
+      <p>Now there were two non-overlapping worlds: learned codecs that looked stunning (HiFiC) but were
+         slow, GPU-only, large and <em>non-deterministic across devices</em>; and traditional codecs that ran
+         everywhere but had plateaued. <strong>No codec was both perceptually excellent and shippable on a phone</strong>
+         with bit-exact decoding. WaveOne &mdash; acquired by <strong>Apple in 2023</strong> &mdash; had spent years
+         building precisely toward that deployability.</p>
+    </div>
+    <div class="era hl">
+      <div class="yr">2026 · Era 3 — the synthesis</div>
+      <h3>PICO: perceptual <em>and</em> practical</h3>
+      <p>PICO (Tatwawadi, &hellip;, <strong>Rippel</strong>, Apple) is where the two threads finally merge.<a class="cite" href="#r17">[17]</a>
+         It keeps the perceptual objective of Era&nbsp;2 but makes it run on an iPhone in ~230&nbsp;ms with bit-exact
+         cross-device decoding &mdash; via runtime-aware NAS plus cheap-but-powerful components (Haar resampling,
+         ConvScale, one-shot context, learned&nbsp;q) and a careful perceptual-loss recipe. Result, judged by
+         <em>humans</em>: <strong>2.3&ndash;3× over the best hand-designed codecs, 20&ndash;40% over the best learned ones.</strong></p>
+    </div>
+  </div>
+
+  <div class="callout ok"><strong>So why is PICO a breakthrough?</strong> Not because any single trick is new &mdash;
+     most pieces trace back through the timeline above. It is because PICO is the <strong>first codec to cross the
+     practicality wall while staying perceptually optimal</strong>: it turns &ldquo;learned compression looks amazing
+     in papers&rdquo; into &ldquo;learned compression you could actually ship on a phone,&rdquo; and it settles the
+     PSNR-vs-perception debate at scale with large human studies. It is the culmination of Rippel&rsquo;s decade-long
+     arc: <em>image → video → efficient → perceptual → on-device.</em></div>
+</section>
+
+<section id="jpeg">
+  <h2>★ A concrete example: JPEG, and why PICO is a new direction</h2>
+  <p>To see what makes PICO interesting, it helps to look at how we have compressed images for <em>thirty years</em>.
+     Almost every photo you have ever seen is a <strong>JPEG</strong><a class="cite" href="#r1">[1]</a> &mdash; a beautifully hand-engineered
+     signal-processing pipeline. (This walkthrough follows the same signal-processing intuition as
+     <a href="https://www.youtube.com/watch?v=Kv1Hiv3ox8I">this explainer video</a>.)</p>
+
+  <h3>How JPEG works &mdash; the 30-year recipe</h3>
+  <ol>
+    <li><strong>Split brightness from colour.</strong> Convert RGB&nbsp;→&nbsp;YCbCr. The eye is far more sensitive to
+        brightness (Y) than to colour (Cb, Cr), so the two can be treated differently.</li>
+    <li><strong>Throw away colour resolution (chroma subsampling).</strong> Store colour at half or quarter
+        resolution. You genuinely do not notice &mdash; the first free lunch, paid for by a fact about human vision.</li>
+    <li><strong>Cut the image into 8×8 blocks</strong> and process each one independently.</li>
+    <li><strong>Transform each block with the DCT.</strong> This rewrites 64 pixels as 64 frequencies. Natural image
+        blocks are smooth, so almost all the energy lands in a few low-frequency coefficients &mdash; exactly the
+        transform-coding idea in <a href="#problem">demo&nbsp;1</a>.</li>
+    <li><strong>Quantize with a table (the lossy step).</strong> Divide each coefficient by a number and round;
+        high frequencies get coarser bins because the eye barely sees them. This one table <em>is</em> JPEG&rsquo;s
+        entire model of human vision &mdash; a fixed, hand-tuned guess.</li>
+    <li><strong>Entropy-code the result</strong> (zig-zag scan → run-length → Huffman) to pack the many zeros tightly.</li>
+  </ol>
+
+  <figure>
+    <img src="assets/jpeg_pipeline.png" alt="YCbCr split and chroma subsampling on a real image">
+    <figcaption><code>demo6_jpeg_pipeline.py</code> — Steps 1&ndash;2 on a real image: brightness (Y) is kept sharp while
+      the two colour channels (Cb, Cr) are stored at 1/4 resolution. The reconstruction barely changes (~36&nbsp;dB),
+      because human vision spends most of its acuity on brightness, not colour.</figcaption>
+  </figure>
+
+  <h3>Inside one 8×8 block (steps 3&ndash;5)</h3>
+  <p>The heart of JPEG is what happens to a single 8×8 block. The <strong>DCT</strong> rewrites its 64 pixels as 64
+     frequency coefficients. Because natural blocks are smooth, the &ldquo;energy&rdquo; piles up in the top-left
+     (low-frequency) corner while the bottom-right (fine detail) is almost zero &mdash; this <em>energy compaction</em>
+     is the whole reason transforms help. The <strong>quantization table</strong> then divides each coefficient and
+     rounds: its values grow toward the bottom-right, so high frequencies are quantized coarsely (often to zero) and
+     low frequencies finely. Reading the result in a <strong>zig-zag</strong> order lines up all those zeros so
+     run-length + Huffman coding can crush them.</p>
+  <figure>
+    <img src="assets/jpeg_block_dct.png" alt="8x8 block DCT coefficients, quant table, quantized result, rebuilt block">
+    <figcaption>One textured block: pixels → DCT (energy to the top-left) → divide by the quant table → most high
+      frequencies vanish → inverse-DCT rebuild. That fixed table <em>is</em> JPEG&rsquo;s entire model of the eye.</figcaption>
+  </figure>
+
+  <h3>What happens when you starve it of bits (step 6 &amp; the failure mode)</h3>
+  <p>To shrink the file, JPEG simply scales the quantization table up &mdash; coarser bins, more zeros, fewer bits.
+     But because every 8×8 block is quantized <em>independently</em>, at low bitrate each block collapses toward its own
+     average and the seams between neighbours stop lining up. That is the origin of the classic <strong>blocky
+     artefacts</strong>: JPEG is <em>approximating the original coefficients</em>, and when it runs out of bits the
+     approximation breaks down in a very visible, structured way.</p>
+  <figure>
+    <img src="assets/jpeg_quality.png" alt="Real JPEGs at decreasing quality with zoomed crops showing 8x8 blocks">
+    <figcaption>Real JPEGs (Pillow&rsquo;s encoder) from high to very low quality, with a zoom row. The 8×8 block grid
+      becomes obvious as the bitrate drops &mdash; exactly the failure mode a perceptual, generative codec is built to avoid.</figcaption>
+  </figure>
+  <p>Decoding just runs the whole thing backwards. And here is the punch line: JPEG&nbsp;2000,<a class="cite" href="#r2">[2]</a>
+     WebP,<a class="cite" href="#r3">[3]</a> BPG,<a class="cite" href="#r4">[4]</a> AV1<a class="cite" href="#r8">[8]</a>
+     and VVC<a class="cite" href="#r15">[15]</a> are all <em>refinements of these very boxes</em> &mdash; smarter
+     transforms, smarter prediction, better-tuned perceptual knobs &mdash; but the boxes are always
+     <strong>hand-designed and fixed</strong>, and the goal is always to <strong>describe the original pixels compactly
+     and reconstruct an approximation</strong>. This is the ceiling PICO breaks away from.</p>
+
+  <h3>Why PICO is an interesting new direction</h3>
+  <p>PICO keeps the <em>shape</em> of this pipeline (transform → quantize → entropy-code) but changes two things at a
+     fundamental level:</p>
+  <ul>
+    <li><strong>Every box is learned, not hand-designed.</strong> The transform, the quantization widths and the
+        entropy model are all trained from data &mdash; and the <em>architecture itself</em> is discovered by searching
+        millions of configurations, instead of being written down by an expert.</li>
+    <li><strong>The objective shifts from &ldquo;match pixels&rdquo; to &ldquo;match perception.&rdquo;</strong>
+        JPEG&rsquo;s model of the eye is a single quantization table; PICO optimises directly for the human visual
+        system with deep perceptual + adversarial losses. So at very low bitrate JPEG <em>breaks</em> into blocks
+        while PICO <em>regenerates</em> a plausible texture that simply looks right.</li>
+  </ul>
+  <p>That second point is the real paradigm shift: from <strong>&ldquo;describe-and-approximate&rdquo;</strong>
+     (keep a lossy copy of the actual coefficients) toward <strong>&ldquo;compress-and-regenerate&rdquo;</strong>
+     (store a compact code and let a generative decoder paint a perceptually-equivalent image). Compression starts to
+     look less like signal processing and more like a tiny, conditioned image <em>generator</em>.</p>
+
+  <table>
+    <tr><th>Stage</th><th>JPEG (fixed, hand-designed)</th><th>PICO (learned)</th></tr>
+    <tr><td>Colour / input</td><td>YCbCr + chroma subsampling</td><td>learned analysis transform g<sub>a</sub></td></tr>
+    <tr><td>Transform</td><td>8×8 DCT (fixed basis)</td><td>learned non-linear transform + Haar resampling</td></tr>
+    <tr><td>Quantization</td><td>one fixed quant table</td><td>learned per-content bin width q</td></tr>
+    <tr><td>Entropy coding</td><td>zig-zag + run-length + Huffman</td><td>hyperprior + autoregressive context</td></tr>
+    <tr><td>Model of the eye</td><td>the quant table (a heuristic)</td><td>explicit perceptual + GAN losses</td></tr>
+    <tr><td>Who designs it</td><td>human experts</td><td>NAS over millions of configs</td></tr>
+    <tr><td>Low-bitrate failure</td><td>blocky artefacts</td><td>plausible regenerated texture</td></tr>
+  </table>
+  <div class="callout"><strong>One-sentence version:</strong> for 30 years we compressed images by
+     <em>hand-designing</em> a clever way to <em>describe</em> the pixels; PICO instead <em>learns</em> the whole
+     pipeline and optimises it for how images <em>look to people</em> &mdash; turning a codec into a fast, on-device
+     generative model.</div>
+</section>
+
+<section id="problem">
+  <h2><span class="n">1</span> The problem: rate vs. distortion</h2>
+  <p>Image compression is a tug-of-war between two numbers: the <strong>rate</strong> (how many bits the file takes,
+     measured in bits-per-pixel, <em>bpp</em>) and the <strong>distortion</strong> (how different the decoded image is
+     from the original). You can always shrink one by sacrificing the other. A codec is &ldquo;better&rdquo; when its whole
+     <strong>rate&ndash;distortion (RD) curve</strong> sits above a competitor&rsquo;s &mdash; more quality for the same bits.</p>
+  <p>The single most important trick is <strong>transform coding</strong>: instead of quantizing raw pixels, first apply a
+     transform that packs the image&rsquo;s energy into a few coefficients, then quantize <em>those</em>. JPEG uses a fixed
+     DCT; learned codecs like PICO replace it with a <em>learned</em> non-linear transform (a neural autoencoder).
+     The demo below quantizes the same image both ways:</p>
+  <figure>
+    <img src="assets/demo1_transform_coding.png" alt="RD curves: pixel quantization vs DCT transform coding">
+    <figcaption><code>demo1_transform_coding.py</code> — at the same bitrate, an 8&times;8 DCT beats raw-pixel
+      quantization by several dB. Learned transforms push this further.</figcaption>
+  </figure>
+</section>
+
+<section id="pipeline">
+  <h2><span class="n">2</span> How PICO works, step by step</h2>
+  <p>PICO is built on the now-standard <strong>mean-scale hyperprior</strong> autoencoder.<a class="cite" href="#r9">[9]</a><a class="cite" href="#r10">[10]</a>
+     Here is exactly what happens to your image on the way in (encoding) and on the way out (decoding). As you read, watch
+     for which boxes are <strong>learned neural networks</strong> and which are <strong>fixed maths</strong>.</p>
+  <figure>
+    <img src="assets/demo5_architecture.png" alt="PICO mean-scale hyperprior pipeline diagram">
+    <figcaption><code>demo5_ablation_rd.py</code> draws this pipeline; each numbered step below maps to a block in it.</figcaption>
+  </figure>
+
+  <h3>Encoding: image &rarr; bits</h3>
+  <ol>
+    <li><strong>Tile the image.</strong> A 12&nbsp;MP photo is cut into <em>non-overlapping</em> 504×504 tiles, each padded to
+        512×512 with a 4-pixel contextual margin from its neighbours, so each piece fits in phone memory and is processed on
+        its own. <em>(fixed)</em></li>
+    <li><strong>Analysis transform g<sub>a</sub> &mdash; the &ldquo;learned DCT&rdquo;.</strong> A small convolutional network turns
+        each tile (H×W×3) into a much smaller <em>latent</em> tensor y (roughly H/16 × W/16 × C channels), down-sampling with
+        invertible <strong>Haar wavelets</strong> instead of stride-2 convs (<a href="#haar">§3</a>). This is JPEG&rsquo;s fixed
+        8×8 DCT replaced by a <em>learned, non-linear</em> transform. <em>(ML &mdash; learned)</em></li>
+    <li><strong>Quantize the latent.</strong> Round y to whole numbers using a <em>learned, per-content</em> bin width q
+        &mdash; finer bins where detail matters, coarser where it doesn&rsquo;t (<a href="#quant">§4</a>). This rounding is the
+        only place information is actually lost. <em>(ML &mdash; learned q)</em></li>
+    <li><strong>Predict each value&rsquo;s bit cost (the entropy model).</strong> A side &ldquo;hyperprior&rdquo; network plus a
+        one-shot autoregressive <em>context</em> network read the quantized latent and output, for every number, a probability
+        distribution (a mean µ and a scale σ) (<a href="#entropy">§5</a>). A sharper prediction means fewer bits. <em>(ML &mdash; learned)</em></li>
+    <li><strong>Write the bitstream.</strong> A standard arithmetic / range coder turns the integers into the actual file,
+        spending &minus;log&#8322;P bits on each value using the predicted probabilities. <em>(fixed algorithm)</em></li>
+  </ol>
+
+  <h3>Decoding: bits &rarr; image</h3>
+  <ol>
+    <li><strong>Entropy-decode</strong> the bitstream back into the exact same integer latent (same probabilities, run in
+        reverse). <em>(fixed)</em></li>
+    <li><strong>Synthesis transform g<sub>s</sub>.</strong> A second learned network &mdash; the mirror of g<sub>a</sub>,
+        up-sampling with Haar &mdash; turns the latent back into pixels. Because it was trained with perceptual + adversarial
+        losses, at low bitrate it <em>regenerates</em> plausible texture instead of blurring (<a href="#perceptual">§7</a>).
+        <em>(ML &mdash; learned)</em></li>
+    <li><strong>Re-assemble the tiles</strong> into the full image. <em>(fixed)</em></li>
+  </ol>
+
+  <h3>So which steps did ML replace?</h3>
+  <p>Every box that was a hand-designed formula in JPEG is now a <em>trained network</em> &mdash; and the <em>shape</em> of those
+     networks was itself chosen by a <strong>performance-aware neural architecture search</strong> (NAS) over millions of
+     configurations, constrained to hit a target phone runtime.<a class="cite" href="#r17">[17]</a></p>
+  <table>
+    <tr><th>Step</th><th>JPEG (fixed)</th><th>PICO</th><th>ML?</th><th>Lives in</th></tr>
+    <tr><td>Split / resample</td><td>8×8 blocks</td><td>tiles + Haar resampling</td><td>partly &mdash; tiling is fixed; Haar resampling sits inside the learned transforms</td><td>both</td></tr>
+    <tr><td>Transform</td><td>fixed DCT</td><td>conv analysis g<sub>a</sub></td><td><strong>yes</strong></td><td>encoder</td></tr>
+    <tr><td>Quantize</td><td>fixed quant table</td><td>learned per-content width q</td><td><strong>yes</strong> &mdash; q is an <em>output</em> of the context net, not its own model</td><td>decoder side</td></tr>
+    <tr><td>Probability model</td><td>fixed Huffman</td><td>hyperprior + context → µ, σ</td><td><strong>yes</strong></td><td>both</td></tr>
+    <tr><td>Write bits</td><td>Huffman coder</td><td>arithmetic / range coder</td><td>no &mdash; fixed algorithm</td><td>&mdash;</td></tr>
+    <tr><td>Reconstruct</td><td>inverse DCT</td><td>conv synthesis g<sub>s</sub></td><td><strong>yes</strong></td><td>decoder</td></tr>
+    <tr><td>Design the architecture</td><td>human experts</td><td>NAS over millions of configs</td><td><strong>yes</strong> &mdash; meta-learned, run <em>offline</em> (ships 0 params)</td><td>&mdash;</td></tr>
+  </table>
+  <p class="muted">Only three shipped neural networks do the real work &mdash; the analysis transform g<sub>a</sub>, the
+     hyperprior + context probability model, and the synthesis transform g<sub>s</sub> &mdash; bundled into an
+     <strong>encoder</strong> and a <strong>decoder</strong> (sizes below). The learned width q is just an output of the
+     context net, and NAS is an offline search that ships nothing.</p>
+  <h3>How big are the networks?</h3>
+  <p>The paper reports sizes for the two bundles that actually ship &mdash; an encoder and a decoder &mdash; not for each box.<a class="cite" href="#r17">[17]</a></p>
+  <table>
+    <tr><th>Bundle</th><th>Parameters</th><th>On disk</th><th>Peak on-device memory</th><th>Channels / scale</th></tr>
+    <tr><td><strong>Encoder</strong> (g<sub>a</sub> + entropy estimation)</td><td>15.2M</td><td>30.4 MB</td><td>38.8 MB</td><td>64 / 96 / 96</td></tr>
+    <tr><td><strong>Decoder</strong> (g<sub>s</sub> + entropy decoding + context)</td><td>9.6M</td><td>19.4 MB</td><td>25.4 MB</td><td>160 / 64 / 32</td></tr>
+    <tr><td><strong>Combined</strong></td><td>&asymp;24.8M</td><td>&asymp;49.8 MB</td><td>&mdash;</td><td>&mdash;</td></tr>
+  </table>
+  <p class="muted">&asymp;25M parameters is <em>tiny</em> by modern ML standards &mdash; the win comes from the design and the
+     objective, not from scale. The paper gives <em>no</em> finer per-component breakdown (g<sub>a</sub> vs hyperprior vs
+     context vs g<sub>s</sub>), so the bundle contents in brackets are approximate. The learned width q is an output of the
+     context net, and the NAS search runs offline (0 inference parameters).</p>
+  <p class="muted">Why this matters: making every step learnable lets PICO optimise the <em>whole</em> chain for a single goal
+     at once &mdash; and that goal is human perception, not pixel error. How that goal is actually measured is covered in
+     <a href="#perceptual">§7</a>.</p>
+</section>
+
+<section id="haar">
+  <h2><span class="n">3</span> Haar-wavelet resampling <span class="pill">top lever · up to ~19.5%</span></h2>
+  <p>Every time the network changes resolution it must down- or up-sample. The usual choices &mdash; a stride-2 convolution,
+     or a naive &ldquo;pixel-reshuffle&rdquo; (space-to-depth) &mdash; either <strong>throw information away</strong> or alias fine
+     detail. PICO instead resamples with <strong>2D Haar wavelets</strong>: one H&times;W&times;C block becomes
+     (H/2)&times;(W/2)&times;4C, keeping <em>all</em> the information (perfect reconstruction) and cleanly splitting low- vs
+     high-frequency sub-bands &mdash; for free, since Haar folds into a 1&times;1 conv at inference. The network then decides what
+     to spend bits on, instead of the resampler silently destroying detail.</p>
+  <p class="muted">In the paper&rsquo;s ablation this is the single largest architectural lever: replacing Haar with a naive
+     pixel-reshuffle costs <strong>~19.5% BD-rate</strong>, and with a stride-2 conv/deconv <strong>~8.9%</strong>.<a class="cite" href="#r17">[17]</a>
+     (Demo&nbsp;2 below illustrates the underlying principle &mdash; invertibility &mdash; using a stride-2 baseline.)</p>
+  <figure>
+    <img src="assets/demo2_haar_resampling.png" alt="Haar sub-bands and invertible vs lossy resampling">
+    <figcaption><code>demo2_haar_resampling.py</code> — top: the four Haar sub-bands (LL/LH/HL/HH).
+      Bottom: Haar down-then-up reconstructs the image <strong>exactly (≈99 dB)</strong>, while stride-2 + bilinear loses
+      detail (≈28.6 dB). The right panel shows the destroyed high-frequency content.</figcaption>
+  </figure>
+</section>
+
+<section id="quant">
+  <h2><span class="n">4</span> Quantization &amp; learned bin width <span class="pill">~8.2%</span></h2>
+  <p>Quantization is the only <em>lossy</em> step, and it is not differentiable, so learned codecs lean on two tricks:</p>
+  <ul>
+    <li><strong>Straight-through estimator (STE)</strong>: round on the forward pass, copy the gradient straight through
+        on the backward pass &mdash; so the encoder can still be trained.</li>
+    <li><strong>Additive U(&minus;&frac12;,&frac12;) noise</strong>: a differentiable stand-in for rounding whose distribution
+        matches the quantized one, used to estimate the rate during training.</li>
+  </ul>
+  <p>PICO also <strong>learns a per-content quantization width</strong> <code>q</code>: how finely to quantize each region.
+     The principle is <em>adaptive bit allocation</em> &mdash; spend bits where the signal has energy, skip where it doesn&rsquo;t.
+     The demo shows the textbook version (&ldquo;reverse water-filling&rdquo;) on real image statistics: optimal allocation beats a
+     uniform bit budget by 10+ dB at low bitrate.</p>
+  <figure>
+    <img src="assets/demo3_quantization.png" alt="Noise proxy, adaptive bin width map, and RD curves">
+    <figcaption><code>demo3_quantization.py</code> — left: the noise proxy matches rounding. Middle: optimal bits per DCT
+      frequency. Right: adaptive (content-aware) allocation lifts the whole RD curve.</figcaption>
+  </figure>
+</section>
+
+<section id="entropy">
+  <h2><span class="n">5</span> The entropy model: hyperprior + context <span class="pill">~10.3%</span></h2>
+  <p>After quantization, the latent must become bits. The count is set by the probability model:
+     <code>bits = &minus;log&#8322; P</code>. A better model of the <em>same</em> latent means fewer bits &mdash; a free, lossless win.
+     PICO builds the model in stages:</p>
+  <ol>
+    <li><strong>Factorized</strong>: one global distribution &mdash; ignores all structure.</li>
+    <li><strong>Hyperprior</strong>: a tiny side channel transmits a per-region <em>scale</em> &mdash; &ldquo;how uncertain is each area.&rdquo;</li>
+    <li><strong>Autoregressive context</strong>: predict each value&rsquo;s <em>mean</em> from already-decoded neighbours and
+        code only the residual. PICO uses a <em>one-shot</em> (checkerboard/channel) AR model so it stays fast on-device.</li>
+  </ol>
+  <figure>
+    <img src="assets/demo4_hyperprior_entropy.png" alt="Bits drop from factorized to hyperprior to context model">
+    <figcaption><code>demo4_hyperprior_entropy.py</code> — on a correlated, heteroscedastic latent the estimated bits/symbol
+      drop monotonically: factorized &rarr; hyperprior &rarr; +context. The entropy model is where bits are really saved.</figcaption>
+  </figure>
+</section>
+
+<section id="matters">
+  <h2><span class="n">6</span> So… what actually matters?</h2>
+  <p>The paper&rsquo;s headline table measures each component by its <strong>BD-rate increase</strong> when its design choice is
+     swapped for the naive alternative &mdash; i.e. how many <em>extra</em> bits you would need for the same quality without it.
+     Higher = matters more (metric: CMMD-CLIP BD-rate).</p>
+  <figure>
+    <img src="assets/demo5_ablation.png" alt="BD-rate increase per removed component and what BD-rate means">
+    <figcaption>Left: the ranking from the paper. Right: what BD-rate measures &mdash; the horizontal gap between two RD
+      curves at matched quality.</figcaption>
+  </figure>
+  <table>
+    <tr><th>Design choice</th><th>BD-rate vs naive alternative</th><th>Demonstrated in</th></tr>
+    <tr><td>Haar resampling</td><td>~19.5%<sup>&dagger;</sup></td><td><code>demo2</code></td></tr>
+    <tr><td>One-shot autoregressive context</td><td>~10.3%</td><td><code>demo4</code></td></tr>
+    <tr><td>Learned scales (ConvScale)</td><td>~9.6%</td><td>architecture (per-channel learned scales)</td></tr>
+    <tr><td>Learned quantization width</td><td>~8.2%</td><td><code>demo3</code></td></tr>
+    <tr><td><strong>All of the above together</strong></td><td><strong>~31.7%</strong></td><td>&mdash;</td></tr>
+  </table>
+  <p class="muted"><sup>&dagger;</sup> The ~19.5% is vs a naive pixel-reshuffle; replacing Haar with a stride-2 conv/deconv
+     instead costs ~8.9%. &mdash; &ldquo;Learned scales&rdquo; (ConvScale): small learnable per-channel input/output scales folded
+     into convolutions plus a per-channel spatial activation scale at each resolution &mdash; free at inference (reparameterized
+     away) yet worth ~9.6%.</p>
+</section>
+
+<section id="perceptual">
+  <h2><span class="n">7</span> Optimising for the eye &mdash; and how it&rsquo;s scored</h2>
+  <p>The deepest finding is about the <em>objective</em>: what you grade a codec on decides what it becomes. There are two
+     distinct &ldquo;scores&rdquo; at play here, and confusing them is a classic mistake.</p>
+
+  <h3>The training objective (what the network minimises)</h3>
+  <p>Like every learned codec, PICO minimises <strong>rate + λ · distortion</strong> &mdash; few bits <em>and</em> a faithful
+     image, with λ trading the two off. The twist is that &ldquo;distortion&rdquo; is not plain MSE but a blend aimed at human vision:</p>
+  <p style="text-align:center"><code>loss = rate &nbsp;+&nbsp; λ · ( MSE + w&#8321;·LPIPS + w&#8322;·MS-SSIM + w&#8323;·GAN + w&#8324;·text + w&#8325;·tiling )</code></p>
+  <p>MSE anchors it, <strong>LPIPS</strong><a class="cite" href="#r11">[11]</a> and MS-SSIM reward perceptual similarity, the
+     <strong>GAN</strong> term rewards <em>realism</em> (texture that looks real, not merely close), and two targeted terms fix the
+     artefacts people notice most &mdash; legible <em>text</em> and seamless <em>tile</em> boundaries. Training runs in two phases
+     (an MSE warm-up, then perceptual/GAN fine-tuning) so the GAN does not collapse. The &ldquo;rate&rdquo; term is the entropy
+     model&rsquo;s differentiable predicted bit cost (<a href="#entropy">§5</a>), so the entire chain trains by gradient descent.</p>
+
+  <h3>The evaluation (how victory is actually claimed)</h3>
+  <p>You cannot trust a model graded only by its own loss, so PICO is judged by separate yardsticks:</p>
+  <ul>
+    <li><strong>Large subjective human studies</strong> &mdash; tens of thousands of <em>pairwise</em> &ldquo;which looks
+        better?&rdquo; comparisons, turned into <strong>Elo</strong> rankings. Real people, real preference: the gold standard.</li>
+    <li><strong>BD-rate on perceptual metrics</strong> &mdash; the rate&ndash;distortion curves are scored with metrics that
+        track human opinion (e.g. CMMD / LPIPS-style), <em>not</em> PSNR, then summarised as the average % bitrate saved at
+        matched quality (the gap pictured in <a href="#matters">§6</a>).</li>
+    <li><strong>Runtime as a hard constraint</strong> &mdash; a codec only counts as &ldquo;practical&rdquo; if it meets the
+        on-device latency budget (~230&nbsp;ms encode / 150&nbsp;ms decode for a 12&nbsp;MP image). Quality is maximised
+        <em>subject to</em> that.</li>
+  </ul>
+  <p>In those studies the perceptually-trained codec is dramatically preferred <em>even where its PSNR is lower</em> &mdash; the
+     rate&ndash;distortion&ndash;perception trade-off made concrete.<a class="cite" href="#r13">[13]</a> The lesson:
+     <strong>PSNR poorly reflects what humans see</strong>, and can even contradict their preference.</p>
+
+  <div class="callout warn"><strong>Why the choice of yardstick is the whole point.</strong> Grade with PSNR and blurry averages
+     win, so you build a blurry codec. Grade with <em>human perception</em> and a completely different design wins &mdash; one that
+     <em>regenerates</em> texture. Changing the scoring rule changed the answer; that, more than any single component, is
+     PICO&rsquo;s thesis.<a class="cite" href="#r13">[13]</a> <span class="muted">(These demos implement the rate/MSE core; the
+     GAN recipe is described, not reproduced &mdash; see the box in <a href="#run">§9</a>.)</span></div>
+  <div class="callout">PICO also tiles big images (non-overlapping 504×504 tiles, padded to 512×512 with a 4-px contextual
+     margin) so a 12&nbsp;MP photo fits in phone memory, and uses a bit-exact CPU path for the scale decoder so a file encoded
+     on one device decodes identically on another.</div>
+</section>
+
+<section id="vs">
+  <h2><span class="n">8</span> How PICO differs from earlier codecs</h2>
+  <p>&ldquo;Optimised for the human eye&rdquo; is the headline, but concretely PICO changes four things at once:
+     the <strong>objective</strong>, the <strong>losses</strong>, the <strong>architecture</strong>, and the
+     <strong>deployment engineering</strong>. Here is what each actually means.</p>
+
+  <h3>1 · The objective: from pixel error to perceptual realism</h3>
+  <p>Traditional codecs (JPEG, AV1, VVC) and most early learned codecs minimise <em>pixel</em> error (MSE/PSNR).
+     At low bitrate the mathematically safe move is to <strong>blur</strong>: when the codec is unsure what a texture
+     looks like, outputting the average is what least upsets MSE &mdash; hence smearing, blocking and ringing.
+     PICO adds a <strong>GAN + perceptual losses</strong>, which instead ask the output to look like a <em>real
+     photo in distribution</em>. So when bits run out it does not smear &mdash; it <strong>generates a plausible
+     texture</strong> (grass, hair, brick). Pixel values may differ from the original (PSNR can even drop), yet
+     people judge the result as clearly better.</p>
+  <div class="callout warn"><strong>Why PSNR misleads:</strong> in PICO&rsquo;s subjective studies (tens of thousands of
+     pairwise comparisons, Elo-ranked) the perceptual model is strongly preferred even when its PSNR is <em>lower</em>.
+     Chasing PSNR actively works against human preference.</div>
+
+  <h3>2 · Targeted losses for the artefacts people actually notice</h3>
+  <p>Beyond LPIPS + MS-SSIM + GAN, PICO adds two losses aimed at specific failure modes that most prior codecs ignore:
+     a <strong>text-fidelity</strong> loss (heavy L1 in detected text regions, GAN suppressed there, so letters stay
+     crisp instead of being &ldquo;hallucinated&rdquo; wrong) and a <strong>tiling-artefact</strong> loss
+     (multi-resolution consistency across tile seams). Training is <strong>two-phase</strong> &mdash; an MSE warm-up,
+     then perceptual/GAN fine-tuning &mdash; which is what keeps the GAN from collapsing.</p>
+
+  <h3>3 · Components that are both better <em>and</em> cheap (found by runtime-aware NAS)</h3>
+  <p>To stay fast on a phone, PICO runs a <strong>performance-aware neural architecture search</strong> over millions
+     of configurations, picking the most accurate backbone that still hits a target on-device latency. Several of its
+     building blocks (the &ldquo;what matters&rdquo; list above) are high-value yet nearly free at inference:</p>
+  <ul>
+    <li><strong>Haar resampling</strong> instead of strided conv &mdash; lossless, alias-free, and reparameterised into
+        1&times;1 convs so it costs nothing at inference.</li>
+    <li><strong>ConvScale / learned scales</strong> &mdash; folded into the convolution weights at inference (free), yet worth ~9.6%.</li>
+    <li><strong>One-shot autoregressive context</strong> &mdash; earlier AR entropy models decode pixel-by-pixel
+        (too slow to ship); PICO&rsquo;s runs in a couple of parallel passes entirely on the accelerator.</li>
+  </ul>
+
+  <h3>4 · Engineering that makes it actually deployable</h3>
+  <ul>
+    <li><strong>Tiling</strong> (non-overlapping 504×504 tiles padded to 512×512 with a 4-px contextual margin) so a 12&nbsp;MP image fits in phone memory.</li>
+    <li><strong>Bit-exact cross-device decoding</strong> &mdash; the entropy scale decoder is quantised to UINT8 and run on
+        CPU for IEEE-compliant floats, so a file encoded on one device decodes <em>identically</em> on another
+        (a float mismatch would otherwise break decoding entirely).</li>
+    <li><strong>Latency</strong> &mdash; ~230&nbsp;ms encode / ~150&nbsp;ms decode for a 12&nbsp;MP image on an iPhone&nbsp;17 Pro Max,
+        faster than many top ML codecs running on a V100 GPU.</li>
+  </ul>
+
+  <h3>Side by side</h3>
+  <table>
+    <tr><th></th><th>Traditional (JPEG/AV1/VVC)</th><th>Earlier learned codecs</th><th>PICO</th></tr>
+    <tr><td>Transform</td><td>hand-designed (DCT)</td><td>learned</td><td>learned + runtime-aware NAS</td></tr>
+    <tr><td>Objective</td><td>pixel error</td><td>mostly PSNR (blurry), or perceptual but slow</td><td><strong>perceptual / generative + targeted losses</strong></td></tr>
+    <tr><td>Low-bitrate look</td><td>blocking / ringing</td><td>blur</td><td><strong>plausible generated texture</strong></td></tr>
+    <tr><td>Runs on a phone?</td><td>yes (mature hardware)</td><td>usually no (slow, GPU, non-deterministic)</td><td><strong>yes &mdash; real-time + bit-exact</strong></td></tr>
+  </table>
+  <p class="muted">In short: PICO is the first learned codec that is <strong>both</strong> perceptually optimised
+     <strong>and</strong> genuinely deployable &mdash; that combination is the contribution, not either half alone.</p>
+</section>
+
+<section id="discuss">
+  <h2>★ Your turn: discussion questions</h2>
+  <p>Read the notes above, then come to our session with a view on these. There are no &ldquo;official&rdquo; answers
+     &mdash; I want your reasoning, ideally backed by the references.</p>
+  <ol class="qbox">
+    <li><strong>Was abandoning PSNR the right call?</strong> The rate&ndash;distortion&ndash;perception theory<a class="cite" href="#r13">[13]</a>
+       says fidelity and realism genuinely trade off. If a codec <em>invents</em> plausible texture that was not in the
+       original, is that acceptable for a family photo? A legal document? Where is the line?</li>
+    <li><strong>Is PICO a real breakthrough or excellent engineering &mdash; and what is the key insight?</strong> Almost every
+       component traces back to earlier work (the hyperprior,<a class="cite" href="#r9">[9]</a> the context model,<a class="cite" href="#r10">[10]</a>
+       GAN-based compression,<a class="cite" href="#r14">[14]</a> flexible-rate video<a class="cite" href="#r16">[16]</a>). Does
+       combining known pieces to cross the &ldquo;deployable <em>and</em> perceptual&rdquo; threshold count as a breakthrough?
+       In one sentence, what is the paper&rsquo;s core insight?</li>
+    <li><strong>What is the next wall &mdash; e.g. the wall in MRI?</strong> PICO solved on-device <em>natural-image</em>
+       compression by letting the decoder <em>regenerate</em> texture. But in medical imaging (MRI/CT), an invented-but-plausible
+       detail could be a fake lesion. What does &ldquo;the wall&rdquo; look like there &mdash; and would a perceptual/generative
+       codec help or be dangerous? Sketch one concrete research idea.</li>
+  </ol>
+  <p class="muted">Send me a paragraph per question, or annotate this page and bring it to the meeting.</p>
+</section>
+
+<section id="run">
+  <h2><span class="n">9</span> Run the simulations yourself</h2>
+  <p>Everything here is free and local (CPU or Apple-MPS). From the project folder:</p>
+  <pre><code>pip install -r requirements.txt
+
+python demos/demo1_transform_coding.py     # transform coding &amp; the RD trade-off
+python demos/demo2_haar_resampling.py      # invertible Haar vs lossy strided conv
+python demos/demo3_quantization.py         # STE, noise proxy, adaptive bin width
+python demos/demo4_hyperprior_entropy.py   # factorized -> hyperprior -> context
+python demos/demo5_ablation_rd.py          # architecture + "what matters" charts
+
+# optional: actually train the tiny codec end-to-end (~3 min on MPS)
+python demos/demo5_ablation_rd.py --train</code></pre>
+  <p class="muted">Each script prints a short lesson and writes a figure into <code>assets/</code> (the ones embedded above).
+     The demos auto-download one Kodak test image; offline, they fall back to a synthetic image.</p>
+
+  <div class="callout warn">
+    <strong>What this project is <em>not</em>.</strong> It is a learning companion, not a reproduction of PICO. Out of scope:
+    the neural architecture search over millions of configs, on-device latency/runtime targets, a real range-coder bitstream
+    (we report estimated entropy as bpp), the GAN discriminator and text/tiling losses, the quality levels (8 coarse,
+    interpolated to 71), and the
+    large-scale (~120k image) training. The included <code>TinyCodec</code> is a faithful-in-spirit mean-scale hyperprior with
+    Haar resampling, masked-conv context and learned <code>q</code> &mdash; but a 3-minute toy on a handful of images will
+    <em>not</em> reproduce the paper&rsquo;s ablation <em>ordering</em>; that needs full-scale training. The clean per-component
+    evidence lives in demos 2&ndash;4.
+  </div>
+  <div class="callout ok">
+    <strong>What you <em>can</em> take away.</strong> A working mental model of every block in a modern learned image codec,
+    correct isolated simulations of why each &ldquo;what matters&rdquo; component helps, and the central insight that practical,
+    perceptually-optimised compression &mdash; not PSNR chasing &mdash; is what makes PICO win.
+  </div>
+</section>
+
+<section id="refs">
+  <h2>★ References</h2>
+  <p class="muted">Primary sources for the claims above. arXiv links are free to read; the 2026 entries are preprints,
+     and some venue details are not yet finalised.</p>
+  <ol class="refs">
+    <li id="r1">G. K. Wallace. &ldquo;The JPEG Still Picture Compression Standard.&rdquo; <em>IEEE Trans. Consumer Electronics</em>, 1992. <a href="https://doi.org/10.1109/30.125072">doi:10.1109/30.125072</a></li>
+    <li id="r2">A. Skodras, C. Christopoulos, T. Ebrahimi. &ldquo;The JPEG 2000 Still Image Compression Standard.&rdquo; <em>IEEE Signal Processing Magazine</em>, 2001. <a href="https://doi.org/10.1109/79.952804">doi:10.1109/79.952804</a></li>
+    <li id="r3">Google. &ldquo;WebP &mdash; A new image format for the Web.&rdquo; 2010. <a href="https://developers.google.com/speed/webp">developers.google.com/speed/webp</a></li>
+    <li id="r4">F. Bellard. &ldquo;BPG Image Format.&rdquo; 2014. <a href="https://bellard.org/bpg/">bellard.org/bpg</a></li>
+    <li id="r5">G. Toderici, S. M. O&rsquo;Malley, S. J. Hwang, et al. &ldquo;Variable Rate Image Compression with Recurrent Neural Networks.&rdquo; <em>ICLR</em>, 2016. <a href="https://arxiv.org/abs/1511.06085">arXiv:1511.06085</a></li>
+    <li id="r6">J. Ballé, V. Laparra, E. P. Simoncelli. &ldquo;End-to-end Optimized Image Compression.&rdquo; <em>ICLR</em>, 2017. <a href="https://arxiv.org/abs/1611.01704">arXiv:1611.01704</a></li>
+    <li id="r7">O. Rippel, L. Bourdev. &ldquo;Real-Time Adaptive Image Compression.&rdquo; <em>ICML</em>, 2017. <a href="https://arxiv.org/abs/1705.05823">arXiv:1705.05823</a></li>
+    <li id="r8">Alliance for Open Media. &ldquo;AV1 Bitstream &amp; Decoding Process Specification.&rdquo; 2018. <a href="https://aomedia.org/">aomedia.org</a></li>
+    <li id="r9">J. Ballé, D. Minnen, S. Singh, S. J. Hwang, N. Johnston. &ldquo;Variational Image Compression with a Scale Hyperprior.&rdquo; <em>ICLR</em>, 2018. <a href="https://arxiv.org/abs/1802.01436">arXiv:1802.01436</a></li>
+    <li id="r10">D. Minnen, J. Ballé, G. Toderici. &ldquo;Joint Autoregressive and Hierarchical Priors for Learned Image Compression.&rdquo; <em>NeurIPS</em>, 2018. <a href="https://arxiv.org/abs/1809.02736">arXiv:1809.02736</a></li>
+    <li id="r11">R. Zhang, P. Isola, A. A. Efros, E. Shechtman, O. Wang. &ldquo;The Unreasonable Effectiveness of Deep Features as a Perceptual Metric (LPIPS).&rdquo; <em>CVPR</em>, 2018. <a href="https://arxiv.org/abs/1801.03924">arXiv:1801.03924</a></li>
+    <li id="r12">O. Rippel, S. Nair, C. Lew, S. Branson, A. G. Anderson, L. Bourdev. &ldquo;Learned Video Compression.&rdquo; <em>ICCV</em>, 2019. <a href="https://arxiv.org/abs/1811.06981">arXiv:1811.06981</a></li>
+    <li id="r13">Y. Blau, T. Michaeli. &ldquo;Rethinking Lossy Compression: The Rate-Distortion-Perception Tradeoff.&rdquo; <em>ICML</em>, 2019. <a href="https://arxiv.org/abs/1901.07821">arXiv:1901.07821</a></li>
+    <li id="r14">F. Mentzer, G. Toderici, M. Tschannen, E. Agustsson. &ldquo;High-Fidelity Generative Image Compression (HiFiC).&rdquo; <em>NeurIPS</em>, 2020. <a href="https://arxiv.org/abs/2006.09965">arXiv:2006.09965</a></li>
+    <li id="r15">B. Bross, Y.-K. Wang, J. Chen, et al. &ldquo;Overview of the Versatile Video Coding (VVC) Standard (ITU-T H.266).&rdquo; <em>IEEE TCSVT</em>, 2021. <a href="https://www.itu.int/rec/T-REC-H.266">itu.int/rec/T-REC-H.266</a></li>
+    <li id="r16">O. Rippel, A. G. Anderson, K. Tatwawadi, S. Nair, C. Lytle, L. Bourdev. &ldquo;ELF-VC: Efficient Learned Flexible-Rate Video Coding.&rdquo; <em>ICCV</em>, 2021. <a href="https://arxiv.org/abs/2104.14335">arXiv:2104.14335</a></li>
+    <li id="r17">K. Tatwawadi, P. Rahimzadeh, Z. Sun, Z. Chen, Z. Yang, S. Nair, D. Hasteer, O. Rippel. &ldquo;What Matters in Practical Learned Image Compression (PICO).&rdquo; arXiv:2605.05148, 2026. <a href="https://arxiv.org/abs/2605.05148">arXiv:2605.05148</a> &middot; <a href="https://apple.github.io/ml-pico/">project page</a> &middot; <a href="https://machinelearning.apple.com/research/compression">Apple ML Research</a></li>
+  </ol>
+  <p class="muted">Background / verification: JPEG signal-processing explainer video
+     (<a href="https://www.youtube.com/watch?v=Kv1Hiv3ox8I">youtube.com/watch?v=Kv1Hiv3ox8I</a>). Author list for [17]
+     confirmed against the arXiv listing.</p>
+</section>
+
+</main>
+
+<footer>
+  <div class="keyline" style="margin-bottom:14px"></div>
+  <p>Reading notes prepared for an undergraduate study group &mdash; a learning aid, not the official codec. Full
+     citations are in <a href="#refs">References</a>. Figures are generated by the Python demos in this repo; the Kodak
+     test image is © its original authors, used here for non-commercial research/education.</p>
+</footer>
+
+</body>
+</html>
