@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How these PICO notes were made — research &amp; build methodology</title>
+<style>
+  :root{--blue:#2e86ab;--red:#d1495b;--amber:#e09f3e;--green:#3a7d44;--purple:#6a4c93;
+        --ink:#1c2430;--muted:#5b6776;--line:#e3e8ee;--bg:#f7f9fb;--card:#fff}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       color:var(--ink);background:var(--bg);line-height:1.6}
+  a{color:var(--blue)}
+  header{background:linear-gradient(135deg,#221a33,#2e4a63);color:#fff;padding:50px 24px 36px}
+  header .wrap{max-width:940px;margin:0 auto}
+  header h1{margin:0 0 6px;font-size:28px;line-height:1.25}
+  header .sub{font-size:16px;opacity:.9;margin:0}
+  main{max-width:940px;margin:0 auto;padding:8px 24px 64px}
+  section{background:var(--card);border:1px solid var(--line);border-radius:14px;
+          padding:22px 26px;margin:20px 0;box-shadow:0 1px 2px rgba(20,30,45,.04)}
+  h2{font-size:21px;margin:2px 0 12px;display:flex;align-items:center;gap:10px}
+  h2 .n{background:var(--blue);color:#fff;border-radius:8px;font-size:14px;width:30px;height:30px;
+        display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}
+  h3{font-size:15.5px;margin:16px 0 6px}
+  p{margin:9px 0}
+  .lead{font-size:17px}
+  .muted{color:var(--muted)}
+  code{background:#eef2f6;border:1px solid #dde4ec;border-radius:5px;padding:1px 6px;
+       font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px}
+  figure{margin:14px 0 4px;text-align:center}
+  figcaption{font-size:12.5px;color:var(--muted);margin-top:6px}
+  svg{max-width:100%;height:auto}
+  .callout{border-left:4px solid var(--amber);background:#fff8ec;padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0}
+  .callout.ok{border-color:var(--green);background:#eef6ef}
+  .callout.warn{border-color:var(--red);background:#fdeef0}
+  table{border-collapse:collapse;width:100%;font-size:13.5px;margin:12px 0}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  th{background:#f1f6fa}
+  ul,ol{margin:8px 0;padding-left:22px}
+  li{margin:5px 0}
+  .toc a{display:inline-block;margin:0 14px 6px 0;font-size:14px}
+  .tag{display:inline-block;background:#eef4fb;border:1px solid #cfe0f0;border-radius:999px;
+       padding:2px 10px;font-size:12px;margin:0 4px 4px 0;color:#2c5778}
+  footer{max-width:940px;margin:0 auto;padding:0 24px 50px;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>How these PICO notes were made</h1>
+    <p class="sub">A behind-the-scenes report on the research &amp; build process &mdash; the workflow, the tools,
+       the bugs I caught, and how I verified the claims before teaching them.</p>
+  </div>
+</header>
+
+<main>
+
+<section>
+  <h2>TL;DR</h2>
+  <p class="lead">I treated this like a small research project, not a one-shot write-up. The work ran in
+     <strong>six phases</strong> &mdash; Research &rarr; Scope &rarr; Build &rarr; Write &rarr; Verify &rarr; Publish &mdash;
+     with a tight <em>build&ndash;run&ndash;inspect&ndash;fix</em> loop inside &ldquo;Build,&rdquo; and an
+     <em>adversarial fact-check</em> inside &ldquo;Verify.&rdquo; The guiding rule throughout:
+     <strong>run it and verify it before you teach it.</strong></p>
+  <p>This matters because several things that &ldquo;sounded right&rdquo; turned out to be wrong when actually executed:
+     two demos initially showed the <em>opposite</em> of the lesson, one experiment contradicted the paper at small scale,
+     and a fact-check caught four numbers/claims that needed correcting. None of those would have surfaced without
+     running and checking.</p>
+  <nav class="toc">
+    <div style="height:1px;background:var(--line);margin:8px 0 10px"></div>
+    <strong>Contents:</strong>
+    <a href="#flow">The overall workflow</a>
+    <a href="#research">1 Research</a>
+    <a href="#scope">2 Scope</a>
+    <a href="#build">3 Build</a>
+    <a href="#write">4 Write</a>
+    <a href="#verify">5 Verify</a>
+    <a href="#publish">6 Publish</a>
+    <a href="#principles">Principles</a>
+    <a href="#tools">Tools</a>
+  </nav>
+</section>
+
+<section id="flow">
+  <h2>The overall workflow</h2>
+  <p>The whole project followed this loop. The dashed arrow is the important part: findings from
+     <strong>Verify</strong> (and bugs from <strong>Build</strong>) fed back and changed earlier work &mdash; it was not linear.</p>
+  <figure>
+    <svg viewBox="0 0 920 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Six-phase workflow diagram">
+      <defs>
+        <marker id="aA" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L7,3 L0,6 Z" fill="#5b6776"/>
+        </marker>
+        <marker id="aAr" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L7,3 L0,6 Z" fill="#d1495b"/>
+        </marker>
+      </defs>
+      <!-- phase boxes -->
+      <g font-family="inherit" font-size="14" text-anchor="middle">
+        <g>
+          <rect x="8"   y="40" width="132" height="62" rx="11" fill="#cfe8f3" stroke="#2e86ab"/>
+          <text x="74"  y="66" font-weight="700">1 · Research</text>
+          <text x="74"  y="86" font-size="11" fill="#33586b">read the paper</text>
+        </g>
+        <g>
+          <rect x="160" y="40" width="132" height="62" rx="11" fill="#e9e3f6" stroke="#6a4c93"/>
+          <text x="226" y="66" font-weight="700">2 · Scope</text>
+          <text x="226" y="86" font-size="11" fill="#4b3b66">plan + ask</text>
+        </g>
+        <g>
+          <rect x="312" y="40" width="132" height="62" rx="11" fill="#ffe7b3" stroke="#e09f3e"/>
+          <text x="378" y="66" font-weight="700">3 · Build</text>
+          <text x="378" y="86" font-size="11" fill="#7a5a17">demos + figures</text>
+        </g>
+        <g>
+          <rect x="464" y="40" width="132" height="62" rx="11" fill="#d6ecd2" stroke="#3a7d44"/>
+          <text x="530" y="66" font-weight="700">4 · Write</text>
+          <text x="530" y="86" font-size="11" fill="#2c5a33">the HTML notes</text>
+        </g>
+        <g>
+          <rect x="616" y="40" width="132" height="62" rx="11" fill="#f6cdd0" stroke="#d1495b"/>
+          <text x="682" y="66" font-weight="700">5 · Verify</text>
+          <text x="682" y="86" font-size="11" fill="#8a2f3b">fact-check</text>
+        </g>
+        <g>
+          <rect x="768" y="40" width="132" height="62" rx="11" fill="#eee" stroke="#888"/>
+          <text x="834" y="66" font-weight="700">6 · Publish</text>
+          <text x="834" y="86" font-size="11" fill="#555">git &#8594; GitHub</text>
+        </g>
+        <!-- forward arrows -->
+        <g stroke="#5b6776" stroke-width="2" fill="none">
+          <line x1="140" y1="71" x2="158" y2="71" marker-end="url(#aA)"/>
+          <line x1="292" y1="71" x2="310" y2="71" marker-end="url(#aA)"/>
+          <line x1="444" y1="71" x2="462" y2="71" marker-end="url(#aA)"/>
+          <line x1="596" y1="71" x2="614" y2="71" marker-end="url(#aA)"/>
+          <line x1="748" y1="71" x2="766" y2="71" marker-end="url(#aA)"/>
+        </g>
+        <!-- feedback loop: Verify -> back to Build/Write -->
+        <path d="M682,104 C682,165 530,175 454,150" stroke="#d1495b" stroke-width="2"
+              fill="none" stroke-dasharray="6 4" marker-end="url(#aAr)"/>
+        <text x="540" y="194" font-size="12" fill="#d1495b" text-anchor="middle"
+              font-style="italic">findings feed back &#8212; corrections re-enter Build / Write</text>
+      </g>
+    </svg>
+    <figcaption>The six phases. In practice the user also redirected scope twice early on, which looped 2&rarr;1.</figcaption>
+  </figure>
+</section>
+
+<section id="research">
+  <h2><span class="n">1</span> Research &mdash; read the paper from primary sources</h2>
+  <p>I did <em>not</em> answer from memory (the paper is recent &mdash; arXiv:2605.05148, 2026). I pulled facts from
+     primary sources with web tools:</p>
+  <ul>
+    <li><code>WebSearch</code> &rarr; identified the paper as Apple&rsquo;s <strong>PICO</strong> and found the arXiv ID,
+        Apple ML Research page, and project page.</li>
+    <li><code>WebFetch</code> on the arXiv <em>HTML</em> (not just the abstract) &rarr; extracted the concrete details:
+        mean-scale hyperprior backbone, Haar resampling, ConvScale, learned quantization width, the one-shot context
+        model, the loss cocktail, and the ablation table.</li>
+    <li>Re-fetched specific numbers on demand later (model sizes, NAS channel counts) when a question needed them.</li>
+  </ul>
+  <p>Output of this phase: a structured mental model of <em>what PICO is</em> and <em>which numbers the paper actually
+     reports</em> &mdash; the raw material for everything downstream.</p>
+</section>
+
+<section id="scope">
+  <h2><span class="n">2</span> Scope &mdash; plan, ask, and re-scope when redirected</h2>
+  <p>A full reproduction is impossible free/local (proprietary NAS, ~120k-image training, on-device runtime). So I
+     scoped deliberately rather than guessing:</p>
+  <ul>
+    <li>Entered <strong>plan mode</strong>, checked the environment (<code>Python 3.13</code>, <code>torch 2.9.1</code>
+        with Apple-MPS, matplotlib), and wrote a plan file.</li>
+    <li>Used <strong>clarifying questions</strong> to fix the scope (focus / compute budget / which losses).</li>
+    <li><strong>Re-scoped twice</strong> when you redirected: first to &ldquo;understand the concept + simulate,&rdquo; then
+        to &ldquo;study, teach via an HTML page, with Python demos.&rdquo; The plan file was rewritten each time.</li>
+  </ul>
+  <div class="callout">Key judgement call: aim for <em>faithful-in-spirit at small scale</em> &mdash; isolate each idea
+     the paper says matters and simulate <em>that</em>, instead of pretending to reproduce SOTA numbers.</div>
+</section>
+
+<section id="build">
+  <h2><span class="n">3</span> Build &mdash; the run&ndash;inspect&ndash;fix loop (where the real work happened)</h2>
+  <p>Each demo went through this cycle. The crucial habit: after writing code I <strong>ran it</strong> and
+     <strong>looked at the actual figure/output</strong> (I literally read the generated PNGs), then asked &ldquo;does
+     this show the lesson, or the opposite?&rdquo; If it failed, I diagnosed the <em>root cause</em> before patching.</p>
+  <figure>
+    <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Build, run, inspect, fix loop">
+      <defs>
+        <marker id="bA" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L7,3 L0,6 Z" fill="#5b6776"/></marker>
+        <marker id="bAr" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L7,3 L0,6 Z" fill="#d1495b"/></marker>
+        <marker id="bAg" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L7,3 L0,6 Z" fill="#3a7d44"/></marker>
+      </defs>
+      <g font-family="inherit" font-size="13" text-anchor="middle">
+        <rect x="20"  y="30" width="150" height="52" rx="10" fill="#ffe7b3" stroke="#e09f3e"/>
+        <text x="95"  y="52" font-weight="700">Write / edit</text>
+        <text x="95"  y="69" font-size="11">demo code</text>
+
+        <rect x="230" y="30" width="150" height="52" rx="10" fill="#cfe8f3" stroke="#2e86ab"/>
+        <text x="305" y="52" font-weight="700">Run</text>
+        <text x="305" y="69" font-size="11">python (Bash)</text>
+
+        <rect x="440" y="30" width="170" height="52" rx="10" fill="#cfe8f3" stroke="#2e86ab"/>
+        <text x="525" y="52" font-weight="700">Inspect output</text>
+        <text x="525" y="69" font-size="11">read PNG + console</text>
+
+        <!-- decision diamond -->
+        <polygon points="525,150 640,188 525,226 410,188" fill="#fff3d6" stroke="#e09f3e"/>
+        <text x="525" y="184" font-size="12" font-weight="700">shows the</text>
+        <text x="525" y="200" font-size="12" font-weight="700">lesson?</text>
+
+        <rect x="250" y="162" width="150" height="52" rx="10" fill="#f6cdd0" stroke="#d1495b"/>
+        <text x="325" y="184" font-weight="700">Diagnose root</text>
+        <text x="325" y="201" font-size="11">cause, then fix</text>
+
+        <rect x="660" y="162" width="170" height="52" rx="10" fill="#d6ecd2" stroke="#3a7d44"/>
+        <text x="745" y="184" font-weight="700">Ship the demo</text>
+        <text x="745" y="201" font-size="11">figure embeds in HTML</text>
+
+        <g stroke="#5b6776" stroke-width="2" fill="none">
+          <line x1="170" y1="56" x2="228" y2="56" marker-end="url(#bA)"/>
+          <line x1="380" y1="56" x2="438" y2="56" marker-end="url(#bA)"/>
+          <line x1="525" y1="82" x2="525" y2="148" marker-end="url(#bA)"/>
+        </g>
+        <!-- no -> diagnose -->
+        <line x1="410" y1="188" x2="402" y2="188" stroke="#d1495b" stroke-width="2" marker-end="url(#bAr)"/>
+        <text x="404" y="160" font-size="12" fill="#d1495b" font-weight="700" text-anchor="end">no</text>
+        <!-- diagnose -> run (loop up) -->
+        <path d="M325,162 C325,110 305,100 305,84" stroke="#d1495b" stroke-width="2" fill="none" marker-end="url(#bAr)"/>
+        <!-- yes -> ship -->
+        <line x1="640" y1="188" x2="658" y2="188" stroke="#3a7d44" stroke-width="2" marker-end="url(#bAg)"/>
+        <text x="650" y="160" font-size="12" fill="#3a7d44" font-weight="700">yes</text>
+      </g>
+    </svg>
+    <figcaption>The build loop. The &ldquo;diagnose root cause&rdquo; box is where the project earned its accuracy.</figcaption>
+  </figure>
+
+  <h3>Three times the loop caught a wrong lesson</h3>
+  <table>
+    <tr><th>Demo</th><th>What ran wrong</th><th>Root cause</th><th>Fix</th></tr>
+    <tr><td><code>demo3</code> quantization</td><td>&ldquo;Smart&rdquo; content-adaptive quantizer looked <em>worse</em> than fixed</td>
+        <td>Under pure MSE, a uniform step is provably optimal at high rate &mdash; my comparison couldn&rsquo;t win</td>
+        <td>Reframed to the textbook <em>reverse water-filling</em> bit allocation, which genuinely wins at low rate</td></tr>
+    <tr><td><code>demo4</code> entropy model</td><td>The hyperprior bar came out <em>higher</em> (more bits) than factorized</td>
+        <td>I measured &ldquo;scale&rdquo; as local std of a <em>smooth</em> field, which underestimates it</td>
+        <td>Rebuilt the latent as heteroscedastic + correlated and used the true amplitude as the transmitted scale &rarr; bits drop monotonically</td></tr>
+    <tr><td><code>demo5</code> ablation</td><td>Training the tiny codec, <em>every</em> ablated variant beat the &ldquo;full&rdquo; model &mdash; the opposite of the paper</td>
+        <td>At 3-minute / 6-image scale, extra components add optimisation difficulty that doesn&rsquo;t pay off</td>
+        <td>Dropped the misleading head-to-head; demo5 now draws the architecture + the paper&rsquo;s reported numbers (the trainable codec stays behind <code>--train</code>)</td></tr>
+  </table>
+  <div class="callout warn">Lesson: a plausible explanation is not evidence. Each of these would have shipped as a
+     confident &mdash; and wrong &mdash; teaching point if I had not run it and looked at the result.</div>
+</section>
+
+<section id="write">
+  <h2><span class="n">4</span> Write &mdash; grow the HTML in layers</h2>
+  <p>The teaching page was not written once; it accreted as you asked for more depth. Roughly in order:</p>
+  <ol>
+    <li>Core concept sections (problem, pipeline, Haar, quantization, entropy, what-matters, perceptual) each pairing
+        a paragraph with its demo figure.</li>
+    <li>A &ldquo;how PICO differs from earlier codecs&rdquo; section.</li>
+    <li>A <strong>history timeline</strong> (JPEG &rarr; learned &rarr; perceptual &rarr; PICO), then a concrete
+        <strong>JPEG walkthrough</strong> with real figures.</li>
+    <li>A step-by-step <strong>&ldquo;how PICO works&rdquo;</strong> encode/decode walkthrough + a <em>which-step-is-ML</em>
+        table + a model-size table.</li>
+    <li>An <strong>evaluation / scoring</strong> explanation (training objective vs. how victory is judged).</li>
+    <li>Framing for the audience (a study-group banner) and trimmed <strong>discussion questions</strong>.</li>
+    <li><strong>Citations</strong> threaded through the text with a numbered <strong>References</strong> list.</li>
+  </ol>
+  <p class="muted">Throughout, every edit re-opened the page and I validated structure programmatically (balanced
+     section tags, every <code>[n]</code> citation resolving to a real reference).</p>
+</section>
+
+<section id="verify">
+  <h2><span class="n">5</span> Verify &mdash; adversarial fact-check against the paper</h2>
+  <p>Self-checking is not enough for claims I&rsquo;m about to hand to students, so I spawned independent
+     <strong>sub-agents</strong> to research and to <em>try to falsify</em> the notes.</p>
+  <figure>
+    <svg viewBox="0 0 860 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Verification fan-out diagram">
+      <defs>
+        <marker id="cA" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L7,3 L0,6 Z" fill="#5b6776"/></marker>
+        <marker id="cAr" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L7,3 L0,6 Z" fill="#d1495b"/></marker>
+      </defs>
+      <g font-family="inherit" font-size="13" text-anchor="middle">
+        <rect x="330" y="20" width="200" height="50" rx="10" fill="#221a33" stroke="#221a33"/>
+        <text x="430" y="42" fill="#fff" font-weight="700">Main agent (me)</text>
+        <text x="430" y="59" fill="#cbd5e1" font-size="11">writes &amp; orchestrates</text>
+
+        <rect x="70"  y="120" width="230" height="58" rx="10" fill="#e9e3f6" stroke="#6a4c93"/>
+        <text x="185" y="143" font-weight="700">Sub-agent A</text>
+        <text x="185" y="160" font-size="11">review Oren Rippel&#8217;s compression papers</text>
+
+        <rect x="560" y="120" width="230" height="58" rx="10" fill="#f6cdd0" stroke="#d1495b"/>
+        <text x="675" y="143" font-weight="700">Sub-agent B</text>
+        <text x="675" y="160" font-size="11">fact-check 26 claims vs the paper</text>
+
+        <rect x="500" y="210" width="350" height="50" rx="10" fill="#fdeef0" stroke="#d1495b"/>
+        <text x="675" y="231" font-weight="700">22 aligned · 4 misaligned</text>
+        <text x="675" y="248" font-size="11">&#8594; apply 4 corrections to HTML + figure</text>
+
+        <g stroke="#5b6776" stroke-width="2" fill="none">
+          <path d="M380,70 C300,90 230,100 200,118" marker-end="url(#cA)"/>
+          <path d="M480,70 C600,92 660,100 675,118" marker-end="url(#cA)"/>
+        </g>
+        <line x1="675" y1="178" x2="675" y2="208" stroke="#d1495b" stroke-width="2" marker-end="url(#cAr)"/>
+        <!-- A feeds the history section (annotation) -->
+        <text x="185" y="200" font-size="11" fill="#6a4c93" font-style="italic">&#8594; fed the history / lineage section</text>
+      </g>
+    </svg>
+    <figcaption>Two independent sub-agents: one gathered context, one tried to falsify the claims. The fact-check ran
+      in the background while I polished tables.</figcaption>
+  </figure>
+  <h3>What the fact-check changed</h3>
+  <p>The agent verified 26 specific claims against the arXiv paper. 22 were correct; <strong>4 needed fixing</strong>,
+     and I applied each to the notes and the figure:</p>
+  <ul>
+    <li><strong>Haar &ldquo;19.5%&rdquo;</strong> is vs a naive <em>pixel-reshuffle</em> &mdash; vs a stride-2 conv it is only
+        <strong>8.9%</strong>. (Relabelled everywhere + in the chart.)</li>
+    <li><strong>Tiles are non-overlapping</strong> 504&times;504, padded to 512 with a 4-px contextual margin &mdash; not
+        &ldquo;a small overlap.&rdquo;</li>
+    <li><strong>&ldquo;71 quality levels&rdquo;</strong> are 8 coarse levels interpolated to 71, not 71 native.</li>
+    <li><strong>230/150 ms</strong> is best-case (&ldquo;as fast as&rdquo;), not a fixed latency.</li>
+  </ul>
+  <div class="callout ok">This phase is the difference between &ldquo;a confident page&rdquo; and &ldquo;a page you can hand to
+     students.&rdquo; The most load-bearing number on the site (the headline 19.5% lever) was the one most in need of nuance.</div>
+</section>
+
+<section id="publish">
+  <h2><span class="n">6</span> Publish &mdash; version control &amp; GitHub</h2>
+  <ul>
+    <li>Initialised a git repo, added a <code>.gitignore</code> (excluded the downloaded Kodak cache, which isn&rsquo;t mine
+        to redistribute, and Python caches).</li>
+    <li>Committed source + the generated figures (so the page renders without running anything) and pushed to
+        <a href="https://github.com/WeiL11/pico-repro">github.com/WeiL11/pico-repro</a> on <code>main</code>.</li>
+  </ul>
+</section>
+
+<section id="principles">
+  <h2>Principles that kept it honest</h2>
+  <ul>
+    <li><strong>Run it before you teach it.</strong> Every quantitative claim in a demo is something I executed and saw.</li>
+    <li><strong>Don&rsquo;t ship a misleading result.</strong> When a tiny-scale experiment contradicted the paper, I removed it
+        rather than dress it up.</li>
+    <li><strong>Cite primary sources, then verify them.</strong> Web-fetch the paper; don&rsquo;t trust memory for a 2026 result.</li>
+    <li><strong>Adversarial check.</strong> Use independent sub-agents to <em>try to falsify</em> the claims, not just confirm them.</li>
+    <li><strong>Free / local by default.</strong> Everything runs on a laptop CPU/MPS; no paid services.</li>
+    <li><strong>Be explicit about scope.</strong> A prominent box states what is reproduced vs. only explained.</li>
+  </ul>
+</section>
+
+<section id="tools">
+  <h2>Tools used (appendix)</h2>
+  <table>
+    <tr><th>Tool</th><th>Used for</th></tr>
+    <tr><td><code>WebSearch</code> / <code>WebFetch</code></td><td>Identify the paper; extract architecture, losses, ablation numbers, model sizes</td></tr>
+    <tr><td>Plan mode + plan file</td><td>Scope the project; record the approach; re-scope on redirection</td></tr>
+    <tr><td>Clarifying questions</td><td>Pin down focus, compute budget, and which losses to implement</td></tr>
+    <tr><td><code>Bash</code> (python)</td><td>Run the demos; train the tiny codec; validate the HTML structure</td></tr>
+    <tr><td>Read (on PNGs)</td><td>Visually inspect every generated figure before embedding it</td></tr>
+    <tr><td>Write / Edit</td><td>Author the demos and the HTML; apply corrections</td></tr>
+    <tr><td>Sub-agents</td><td>Compile Rippel&rsquo;s bibliography; adversarially fact-check 26 claims</td></tr>
+    <tr><td><code>git</code> / <code>gh</code></td><td>Version control and publish to GitHub</td></tr>
+  </table>
+  <p class="muted">Companion to the main notes: <a href="index.html">index.html</a>. Source:
+     <a href="https://github.com/WeiL11/pico-repro">github.com/WeiL11/pico-repro</a>.</p>
+</section>
+
+</main>
+
+<footer>
+  <div style="height:1px;background:var(--line);margin:0 0 14px"></div>
+  <p>A methodology report for the PICO study notes &mdash; written to be transparent about process, including the mistakes
+     caught along the way. The honest version of &ldquo;how I did the research&rdquo; includes the parts that needed fixing.</p>
+</footer>
+
+</body>
+</html>
