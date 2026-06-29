@@ -60,7 +60,7 @@
 </section>
 
 <section>
-  <h2>The current method (v0.4) — two passes under three principles</h2>
+  <h2>The current method (v0.6) — two passes under four principles</h2>
   <figure>
     <svg viewBox="0 0 960 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two-pass research workflow">
       <defs><marker id="a1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
@@ -105,10 +105,29 @@
   </figure>
   <ol class="principles">
     <li><strong>Explain the concept well</strong> — each paper gets Intro (why) / Method (how) / Results / Discussion, jargon defined.</li>
-    <li><strong>Align every statement with the research, with clear citations</strong> — read primary sources; never assert from memory; flag the unverified.</li>
+    <li><strong>Align every statement with the research, with a source on EVERY argument — end to end.</strong> Read primary
+        sources; never assert from memory; carry a citation on each claim from the agent outputs through to the final HTML, then
+        verify each annotation once. Flag the unverified.</li>
     <li><strong>Every agent answers "what is the most important thing missing?"</strong> — which becomes a box per paper.</li>
     <li><strong>Open each content page with a personal "what I find most interesting" take</strong> — the recurring problem the researcher tackles + what they seem drawn to.</li>
   </ol>
+
+  <h3>v0.6 additions (adopted from the retrospective)</h3>
+  <ul>
+    <li><strong>Pipeline, not barrier</strong> — start Pass 2 as soon as the paper list exists; don't wait for all of Pass 1.</li>
+    <li><strong>Per-agent budget</strong> — cap each agent's fetches/time; prefer abstract + HTML + key tables over full PDFs.</li>
+    <li><strong>Slimmer Pass 1</strong> — 1–2 agents instead of 3 (de-duplicate the broad map; fold summaries into Pass 2).</li>
+    <li><strong>Per-claim provenance, verified once</strong> — every argument carries a source from the agent outputs to the final HTML; a final pass checks each annotation.</li>
+    <li><strong>Evidence in the repo</strong> — each agent's full deep-read saved as <code>_research/&lt;paper&gt;.md</code> so every claim is traceable.</li>
+    <li><strong>Decision log</strong> — record why these papers / choices, in the repo (not just chat).</li>
+    <li><strong>Completeness critic</strong> — an agent asks "what's missing / why these papers / what counterexamples?"</li>
+    <li><strong>Output-quality gate</strong> — an LLM-judge / QA check that the page actually teaches (clarity + accuracy).</li>
+    <li><strong>Cross-run diff</strong> — when two runs of the same subject exist, diff them as a free QA signal.</li>
+    <li><strong>Telemetry</strong> — record time / token cost per step and per direction.</li>
+    <li><strong>Batched status</strong> — summarise once at the end, not on every agent completion.</li>
+    <li><strong>Citation counts</strong> — a sanctioned source (e.g. Semantic Scholar) or explicit omission with a note.</li>
+  </ul>
+  <p class="muted">Not adopted: skipping re-identification for already-known subjects; a separate whole-page consistency re-read (covered by per-claim verification).</p>
 </section>
 
 <section>
@@ -130,6 +149,9 @@
     <tr><td class="ver">v0.5<br><span class="muted">fresh-run reproduction · current</span></td>
         <td>Ran the full v0.4 pipeline <strong>completely from scratch</strong> on a researcher (from only a Scholar URL, no prior notes) as a <strong>reproducibility test</strong> &mdash; 3-agent Pass 1 → verify gate → 6-agent Pass 2 → folded HTML, applied from the very start (no shallow first draft).</td>
         <td>The method reproduces: independent agents re-identified the researcher, disambiguated same-name people, and <em>tightened</em> details (e.g. confirmed co-first authorships from the PDFs). Direction: <a href="alisa-liu-v2/index.html">alisa-liu-v2</a>.</td></tr>
+    <tr><td class="ver">v0.6<br><span class="muted">retrospective · adopted, to apply next</span></td>
+        <td>From a process review: <strong>pipeline (no barrier)</strong>, <strong>per-agent budgets</strong>, <strong>slimmer Pass 1</strong>, <strong>per-claim provenance verified once</strong>, <strong>evidence + decision log in the repo</strong> (<code>_research/</code>), a <strong>completeness critic</strong>, an <strong>output-quality gate</strong>, <strong>cross-run diff</strong>, <strong>telemetry</strong>, and <strong>batched status</strong>.</td>
+        <td>Faster (pipeline + budgets), more traceable (every claim sourced &amp; verified), and self-checking (critic + quality gate + diff). Applies from the next direction.</td></tr>
   </table>
   <div class="callout">Next planned improvement: apply v0.4 from the <em>start</em> of the next direction (no shallow first
      draft), and consider a final "completeness critic" agent that asks what the whole note still omits.</div>
