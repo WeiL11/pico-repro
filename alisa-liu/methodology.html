@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How the Alisa Liu notes were made — method</title>
+<style>
+  :root{--blue:#2e86ab;--red:#d1495b;--amber:#e09f3e;--green:#3a7d44;--purple:#6a4c93;
+        --ink:#1c2430;--muted:#5b6776;--line:#e3e8ee;--bg:#f7f9fb;--card:#fff}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       color:var(--ink);background:var(--bg);line-height:1.6}
+  a{color:var(--blue)}
+  header{background:linear-gradient(135deg,#221a33,#2e4a63);color:#fff;padding:48px 24px 34px}
+  header .wrap{max-width:900px;margin:0 auto}
+  header h1{margin:0 0 6px;font-size:26px}
+  header .sub{font-size:15.5px;opacity:.9;margin:0}
+  header .nav{font-size:13.5px;margin-top:6px}
+  main{max-width:900px;margin:0 auto;padding:8px 24px 60px}
+  section{background:var(--card);border:1px solid var(--line);border-radius:14px;
+          padding:20px 24px;margin:18px 0;box-shadow:0 1px 2px rgba(20,30,45,.04)}
+  h2{font-size:20px;margin:2px 0 10px}h3{font-size:15px;margin:14px 0 6px}
+  p{margin:9px 0}.lead{font-size:16.5px}.muted{color:var(--muted)}
+  figure{margin:14px 0 4px;text-align:center}svg{max-width:100%;height:auto}
+  figcaption{font-size:12.5px;color:var(--muted);margin-top:6px}
+  code{background:#eef2f6;border:1px solid #dde4ec;border-radius:5px;padding:1px 6px;
+       font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px}
+  .callout{border-left:4px solid var(--amber);background:#fff8ec;padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0}
+  .callout.ok{border-color:var(--green);background:#eef6ef}
+  .callout.warn{border-color:var(--red);background:#fdeef0}
+  ol.principles{counter-reset:p;list-style:none;padding:0;margin:12px 0}
+  ol.principles li{position:relative;background:#eef4fb;border:1px solid #cfe0f0;border-radius:10px;
+       padding:12px 16px 12px 52px;margin:10px 0;font-size:14px}
+  ol.principles li::before{counter-increment:p;content:counter(p);position:absolute;left:14px;top:11px;
+       width:24px;height:24px;border-radius:50%;background:var(--blue);color:#fff;font-weight:800;
+       text-align:center;line-height:24px}
+  table{border-collapse:collapse;width:100%;font-size:13.5px;margin:12px 0}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  th{background:#f1f6fa}
+  ul,ol{margin:8px 0;padding-left:22px}li{margin:5px 0}
+  footer{max-width:900px;margin:0 auto;padding:0 24px 46px;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>How the Alisa Liu notes were made</h1>
+    <p class="sub">The method behind the <a href="index.html" style="color:#bfe0f2">content page</a> &mdash; a
+       <strong>two-pass</strong> research workflow governed by three principles.</p>
+    <p class="nav"><a href="index.html" style="color:#bfe0f2">← Content (the reading notes)</a></p>
+  </div>
+</header>
+
+<main>
+
+<section>
+  <h2>TL;DR</h2>
+  <p class="lead">The notes were produced by a <strong>two-pass</strong> agent workflow:
+     <strong>Pass 1</strong> maps the whole body of work with a few parallel agents; a <strong>verify gate</strong>
+     fact-checks before any writing; then <strong>Pass 2</strong> sends <em>one agent per signature paper</em> to deep-read
+     it for Intro / Method / Results / Future. The output is a cited teaching page whose papers are <em>foldable</em>
+     (folded by default, opened on click) so the depth stays one click away.</p>
+  <p>This second, deeper pass was added precisely because a first shallow version wasn&rsquo;t good enough &mdash; the
+     whole method now follows the three principles below.</p>
+</section>
+
+<section>
+  <h2>The three guiding principles</h2>
+  <p>Every agent and every section of the final page must satisfy these:</p>
+  <ol class="principles">
+    <li><strong>Always explain the concept well.</strong> Depth over summary: each paper gets a clearly-separated
+       <em>Intro</em> (the problem + why), <em>Method</em> (how the breakthrough works), <em>Results</em> (concrete
+       numbers), and <em>Discussion / future</em>. Jargon is defined.</li>
+    <li><strong>Every statement aligns with what was actually researched, with clear citations.</strong> Read the primary
+       source; never assert from memory; quote the numbers; flag anything that can&rsquo;t be verified.</li>
+    <li><strong>Every agent asks &ldquo;what is the most important thing missing here?&rdquo;</strong> and answers it &mdash;
+       which becomes a dedicated &ldquo;most important thing missing&rdquo; box on each paper in the final note.</li>
+  </ol>
+</section>
+
+<section>
+  <h2>The workflow (two passes + a verify gate)</h2>
+  <figure>
+    <svg viewBox="0 0 960 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two-pass research workflow">
+      <defs><marker id="a1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+        <path d="M0,0 L7,3 L0,6 Z" fill="#5b6776"/></marker>
+        <marker id="a2" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+        <path d="M0,0 L7,3 L0,6 Z" fill="#d1495b"/></marker></defs>
+      <g font-family="inherit" font-size="12.5" text-anchor="middle">
+        <text x="225" y="56" font-size="10.5" fill="#2e86ab" font-weight="700">PASS 1 &#183; &#215;3 PARALLEL</text>
+        <text x="562" y="56" font-size="10.5" fill="#3a7d44" font-weight="700">PASS 2 &#183; &#215;N &#183; ONE AGENT PER PAPER</text>
+
+        <rect x="10" y="78" width="112" height="62" rx="10" fill="#e9e3f6" stroke="#6a4c93"/>
+        <text x="66" y="104" font-weight="700">Scope</text>
+        <text x="66" y="122" font-size="11">the question</text>
+
+        <rect x="162" y="66" width="150" height="62" rx="10" fill="#eaf4fa" stroke="#9cc6dc"/>
+        <rect x="156" y="72" width="150" height="62" rx="10" fill="#dcecf6" stroke="#6aa8c9"/>
+        <rect x="150" y="78" width="150" height="62" rx="10" fill="#cfe8f3" stroke="#2e86ab"/>
+        <text x="225" y="104" font-weight="700">Broad map</text>
+        <text x="225" y="122" font-size="10.5">list &#183; summaries &#183; arc</text>
+
+        <rect x="328" y="78" width="120" height="62" rx="10" fill="#f6cdd0" stroke="#d1495b"/>
+        <text x="388" y="104" font-weight="700">Verify</text>
+        <text x="388" y="122" font-size="10.5">vs primary sources</text>
+
+        <rect x="490" y="66" width="168" height="62" rx="10" fill="#e3f0df" stroke="#9ec79a"/>
+        <rect x="484" y="72" width="168" height="62" rx="10" fill="#d9eed4" stroke="#6fb06a"/>
+        <rect x="478" y="78" width="168" height="62" rx="10" fill="#cfe8cf" stroke="#3a7d44"/>
+        <text x="562" y="102" font-weight="700">Deep-read each paper</text>
+        <text x="562" y="120" font-size="10">intro &#183; method &#183; results &#183; future &#183; what&#8217;s missing</text>
+
+        <rect x="676" y="78" width="150" height="62" rx="10" fill="#fff3d6" stroke="#e09f3e"/>
+        <text x="751" y="104" font-weight="700">Assemble</text>
+        <text x="751" y="122" font-size="10.5">foldable cited HTML</text>
+
+        <rect x="856" y="78" width="94" height="62" rx="10" fill="#eee" stroke="#888"/>
+        <text x="903" y="104" font-weight="700">Publish</text>
+        <text x="903" y="122" font-size="10.5">+ GitHub</text>
+
+        <g stroke="#5b6776" stroke-width="1.8" fill="none">
+          <line x1="122" y1="109" x2="148" y2="109" marker-end="url(#a1)"/>
+          <line x1="312" y1="109" x2="326" y2="109" marker-end="url(#a1)"/>
+          <line x1="448" y1="109" x2="476" y2="109" marker-end="url(#a1)"/>
+          <line x1="658" y1="109" x2="674" y2="109" marker-end="url(#a1)"/>
+          <line x1="826" y1="109" x2="854" y2="109" marker-end="url(#a1)"/>
+        </g>
+        <text x="388" y="160" font-size="11" fill="#d1495b" font-style="italic">&#10003; caught: &#8220;Infini-gram&#8221; is NOT hers</text>
+      </g>
+    </svg>
+    <figcaption>Pass 1 maps the work; the verify gate fact-checks before writing; Pass 2 deep-reads each paper. Every box obeys the three principles.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2>Pass 1 &mdash; the broad map (3 parallel agents)</h2>
+  <p>Google Scholar blocks automated fetching, so the agents cross-checked her <strong>homepage, DBLP, the ACL Anthology,
+     and arXiv</strong> instead. They ran concurrently:</p>
+  <table>
+    <tr><th>Agent</th><th>Task</th></tr>
+    <tr><td>A</td><td>authoritative publication list (sorted by date) with venues, coauthors, author position, links</td></tr>
+    <tr><td>B</td><td>undergraduate-friendly summaries of her signature papers</td></tr>
+    <tr><td>C</td><td>research arc / themes / bio / recurring collaborators</td></tr>
+  </table>
+  <p>The three results cross-corroborated each other &mdash; independent agreement raises confidence.</p>
+</section>
+
+<section>
+  <h2>Verify gate &mdash; fact-check <em>before</em> writing</h2>
+  <p>Principle&nbsp;2 in action: nothing is written until claims are checked against primary sources. This pass flagged three
+     things that would otherwise have been wrong:</p>
+  <ul>
+    <li><strong>&ldquo;Infini-gram&rdquo; is not hers</strong> &mdash; it is by Jiacheng Liu, a different UW researcher.
+       (An earlier from-memory draft got this wrong; the check caught it.)</li>
+    <li><strong>DBLP namesake conflation</strong> &mdash; an unrelated HCI researcher also named &ldquo;Alisa Liu&rdquo; appears
+       in DBLP; her papers were excluded.</li>
+    <li><strong>An unsupported award claim</strong> (a &ldquo;best paper&rdquo; for DExperts) was dropped for lack of evidence.</li>
+  </ul>
+  <div class="callout ok">This is the whole point of verifying first: the most confident-sounding facts are exactly the
+     ones worth checking against a primary source before they reach students.</div>
+</section>
+
+<section>
+  <h2>Pass 2 &mdash; deep-read each paper (one agent per paper)</h2>
+  <p>The first content page was too shallow, so a second fan-out sent <strong>one agent per signature paper</strong>
+     (DExperts, WANLI, AmbiEnt, proxy-tuning, Data Mixture Inference, SuperBPE). Each agent read the actual paper and returned
+     a structured breakdown, with every number checked against the source:</p>
+  <ul>
+    <li><strong>Concept</strong> (one line) &middot; <strong>Intro</strong> (problem + why) &middot; <strong>Method</strong>
+       (how it works, jargon defined, key formula) &middot; <strong>Results</strong> (concrete numbers) &middot;
+       <strong>Discussion / future</strong> &middot; <strong>Citation</strong> (with Alisa Liu&rsquo;s author position).</li>
+    <li>And, per principle&nbsp;3, an explicit answer to <em>&ldquo;what is the most important thing missing here?&rdquo;</em></li>
+  </ul>
+  <p>Those became the foldable <code>&lt;details&gt;</code> sections on the <a href="index.html">content page</a> (folded by
+     default, opened on click), each ending in a red &ldquo;most important thing missing&rdquo; box &mdash; for example, that
+     DExperts inherits whatever biased definition of &ldquo;toxicity&rdquo; its classifier encodes, that proxy-tuning is
+     <em>not</em> truly black-box (it needs logit access + a shared vocabulary), or that SuperBPE&rsquo;s gains rest on fixing
+     <em>compute</em>, not token count.</p>
+</section>
+
+<section>
+  <h2>Honest limitations</h2>
+  <div class="callout warn">
+    <ul>
+      <li><strong>Google Scholar was not directly fetchable</strong> &mdash; the list is built from her homepage + DBLP + ACL
+          Anthology + arXiv, so per-paper citation counts are unverified (numbers were left off rather than guessed).</li>
+      <li>A few <strong>2026 entries are preprints</strong>; titles/venues may change.</li>
+      <li>Deep reads were trusted from the per-paper agents&rsquo; primary-source checks; the signature papers are well
+          confirmed, the long tail less so. A couple of figures are explicitly marked &ldquo;reported / unverified&rdquo; on the content page.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2>Tools used</h2>
+  <table>
+    <tr><th>Tool</th><th>For</th></tr>
+    <tr><td>Parallel subagents (Pass 1 &times;3)</td><td>broad map: paper list, summaries, research arc</td></tr>
+    <tr><td>Parallel subagents (Pass 2 &times;N)</td><td>one deep-read per signature paper (intro/method/results/future + what&rsquo;s missing)</td></tr>
+    <tr><td>WebSearch / WebFetch</td><td>homepage, DBLP, ACL Anthology, arXiv (Scholar blocked)</td></tr>
+    <tr><td>A verify / skeptic pass</td><td>cross-check claims against primary sources before writing</td></tr>
+    <tr><td>Write / Edit</td><td>assemble the cited, foldable teaching HTML</td></tr>
+  </table>
+  <p class="muted">General method &amp; how it has evolved: <a href="../methodology.html">the project methodology tracker</a>.
+     This direction&rsquo;s notes: <a href="index.html">content page</a>.</p>
+</section>
+
+</main>
+
+<footer>
+  <div style="height:1px;background:var(--line);margin:0 0 14px"></div>
+  <p>Method report for the Alisa Liu reading notes &mdash; one instance of an ongoing research-and-teach workflow, refined into
+     a two-pass method governed by three principles.</p>
+</footer>
+
+</body>
+</html>

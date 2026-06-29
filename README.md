@@ -1,58 +1,48 @@
 # Self-Driving Research Notes
 
-**An agent workflow that researches a paper (or a researcher) largely on its own, then turns the result
-into cited, undergraduate-friendly learning notes.**
+**One project: build an agent workflow that researches a topic largely on its own, then turns the result
+into cited, undergraduate-friendly learning notes — and keep improving that workflow.**
 
-The real deliverable here is not any single paper — it's a **repeatable research-and-teach pipeline**.
-Each *instance* below applies the same workflow to a new target. This repo holds the workflow's
-methodology plus the instances built so far.
+This repo is the home of that effort. Its top level **tracks the method itself** (how our research workflow
+evolves); each **research direction** lives in its own subfolder and applies the current method.
 
-> 🚧 **Ongoing project — kept up to date.** New instances are added over time as the workflow is applied
-> to more papers and researchers, and the workflow itself keeps improving. Expect this list to grow.
+> 🚧 Ongoing — new directions are added over time, and the method keeps improving.
 
-> Repo name is still `pico-repro` for history; it now hosts the umbrella project.
+## 📈 The method we are tracking
 
-## The method (how every instance is built)
+**[`methodology.html`](methodology.html)** is the living record of our research method and *how it has
+progressed* (a changelog of what we learned each round). The current best method is a **two-pass** workflow —
+broad parallel fan-out → verify-before-writing → one deep-read agent per paper → foldable cited HTML — under
+three principles (explain the concept; align every claim with a cited source; every agent answers "what's the
+most important thing missing?"). Each new direction must use the latest method here.
+
+## Research directions
+
+Each direction is a self-contained folder with its own **`README.md`**, **`index.html`** (content) and
+**`methodology.html`** (the method as applied to that direction).
+
+| # | Direction | Content | Method |
+|---|---|---|---|
+| 1 | **PICO** — learned image compression (Apple) | [`pico/index.html`](pico/index.html) | [`pico/methodology.html`](pico/methodology.html) |
+| 2 | **Alisa Liu** — NLP researcher paper-history | [`alisa-liu/index.html`](alisa-liu/index.html) | [`alisa-liu/methodology.html`](alisa-liu/methodology.html) |
+
+…more directions coming as the workflow is applied to new papers and researchers.
+
+## Layout
 
 ```
-parallel research fan-out   →   verify-before-writing   →   cited teaching HTML   →   (optional) demos   →   publish
-   several subagents read         a skeptic fact-checks        history + plain-English        runnable, free/local
-   different facets at once        every claim against          summaries + discussion
-                                    primary sources              questions for students
+pico-repro/
+  README.md             this file — the umbrella
+  methodology.html      THE living method + its progress (what the top level tracks)
+  pico/                 direction 1: README + index.html + methodology.html + demos/ + assets/
+  alisa-liu/            direction 2: README + index.html + methodology.html
 ```
 
-The full process — including the bugs caught and the four claims a fact-check corrected — is documented,
-with workflow diagrams, in **[`methodology.html`](methodology.html)**.
+## Principles (kept across every direction)
 
-Guiding principles: **run it before you teach it**, **verify before you write**, **cite primary sources**,
-and **free / local by default** (everything runs on a laptop CPU / Apple-MPS).
-
----
-
-## Instances
-
-### 1 · PICO — *What Matters in Practical Learned Image Compression*  *(in this repo)*
-
-A study + simulation of Apple's **PICO** learned image codec
-([arXiv:2605.05148](https://arxiv.org/abs/2605.05148), 2026): the history of image compression, how PICO
-works step by step, what matters, and how it's scored — backed by citations — plus six free/local Python
-demos that simulate each idea.
-
-- Read: **[`index.html`](index.html)** · How it was built: **[`methodology.html`](methodology.html)**
-- Run: the six demos in [`demos/`](demos/) (see *The PICO instance* below)
-
-### 2 · Alisa Liu — NLP researcher paper-history  *(sibling notes; built with the same workflow)*
-
-A guided tour of NLP researcher **Alisa Liu**'s body of work for undergraduates — bio, a research-arc
-timeline, signature-paper summaries, full publication list, and discussion questions. Built via the same
-3-agent parallel fan-out (whose verify pass caught a real misattribution before it shipped).
-
-- Published as its own repo: **[WeiL11/alisa-liu-notes](https://github.com/WeiL11/alisa-liu-notes)** —
-  with the same `index.html` (content) + `methodology.html` (method) pair.
-
-### More instances coming…
-
-This is a living project — additional papers and researchers will be added as the workflow is applied to them.
-
----
-
+1. **Explain the concept well** — Intro (why) / Method (how) / Results / Discussion per paper; define jargon.
+2. **Align every statement with the research, with clear citations** — read primary sources; never assert
+   from memory; flag the unverified.
+3. **Always answer "what's the most important thing missing?"** — a dedicated box per paper.
+4. **Open each content page with a personal "what I find most interesting" take.**
+5. **Free / local by default**, and the method is a living artifact we keep refining.
