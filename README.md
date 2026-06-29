@@ -9,6 +9,20 @@ citations — and ships small **free/local Python demos** that simulate each ide
 This is **not** a reproduction of the codec; it is an educational explainer. Everything runs free and
 local on CPU or Apple-MPS in seconds to a few minutes.
 
+## About this project (the bigger picture)
+
+The real goal here is **not just PICO**. This repo is the **first instance** of a larger effort: building
+an **efficient agent workflow that can do research largely on its own**, and turn the results into
+**learning-progress notes shared with undergraduates**. The repeatable method — parallel research
+fan-out → *verify-before-writing* (fact-check against primary sources) → cited teaching HTML → optional
+demos → publish — is documented in **[`methodology.html`](methodology.html)**.
+
+- **Instance #1 — PICO** (this repo): Apple's learned-image-compression paper, taught + simulated.
+- **Instance #2 — Alisa Liu**: a paper-history study of an NLP researcher, built with the same workflow
+  (a sibling notes set; reach out if you'd like it published too).
+
+The rest of this README is the PICO instance.
+
 ## The two pages (open these)
 
 - **[`index.html`](index.html)** — the reading notes: history → JPEG walkthrough → how PICO works step by
