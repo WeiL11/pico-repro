@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alisa Liu — research reading notes (fresh run)</title>
+<style>
+  :root{--blue:#2e86ab;--red:#d1495b;--amber:#e09f3e;--green:#3a7d44;--purple:#6a4c93;
+        --ink:#1c2430;--muted:#5b6776;--line:#e3e8ee;--bg:#f7f9fb;--card:#fff}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       color:var(--ink);background:var(--bg);line-height:1.6}
+  a{color:var(--blue)}
+  header{background:linear-gradient(135deg,#20303f,#33566e);color:#fff;padding:52px 24px 38px}
+  header .wrap{max-width:940px;margin:0 auto}
+  header h1{margin:0 0 6px;font-size:30px}
+  header .sub{font-size:16.5px;opacity:.92;margin:0 0 14px}
+  header .meta{font-size:13.5px;opacity:.82}
+  .tags{margin-top:14px}
+  .tag{display:inline-block;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);
+       border-radius:999px;padding:4px 12px;font-size:12.5px;margin:0 6px 6px 0}
+  main{max-width:940px;margin:0 auto;padding:8px 24px 64px}
+  section{background:var(--card);border:1px solid var(--line);border-radius:14px;
+          padding:22px 26px;margin:20px 0;box-shadow:0 1px 2px rgba(20,30,45,.04)}
+  h2{font-size:21px;margin:2px 0 12px}h3{font-size:15.5px;margin:16px 0 6px}
+  p{margin:9px 0}.lead{font-size:17px}.muted{color:var(--muted)}
+  .studynote{background:#eef4fb;border:1px solid #cfe0f0;border-left:4px solid var(--blue);
+       border-radius:0 12px 12px 0;padding:16px 20px;margin:20px 0}
+  .studynote h2{font-size:18px;margin:0 0 6px}.studynote p{font-size:14.5px;margin:6px 0}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin:14px 0}
+  .stat{background:#f1f6fa;border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  .stat b{display:block;font-size:17px;color:var(--blue)}.stat span{font-size:12.5px;color:var(--muted)}
+  .timeline{position:relative;margin:18px 0 4px;padding-left:30px}
+  .timeline::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:var(--line)}
+  .era{position:relative;margin:0 0 18px}
+  .era::before{content:"";position:absolute;left:-26px;top:5px;width:14px;height:14px;border-radius:50%;
+       background:var(--blue);border:3px solid #fff;box-shadow:0 0 0 1px var(--line)}
+  .era.hl::before{background:var(--red)}
+  .era .yr{font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+  .era h3{margin:2px 0 4px;font-size:15.5px}.era p{margin:5px 0}
+  details.paper{border:1px solid var(--line);border-radius:11px;margin:12px 0;background:#fff;overflow:hidden}
+  details.paper>summary{list-style:none;cursor:pointer;padding:14px 16px}
+  details.paper>summary::-webkit-details-marker{display:none}
+  details.paper>summary::before{content:"\25B8\00a0";color:var(--blue);font-weight:700}
+  details.paper[open]>summary::before{content:"\25BE\00a0"}
+  details.paper>summary h3{display:inline;font-size:16px;margin:0}
+  details.paper>summary .concept{display:block;font-size:13px;color:var(--muted);margin:5px 0 0 16px}
+  details.paper .body{padding:2px 16px 14px;border-top:1px solid var(--line);margin-top:10px}
+  details.paper h4{margin:14px 0 3px;font-size:12.5px;color:var(--purple);text-transform:uppercase;letter-spacing:.04em}
+  details.paper .body p{margin:4px 0;font-size:14px}
+  .badge{display:inline-block;font-size:11px;border-radius:999px;padding:1px 8px;margin-left:6px;
+       background:#fde9ec;color:#a83246;border:1px solid #f3c4cc;vertical-align:middle}
+  .badge.co{background:#eaf4ea;color:#2c6b34;border-color:#bfe0c2}
+  .miss{border-left:4px solid var(--red);background:#fdeef0;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:13.5px}
+  .cite-line{font-size:12.5px;color:var(--muted);margin-top:12px;border-top:1px dashed var(--line);padding-top:8px}
+  .formula{background:#11161d;color:#e6edf3;border-radius:8px;padding:8px 12px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;margin:6px 0;overflow:auto}
+  table{border-collapse:collapse;width:100%;font-size:13.5px;margin:12px 0}
+  th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}th{background:#f1f6fa}
+  ol.qbox{counter-reset:q;list-style:none;padding:0;margin:12px 0}
+  ol.qbox li{position:relative;background:#f7fafc;border:1px solid var(--line);border-radius:10px;padding:12px 16px 12px 52px;margin:10px 0}
+  ol.qbox li::before{counter-increment:q;content:"Q" counter(q);position:absolute;left:14px;top:12px;font-weight:800;color:var(--blue)}
+  .callout{border-left:4px solid var(--amber);background:#fff8ec;padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0}
+  .callout.warn{border-color:var(--red);background:#fdeef0}
+  nav.toc{font-size:14px}nav.toc a{display:inline-block;margin:0 14px 6px 0}
+  footer{max-width:940px;margin:0 auto;padding:0 24px 50px;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>Alisa Liu &mdash; research reading notes</h1>
+    <p class="sub">A guided tour of an NLP researcher&rsquo;s work: what she keeps trying to solve, the arc of her papers, and what to read first.</p>
+    <p class="meta">PhD, University of Washington (Allen School), advised by <strong>Yejin Choi</strong> &amp;
+       <strong>Noah A. Smith</strong>; Northwestern undergrad. Member of Technical Staff at OpenAI (2026).
+       <a href="https://alisawuffles.github.io/" style="color:#bfe0f2">homepage</a> ·
+       <a href="https://scholar.google.com/citations?user=3-lTFAwAAAAJ&amp;hl=en" style="color:#bfe0f2">Scholar</a></p>
+    <div class="tags">
+      <span class="tag">decoding-time control</span><span class="tag">tokenization</span>
+      <span class="tag">data quality</span><span class="tag">LM failures (ambiguity, hallucination)</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<div class="studynote">
+  <h2>📚 For our study group</h2>
+  <p>Reading notes on <strong>Alisa Liu</strong>&rsquo;s research. Read the <a href="#arc">arc</a> first to see how the work
+     connects, then use <a href="#start">&ldquo;Start here&rdquo;</a> for an order to read the papers. Every paper folds open
+     into a full Intro / Method / Results / Future breakdown with a &ldquo;what&rsquo;s missing&rdquo; box.</p>
+  <p class="muted">🛠 How these notes were researched and built (a fresh, from-scratch run of our method): <a href="methodology.html">methodology.html</a>.</p>
+</div>
+
+<section style="border-left:5px solid var(--amber)">
+  <h2>💡 What I find most interesting</h2>
+  <p class="lead">Reading across her papers, the question Alisa Liu keeps returning to is:
+     <strong>the parts of the language-model pipeline everyone treats as fixed plumbing &mdash; the training data, the
+     decoding step, and above all the tokenizer &mdash; are exactly where the real, under-exploited leverage lives.</strong></p>
+  <p>Two moves recur. First, <strong>change what a model <em>does</em> without retraining it</strong>: steer it at decode time
+     (<a href="#papers">DExperts</a> → <a href="#papers">proxy-tuning</a>, the same logit-arithmetic idea scaled up over years).
+     Second, <strong>question the inputs we take for granted</strong>: is the <em>data</em> good (WANLI)? is the
+     <em>tokenizer</em> &mdash; a step almost nobody examines &mdash; good, and what does it secretly leak (Data Mixture
+     Inference, SuperBPE)? If I had to name what she&rsquo;s really drawn to: <strong>overlooked, high-leverage layers</strong>
+     and <strong>where models silently fail</strong> (ambiguity, hallucination) &mdash; finding a small, cheap lever that
+     quietly moves a big model rather than spending more compute.</p>
+</section>
+
+<section>
+  <h2>Who she is</h2>
+  <div class="grid">
+    <div class="stat"><b>UW → OpenAI</b><span>PhD at the Allen School (2020–26); now MTS at OpenAI</span></div>
+    <div class="stat"><b>Choi &amp; Smith</b><span>co-advised; close ties to Ai2 / AllenNLP</span></div>
+    <div class="stat"><b>2 core threads</b><span>decoding-time control &amp; tokenization</span></div>
+    <div class="stat"><b>NSF GRF · OpenAI grant</b><span>NSF Graduate Fellowship (2022); OpenAI SuperAlignment grant (2024)</span></div>
+  </div>
+  <nav class="toc">
+    <div style="height:1px;background:var(--line);margin:8px 0 10px"></div>
+    <strong>Contents:</strong>
+    <a href="#arc">Research arc</a> <a href="#start">Start here</a> <a href="#papers">Signature papers</a>
+    <a href="#list">Full publication list</a> <a href="#discuss">Your turn</a> <a href="#sources">Sources &amp; honesty</a>
+  </nav>
+</section>
+
+<section id="arc">
+  <h2>The research arc</h2>
+  <div class="timeline">
+    <div class="era"><div class="yr">2019–2020 · before the NLP PhD</div>
+      <h3>Audio / music machine learning (Northwestern)</h3>
+      <p>Audio source separation and music generation in Bryan Pardo&rsquo;s group (a <strong>DCASE 2020 Best Student Paper</strong>),
+         plus an early commonsense-QA dataset (CODAH). Data-and-evaluation instincts show up early.</p></div>
+    <div class="era hl"><div class="yr">2021–2022 · controlling generation &amp; making data</div>
+      <h3>Decoding-time control + human–AI data creation</h3>
+      <p><strong>DExperts</strong> (ACL 2021) steers a frozen LM at decode time. <strong>WANLI</strong> (EMNLP-F 2022, her
+         lead-author breakout) reframes dataset creation as worker-and-AI collaboration. Same era: Generated Knowledge Prompting.</p></div>
+    <div class="era hl"><div class="yr">2023 · what models get wrong</div>
+      <h3>Ambiguity, failures &amp; instruction data</h3>
+      <p>The <strong>AmbiEnt</strong> ambiguity benchmark (EMNLP 2023), translation-ambiguity, hallucination snowballing,
+         Inverse Scaling, and the widely-cited <em>Self-Instruct</em> (co-author) &mdash; characterising where LMs systematically fail.</p></div>
+    <div class="era hl"><div class="yr">2024 · adaptation matures + the pivot</div>
+      <h3>Inference-time adaptation → tokenizer forensics</h3>
+      <p><strong>Proxy-tuning</strong> (COLM 2024, spotlight) generalises DExperts to adapt huge / API-only models.
+         <strong>Data Mixture Inference</strong> (NeurIPS 2024) reverse-engineers a tokenizer&rsquo;s training-data mix &mdash;
+         the bridge from data into tokenization.</p></div>
+    <div class="era hl"><div class="yr">2025–2026 · tokenization as the core</div>
+      <h3>Tokenization as a high-leverage layer</h3>
+      <p><strong>SuperBPE</strong> (COLM 2025) lets tokens cross whitespace; then <em>Broken Tokens</em> (NeurIPS 2025 spotlight),
+         byte-level sampling (ICML 2026), and compute-optimal tokenization. Parallel thread: frontier open models
+         (<strong>Tülu 3</strong>, OLMo 3, NVIDIA Nemotron 3).</p></div>
+  </div>
+</section>
+
+<section id="start">
+  <h2>Start here (a reading order)</h2>
+  <ol>
+    <li><strong><a href="#papers">DExperts</a></strong> (2021) &mdash; the clean core idea: steer at decode time.</li>
+    <li><strong><a href="#papers">WANLI</a></strong> (2022) &mdash; why data <em>quality</em> beats data quantity.</li>
+    <li><strong><a href="#papers">Proxy-tuning</a></strong> (2024) &mdash; the same decode-time idea, scaled to huge/closed models.</li>
+    <li><strong><a href="#papers">SuperBPE</a></strong> (2025) &mdash; her current focus: tokenization, and why it matters more than it looks.</li>
+  </ol>
+</section>
+
+<section id="papers">
+  <h2>Signature papers — deep dive</h2>
+  <p class="muted">Folded by default &mdash; <strong>click a title</strong> to expand Intro → Method → Results → Discussion &amp;
+     future + a red &ldquo;most important thing missing&rdquo; box. Jargon, once: an LM&rsquo;s per-step scores over the vocabulary
+     are <em>logits</em>; &ldquo;decoding-time&rdquo; methods edit those scores on the fly instead of retraining.</p>
+
+  <details class="paper">
+    <summary><h3>DExperts: Decoding-Time Controlled Text Generation with Experts &amp; Anti-Experts <span class="badge">1st author</span></h3>
+      <span class="concept">Steer a frozen LM toward/away from an attribute by adding a small expert&minus;anti-expert logit difference at decode time &mdash; no retraining.</span></summary>
+    <div class="body">
+      <h4>Intro &mdash; why</h4>
+      <p>Large LMs can produce toxic/off-tone text, and retraining a 175B+ model to fix it is &ldquo;computationally infeasible
+         for most researchers&rdquo; &mdash; and impossible for API-only models. We need cheap, decode-time control that needs only
+         the model&rsquo;s output probabilities and can steer both <em>toward</em> a good attribute and <em>away</em> from a bad one.</p>
+      <h4>Method &mdash; how</h4>
+      <p>Keep a frozen base <strong>M</strong>; add a small <strong>expert M⁺</strong> (trained on text <em>with</em> the wanted
+         attribute) and <strong>anti-expert M⁻</strong> (the unwanted attribute). Combine their logits as a <em>product of
+         experts</em> (multiplying distributions = a logical AND):</p>
+      <div class="formula">modified = softmax( z + α·(z⁺ − z⁻) )</div>
+      <p>The difference (z⁺−z⁻) is where the attribute signal lives; α is the strength knob. They first truncate to the base
+         model&rsquo;s top-k/top-p tokens so the experts can only re-rank plausible words (keeping fluency). An
+         &ldquo;anti-only&rdquo; variant needs only <em>negative</em> examples.</p>
+      <h4>Results</h4>
+      <p>Detoxification (GPT-2 Large; RealToxicityPrompts; Perspective API): toxicity probability <strong>0.520 → 0.128</strong>
+         with fluency near the base (ppl ~32 vs GeDi&rsquo;s 60), beating DAPT/GeDi/PPLM. Very data-efficient: <strong>~650 toxic
+         comments and ~3 min</strong> of fine-tuning already match the strongest baseline. It also steers <strong>GPT-3 via the
+         API</strong> (top-100 log-probs): toxicity prob 0.515 → 0.111. Sentiment control too (94.5% positive on neutral prompts).</p>
+      <h4>Discussion &amp; future</h4>
+      <p>Negative steering is easier than positive; domain-narrow experts (movie reviews) trade fluency for control; stylistic
+         rewriting needs more work. Future: personalised experts and better definitions of harm.</p>
+      <div class="miss"><strong>⚠ Most important thing missing:</strong> the method is only as good &mdash; and as fair &mdash; as
+         the data its experts learn from and the metric judging it. The headline detox numbers use Perspective API, which the
+         authors note over-flags minority-identity language, so &ldquo;less toxic&rdquo; can mean &ldquo;scrubbed of
+         minority-associated language.&rdquo; Always validate with human judgement on your own domain (as the paper&rsquo;s own
+         MTurk study does).</div>
+      <p class="cite-line"><strong>Alisa Liu</strong> (1st), M. Sap, X. Lu, S. Swayamdipta, C. Bhagavatula, N. A. Smith, Y. Choi.
+         ACL 2021. <a href="https://aclanthology.org/2021.acl-long.522/">ACL</a> · <a href="https://arxiv.org/abs/2105.03023">arXiv</a> · <a href="https://github.com/alisawuffles/DExperts">code</a></p>
+    </div>
+  </details>
+
+  <details class="paper">
+    <summary><h3>WANLI: Worker &amp; AI Collaboration for NLI Dataset Creation <span class="badge">1st author</span></h3>
+      <span class="concept">A 107,885-example NLI dataset where GPT-3 drafts examples in the hard, ambiguous style of MultiNLI and humans label + lightly revise &mdash; 4× smaller than MultiNLI yet trains more robust models.</span></summary>
+    <div class="body">
+      <h4>Intro &mdash; why</h4>
+      <p><em>NLI</em>: given a premise and hypothesis, decide entailment / contradiction / neutral. Crowdsourced NLI is full of
+         <em>annotation artifacts</em> (a model can guess the label from the hypothesis alone), so models look great in-domain
+         but are brittle out-of-distribution. WANLI flips the roles: the LM <em>generates</em>, humans <em>evaluate &amp; correct</em>.</p>
+      <h4>Method &mdash; how</h4>
+      <p>Four stages. (1) <strong>Dataset cartography</strong> tracks a model&rsquo;s predictions across training epochs to find
+         <em>ambiguous</em> (high-variability) examples, which build robustness; seed from the top-25% most ambiguous MultiNLI.
+         (2) Take each seed&rsquo;s 4 nearest same-label neighbours (via [CLS] embeddings) to capture a reasoning pattern, and ask
+         <strong>GPT-3</strong> to write a new example in that pattern. (3) <strong>Filter</strong> with an &ldquo;estimated max
+         variability&rdquo; metric, keeping examples that look ambiguous to the model. (4) Two crowdworkers per example
+         <strong>assign the gold label</strong> and make <em>minimal</em> edits (heavy revision re-introduces artifacts).</p>
+      <h4>Results</h4>
+      <p><strong>107,885</strong> examples (~4× smaller than MultiNLI&rsquo;s 393k). Training on WANLI instead of MultiNLI improves
+         <strong>all 8 out-of-distribution test sets</strong>: <strong>+4% Diagnostics, +11% HANS, +9% Adversarial NLI</strong> &mdash;
+         and beats baselines with up to 9× more data. Fewer artifacts: a hypothesis-only model scores only 41.6% on WANLI vs 49.6%
+         on MultiNLI. (κ = 0.60 worker agreement; only 3.54% of examples revised.)</p>
+      <h4>Discussion &amp; future</h4>
+      <p>English-NLI only; genuinely ambiguous cases are forced into one label; GPT-3 reproduces <em>contradiction</em> poorly
+         (~15%). Future: other languages/tasks; treat dataset curation as an AI challenge; preserve ambiguity.</p>
+      <div class="miss"><strong>⚠ Most important thing missing:</strong> the &ldquo;4× less data, better OOD&rdquo; win is <em>not</em>
+         a clean &ldquo;machine vs human generation&rdquo; test &mdash; the pipeline bundles three interventions (targeting the
+         <em>ambiguous slice</em>, GPT-3 generation, human relabel/filter) and the paper admits it <em>could not ablate them</em>.
+         The gains most plausibly come from the shift toward ambiguous, artifact-poor examples, enabled by GPT-3 and controlled by
+         humans &mdash; and WANLI swaps human artifacts for GPT-3&rsquo;s own. Don&rsquo;t over-generalise &ldquo;less data is better.&rdquo;</div>
+      <p class="cite-line"><strong>Alisa Liu</strong> (1st), S. Swayamdipta, N. A. Smith, Y. Choi. Findings of EMNLP 2022.
+         <a href="https://aclanthology.org/2022.findings-emnlp.508/">ACL</a> · <a href="https://arxiv.org/abs/2201.05955">arXiv</a> · <a href="https://wanli.allenai.org/">project</a></p>
+    </div>
+  </details>
+
+  <details class="paper">
+    <summary><h3>We&rsquo;re Afraid Language Models Aren&rsquo;t Modeling Ambiguity (AmbiEnt) <span class="badge">1st author</span></h3>
+      <span class="concept">A 1,645-example linguist-annotated benchmark showing even GPT-4 largely fails to recognise and disentangle the multiple meanings of ambiguous sentences.</span></summary>
+    <div class="body">
+      <h4>Intro &mdash; why</h4>
+      <p>Ambiguity is intrinsic to language; good assistants should <em>recognise</em> it, not silently pick one reading. It
+         matters for correctness and for spotting <em>deliberately</em> misleading language. Yet ambiguous examples are usually
+         <em>excluded</em> when benchmarks are built, so the skill went unstudied.</p>
+      <h4>Method &mdash; how</h4>
+      <p>Define ambiguity <em>through entailment</em>: an ambiguous premise yields a <em>set</em> of NLI labels; disambiguating it
+         collapses the set. <strong>AmbiEnt</strong>: 1,645 examples (35% ambiguous), 142 curated + the rest InstructGPT-generated,
+         annotated by <strong>37 linguistics students</strong> (two each + a third validator). Types: pragmatic ~45%, lexical ~20%,
+         syntactic ~9%, scopal ~8%, etc. Three tests: <em>generate</em> the disambiguations, <em>recognise</em> them (true/false),
+         and model interpretation-specific continuations.</p>
+      <h4>Results</h4>
+      <p>GPT-4&rsquo;s generated disambiguations are judged correct only <strong>32%</strong> of the time vs <strong>89.7%</strong>
+         human agreement with the gold ones. It is internally <em>inconsistent</em>: for <strong>76%</strong> of pairs it says a
+         sentence &ldquo;may mean&rdquo; both readings yet &ldquo;can only mean&rdquo; each one; under the strict recognition test it
+         drops to 2.5% (below 6.25% chance). Interestingly FLAN-T5 (worst at generation) wins the continuation test at 81%. Applied
+         to misleading political claims, a multilabel NLI model flags ambiguity at <strong>88.8% recall</strong> (low precision, but
+         the &ldquo;false positives&rdquo; were often real overlooked ambiguities).</p>
+      <h4>Discussion &amp; future</h4>
+      <p>Much NLI label &ldquo;disagreement&rdquo; is really ambiguity (κ jumps from 0.12 to 0.67 after disambiguation). English-only;
+         small; results swing by how you operationalise the test. Future: larger, naturally-occurring, multilingual ambiguity data.</p>
+      <div class="miss"><strong>⚠ Most important thing missing:</strong> the famous &ldquo;32% vs 90%&rdquo; gap is not a clean
+         apples-to-apples accuracy comparison &mdash; 32% is human-judged correctness of GPT-4&rsquo;s <em>generated</em>
+         disambiguations, while ~90% is agreement with gold ones. The authors warn 32% may even <em>over</em>state GPT-4 (it
+         &ldquo;shortcuts&rdquo; by restating sentences), and rankings flip across the three tests. The robust takeaway is directional:
+         ambiguity is a severe, unsolved challenge for all current LMs.</div>
+      <p class="cite-line"><strong>Alisa Liu</strong> (1st), Z. Wu, J. Michael, A. Suhr, P. West, A. Koller, S. Swayamdipta, N. A. Smith, Y. Choi.
+         EMNLP 2023. <a href="https://arxiv.org/abs/2304.14399">arXiv</a> · <a href="https://github.com/alisawuffles/ambient">data/code</a></p>
+    </div>
+  </details>
+
+  <details class="paper">
+    <summary><h3>Tuning Language Models by Proxy (proxy-tuning) <span class="badge">1st author</span></h3>
+      <span class="concept">Make a large frozen model behave as if fine-tuned by adding, at decode time, the logit delta between a small tuned model and its small untuned twin.</span></summary>
+    <div class="body">
+      <h4>Intro &mdash; why</h4>
+      <p>Fine-tuning the largest models is costly, and API-only models can&rsquo;t be tuned at all. Can we get the <em>effect</em> of
+         fine-tuning a giant model while only ever tuning a <em>small</em> one?</p>
+      <h4>Method &mdash; how</h4>
+      <p>Three models sharing a vocabulary: large base <strong>M</strong>, small tuned <strong>M⁺</strong>, small untuned
+         <strong>M⁻</strong>. At each step:</p>
+      <div class="formula">p(next) = softmax[ s_M + (s_M⁺ − s_M⁻) ]</div>
+      <p>The delta (s_M⁺−s_M⁻) isolates <em>what tuning changed</em> at small scale (it cancels the shared base behaviour); adding it
+         transplants that change onto the big model while keeping its superior knowledge. It is exactly the DExperts arithmetic,
+         repurposed so the &ldquo;experts&rdquo; are a tuned/untuned pair.</p>
+      <h4>Results</h4>
+      <p>Proxy-tuning <strong>Llama2-70B</strong> with 7B proxies closes <strong>88%</strong> of the gap to the truly fine-tuned chat
+         model (13B: 91%). AlpacaFarm win-rate 3.7% → 88.0%; GSM math 9.6 → 32.0 (vs 51.8 fully tuned); ToxiGen 67.4% → 0.0%; and on
+         open-ended TruthfulQA it is <em>more</em> truthful than real fine-tuning (92.3% vs 85.8%). Decode-time overhead ~1.5–2.4×.</p>
+      <h4>Discussion &amp; future</h4>
+      <p>Reasoning is where the gap is least closed; preserves base knowledge (less &ldquo;alignment tax&rdquo;). Future:
+         cross-vocabulary alignment; broader API logit access.</p>
+      <div class="miss"><strong>⚠ Most important thing missing:</strong> &ldquo;tune a black-box / API-only model&rdquo; is
+         aspirational. The method needs the big model&rsquo;s <em>logits over the full shared vocabulary</em> at every step <em>and</em>
+         a matching tokenizer. The 88% headline is on the <em>open-weights</em> Llama2-70B case; most commercial APIs expose only
+         top-k log-probs (or nothing) and may use a different tokenizer.</p>
+      <p class="cite-line"><strong>Alisa Liu</strong> (1st), X. Han, Y. Wang, Y. Tsvetkov, Y. Choi, N. A. Smith. COLM 2024 (spotlight).
+         <a href="https://arxiv.org/abs/2401.08565">arXiv</a></p>
+    </div>
+  </details>
+
+  <details class="paper">
+    <summary><h3>Data Mixture Inference: What do BPE Tokenizers Reveal about their Training Data? <span class="badge co">co-first author</span></h3>
+      <span class="concept">The ordered merge list inside a BPE tokenizer leaks the proportions of languages / code / domains in its training data &mdash; recoverable by solving a linear program.</span></summary>
+    <div class="body">
+      <h4>Intro &mdash; why</h4>
+      <p>The pretraining-data composition of top models is secret, yet it determines capabilities, biases, and reproducibility. This
+         work finds a <em>released</em> artifact &mdash; the tokenizer &mdash; that leaks it.</p>
+      <h4>Method &mdash; how</h4>
+      <p>BPE training repeatedly merges the <em>most frequent adjacent pair</em>, producing an <strong>ordered</strong> merge list.
+         Key insight: the pair merged at step <em>t</em> was the most frequent pair <em>after the first t−1 merges</em> &mdash; a clue
+         about the data mixture. Solve a <strong>linear program</strong>: unknown proportions α (≥0, sum to 1); reference samples give
+         each category&rsquo;s pair counts; every merge becomes an inequality (&ldquo;under α, the merged pair really was most
+         frequent&rdquo;); minimise total violation. No weights, gradients, or training data needed.</p>
+      <h4>Results</h4>
+      <p>On tokenizers trained from <em>known</em> mixtures it is extraordinarily accurate (log₁₀ MSE ≈ −7.3 for languages, ≈ −6.5 for
+         code &mdash; 4–6 orders of magnitude better than random). On real tokenizers: <strong>GPT-2 ≈ 99% English</strong>;
+         <strong>GPT-3.5 ≈ 63% code</strong> (the first code-heavy GPT); <strong>GPT-4o ≈ 39% non-English</strong> (a big multilingual
+         jump from GPT-3.5&rsquo;s 3.2%); Llama 3 ≈ 48% non-English; Mistral NeMo ≈ 47% non-English; <strong>Claude ≈ 57% code</strong>.</p>
+      <h4>Discussion &amp; future</h4>
+      <p>Distribution shift (reference samples ≠ real data) degrades accuracy sharply; unmodeled categories hurt; English domains are
+         harder than languages; it only works on BPE (ordered-merge) tokenizers. Future: inferring more global properties of training data.</p>
+      <div class="miss"><strong>⚠ Most important thing missing:</strong> the percentages describe the <em>tokenizer&rsquo;s</em> training
+         sample, <em>not</em> necessarily the model&rsquo;s full pretraining corpus &mdash; and the paper shows this can break (Llama&rsquo;s
+         tokenizer was trained on a different distribution than its LM). Read &ldquo;GPT-4o is 39% non-English&rdquo; as &ldquo;GPT-4o&rsquo;s
+         <em>tokenizer</em> data was ~39% non-English.&rdquo; Trust the directional conclusions, not the exact decimals.</p>
+      <p class="cite-line">J. Hayase*, <strong>Alisa Liu*</strong> (co-first &mdash; the paper footnote states &ldquo;equal contribution,
+         ordered alphabetically&rdquo;), Y. Choi, S. Oh, N. A. Smith. NeurIPS 2024. <a href="https://arxiv.org/abs/2407.16607">arXiv</a> · <a href="https://github.com/alisawuffles/tokenizer-attack">code</a></p>
+    </div>
+  </details>
+
+  <details class="paper">
+    <summary><h3>SuperBPE: Space Travel for Language Models <span class="badge co">co-first author</span></h3>
+      <span class="concept">A tokenizer that lets tokens cross spaces (&ldquo;superwords&rdquo;), learned by a two-stage BPE curriculum, so text needs far fewer tokens and the model is both better and cheaper.</span></summary>
+    <div class="body">
+      <h4>Intro &mdash; why</h4>
+      <p>Standard <em>BPE</em> first splits on whitespace (&ldquo;pretokenization&rdquo;), so <strong>no token can cross a space</strong>.
+         That wastes tokens on multi-word expressions (&ldquo;by the way&rdquo;), is inconsistent across languages (English
+         &ldquo;spacesuit helmet&rdquo; = one German word), and makes BPE add ever-rarer subwords. More tokens means more compute &mdash;
+         and worse models.</p>
+      <h4>Method &mdash; how</h4>
+      <p>A simple <strong>curriculum</strong> with one knob, a transition point <em>t</em>. <strong>Stage 1</strong> (first <em>t</em>
+         merges): ordinary BPE <em>with</em> whitespace splitting &mdash; learn subwords. <strong>Stage 2</strong> (remaining merges):
+         <em>disable</em> whitespace splitting, so frequent multi-word sequences become single <strong>superword</strong> tokens. The
+         vocabulary budget is fixed (200k); only <em>how</em> it&rsquo;s learned changes. Learning subwords first is essential &mdash; a
+         &ldquo;no pretokenization from the start&rdquo; variant does worse.</p>
+      <h4>Results</h4>
+      <p>At a fixed 200k vocabulary, <strong>up to 33% fewer tokens</strong>; bytes/token rise from BPE&rsquo;s ~4.45 (capped at 4.68) to
+         <strong>6.63</strong>. At 8B parameters (model size, vocab, <em>and compute</em> held fixed) the best model (t=180k) gives
+         <strong>+4.0% average across 30 tasks</strong> (wins 25/30; +8.2% MMLU) while using <strong>~27% less inference compute</strong>.
+         The one significant loss is LAMBADA.</p>
+      <h4>Discussion &amp; future</h4>
+      <p>Why it works: segmentation is more <em>uniform in per-token difficulty</em>. The most-compressing tokenizer (t=80k) is <em>not</em>
+         the best model &mdash; compression ≠ quality. English-only at 8B; the cross-lingual motivation isn&rsquo;t experimentally tested.
+         Future: adapt already-trained models to SuperBPE; combine with multi-token prediction.</p>
+      <div class="miss"><strong>⚠ Most important thing missing:</strong> is it a free lunch? It holds up because the comparison fixes
+         <em>compute</em>, not tokens &mdash; same model size, vocab, and FLOPs, with the effective byte-context matched, so SuperBPE
+         doesn&rsquo;t cheat by seeing more context. The honest residual catch is the authors&rsquo; own: encoding efficiency and downstream
+         quality are different axes (you can&rsquo;t rank the two tokenizers by loss). Takeaway: &ldquo;a better tokenizer at equal cost,&rdquo;
+         not &ldquo;more compression is always better.&rdquo;</p>
+      <p class="cite-line"><strong>Alisa Liu*</strong> &amp; J. Hayase* (co-first), V. Hofmann, S. Oh, N. A. Smith, Y. Choi. COLM 2025.
+         <a href="https://arxiv.org/abs/2503.13423">arXiv</a> · <a href="https://superbpe.github.io/">site</a></p>
+    </div>
+  </details>
+</section>
+
+<section id="list">
+  <h2>Full publication list (newest first)</h2>
+  <p class="muted">From her homepage, DBLP and arXiv (Scholar is flaky to fetch). &ldquo;1st&rdquo; = first author; &ldquo;co-1st&rdquo; =
+     equal contribution. 2026 items are preprints; details may shift. Same-name researchers in other fields were excluded.</p>
+  <table>
+    <tr><th>Year</th><th>Paper</th><th>Venue</th><th>Role</th></tr>
+    <tr><td>2026</td><td>Nemotron 3 (Nano/Super/Ultra) — open MoE hybrid Mamba-Transformer</td><td>NVIDIA report (arXiv)</td><td>contributor</td></tr>
+    <tr><td>2026</td><td>Compute-Optimal Tokenization</td><td>arXiv (Meta)</td><td>middle</td></tr>
+    <tr><td>2026</td><td>Are LMs Sensitive to Morally Irrelevant Distractors?</td><td>arXiv</td><td>middle</td></tr>
+    <tr><td>2026</td><td>Are You Going to Finish That? (Partial-Token Problem)</td><td>arXiv</td><td>2nd</td></tr>
+    <tr><td>2026</td><td>Sampling from Your Language Model One Byte at a Time</td><td>ICML</td><td>2nd</td></tr>
+    <tr><td>2025</td><td>Broken Tokens? &hellip; Non-Canonical Tokenizations</td><td>NeurIPS (spotlight)</td><td>2nd</td></tr>
+    <tr><td>2025</td><td><a href="https://arxiv.org/abs/2503.13423">SuperBPE: Space Travel for Language Models</a></td><td>COLM (top 0.2%)</td><td><strong>co-1st</strong></td></tr>
+    <tr><td>2025</td><td>Tülu 3: Open LM Post-Training</td><td>COLM</td><td>contributor</td></tr>
+    <tr><td>2025</td><td>OLMo 3</td><td>Ai2 report</td><td>contributor</td></tr>
+    <tr><td>2025</td><td>Semantic Leakage in Language Models</td><td>NAACL</td><td>middle</td></tr>
+    <tr><td>2025</td><td>LlamaPIE: Proactive In-Ear Conversation Assistants</td><td>ACL Findings</td><td>middle</td></tr>
+    <tr><td>2024</td><td>Decoding-Time LM Alignment with Multiple Objectives</td><td>NeurIPS</td><td>middle</td></tr>
+    <tr><td>2024</td><td><a href="https://arxiv.org/abs/2407.16607">Data Mixture Inference (BPE tokenizers)</a></td><td>NeurIPS</td><td><strong>co-1st</strong></td></tr>
+    <tr><td>2024</td><td>How LM Hallucinations Can Snowball</td><td>ICML</td><td>middle</td></tr>
+    <tr><td>2024</td><td><a href="https://arxiv.org/abs/2401.08565">Tuning Language Models by Proxy</a></td><td>COLM (spotlight)</td><td><strong>1st</strong></td></tr>
+    <tr><td>2023</td><td><a href="https://arxiv.org/abs/2304.14399">We&rsquo;re Afraid LMs Aren&rsquo;t Modeling Ambiguity</a></td><td>EMNLP</td><td><strong>1st</strong></td></tr>
+    <tr><td>2023</td><td>Are Translation Systems Sensitive to Disambiguating Context?</td><td>EMNLP Findings</td><td>2nd</td></tr>
+    <tr><td>2023</td><td>Inverse Scaling: When Bigger Isn&rsquo;t Better</td><td>TMLR</td><td>middle</td></tr>
+    <tr><td>2023</td><td>Self-Instruct</td><td>ACL</td><td>middle</td></tr>
+    <tr><td>2023</td><td>MaRCo: Detoxifying with Experts &amp; Anti-Experts</td><td>ACL</td><td>2nd</td></tr>
+    <tr><td>2022</td><td><a href="https://aclanthology.org/2022.findings-emnlp.508/">WANLI</a></td><td>EMNLP Findings</td><td><strong>1st</strong></td></tr>
+    <tr><td>2022</td><td>Generated Knowledge Prompting</td><td>ACL</td><td>2nd</td></tr>
+    <tr><td>2021</td><td><a href="https://aclanthology.org/2021.acl-long.522/">DExperts</a></td><td>ACL</td><td><strong>1st</strong></td></tr>
+    <tr><td>2020</td><td>Model Selection for Deep Audio Source Separation</td><td>DCASE (Best Student Paper)</td><td><strong>1st</strong></td></tr>
+    <tr><td>2019</td><td>CODAH: Adversarially-Authored Commonsense QA</td><td>RepEval @ NAACL</td><td>middle</td></tr>
+  </table>
+</section>
+
+<section id="discuss">
+  <h2>Your turn: discussion questions</h2>
+  <ol class="qbox">
+    <li><strong>&ldquo;Steer at decode time&rdquo; vs fine-tuning.</strong> DExperts → proxy-tuning is one idea applied twice. What
+       else could decode-time steering solve, and where does it break versus actually fine-tuning the weights?</li>
+    <li><strong>Does better data really beat more data?</strong> WANLI leans on AI-generated, human-curated data and can&rsquo;t
+       ablate which part helps. When does synthetic data genuinely help, and when does it just launder the generator&rsquo;s biases?</li>
+    <li><strong>Why was tokenization ignored for so long?</strong> SuperBPE and Data Mixture Inference show the tokenizer has big
+       downstream and transparency effects. Why is such a fundamental step under-studied &mdash; and what would you investigate next?</li>
+  </ol>
+</section>
+
+<section id="sources">
+  <h2>Sources &amp; honesty</h2>
+  <p>Built fresh from her <a href="https://alisawuffles.github.io/">homepage</a> + CV, <a href="https://dblp.org/pid/239/5177.html">DBLP</a>,
+     the <a href="https://aclanthology.org/people/alisa-liu/">ACL Anthology</a>, and arXiv; each signature paper was deep-read against
+     its own PDF.</p>
+  <div class="callout warn"><strong>Caveats (verify before citing):</strong>
+    <ul>
+      <li><strong>Google Scholar wasn&rsquo;t reliably fetchable</strong>; per-paper citation counts are unverified and omitted.</li>
+      <li><strong>Co-first authorship</strong> on SuperBPE and Data Mixture Inference is confirmed in the papers (&ldquo;equal
+          contribution&rdquo;); on the latter she is listed 2nd only because of alphabetical ordering.</li>
+      <li><strong>Same-name researchers excluded</strong> — an HCI &ldquo;Alisa Liu&rdquo; (stained-glass/TEI) and genomics/neuroscience
+          authors are different people; disambiguated by field + co-author network.</li>
+      <li>A few 2026 entries are preprints; exact venues/titles may change.</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div style="height:1px;background:var(--line);margin:0 0 14px"></div>
+  <p>Reading notes prepared for an undergraduate study group &mdash; a learning aid, not an official bibliography. Every paper links
+     its primary source; please check the claims.</p>
+</footer>
+
+</body>
+</html>

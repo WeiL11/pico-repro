@@ -124,9 +124,12 @@
     <tr><td class="ver">v0.3<br><span class="muted">Alisa pass 1</span></td>
         <td>Parallelised research into a <strong>3-agent fan-out</strong> (list / summaries / arc) and moved verification <em>before</em> writing (a verify gate).</td>
         <td>Caught a misattribution (Infini-gram is not hers) <em>before</em> it shipped. → front-load verification; fan out for speed.</td></tr>
-    <tr><td class="ver">v0.4<br><span class="muted">Alisa pass 2 · current</span></td>
+    <tr><td class="ver">v0.4<br><span class="muted">Alisa pass 2</span></td>
         <td>Added a <strong>per-paper deep-read fan-out</strong> (one agent per paper → Intro/Method/Results/Future + "what's missing"), formalised the <strong>three principles</strong>, <strong>foldable</strong> <code>&lt;details&gt;</code> output, and the <strong>"what I find most interesting" opening</strong>.</td>
-        <td>Depth + scannability together; every claim cited; the most-missing question made explicit. This is the method new directions start from.</td></tr>
+        <td>Depth + scannability together; every claim cited; the most-missing question made explicit.</td></tr>
+    <tr><td class="ver">v0.5<br><span class="muted">fresh-run reproduction · current</span></td>
+        <td>Ran the full v0.4 pipeline <strong>completely from scratch</strong> on a researcher (from only a Scholar URL, no prior notes) as a <strong>reproducibility test</strong> &mdash; 3-agent Pass 1 → verify gate → 6-agent Pass 2 → folded HTML, applied from the very start (no shallow first draft).</td>
+        <td>The method reproduces: independent agents re-identified the researcher, disambiguated same-name people, and <em>tightened</em> details (e.g. confirmed co-first authorships from the PDFs). Direction: <a href="alisa-liu-v2/index.html">alisa-liu-v2</a>.</td></tr>
   </table>
   <div class="callout">Next planned improvement: apply v0.4 from the <em>start</em> of the next direction (no shallow first
      draft), and consider a final "completeness critic" agent that asks what the whole note still omits.</div>
@@ -139,6 +142,8 @@
         <a href="pico/methodology.html">method</a></li>
     <li><strong>Alisa Liu</strong> — NLP researcher paper-history: <a href="alisa-liu/index.html">content</a> ·
         <a href="alisa-liu/methodology.html">method</a></li>
+    <li><strong>Alisa Liu (fresh run)</strong> — same researcher, rebuilt from scratch as a reproducibility test:
+        <a href="alisa-liu-v2/index.html">content</a> · <a href="alisa-liu-v2/methodology.html">method</a></li>
   </ul>
   <p class="muted">When the method improves, update this page (bump the version + add a changelog row) and apply it to the next direction.</p>
 </section>
