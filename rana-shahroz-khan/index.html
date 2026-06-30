@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rana M. Shahroz Khan &mdash; research reading notes</title>
+<style>
+  :root{--blue:#2e86ab;--red:#d1495b;--amber:#e09f3e;--green:#3a7d44;--purple:#6a4c93;
+        --ink:#1c2430;--muted:#5b6776;--line:#e3e8ee;--bg:#f7f9fb;--card:#fff}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6}
+  a{color:var(--blue)}
+  header{background:linear-gradient(135deg,#1d2b3a,#2f5066);color:#fff;padding:52px 24px 38px}
+  header .wrap{max-width:940px;margin:0 auto}
+  header h1{margin:0 0 6px;font-size:30px}
+  header .sub{font-size:16.5px;opacity:.92;margin:0 0 14px}
+  header .meta{font-size:13.5px;opacity:.82}
+  .tags{margin-top:14px}.tag{display:inline-block;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:4px 12px;font-size:12.5px;margin:0 6px 6px 0}
+  main{max-width:940px;margin:0 auto;padding:8px 24px 64px}
+  section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 26px;margin:20px 0;box-shadow:0 1px 2px rgba(20,30,45,.04)}
+  h2{font-size:21px;margin:2px 0 12px}h3{font-size:15.5px;margin:16px 0 6px}
+  p{margin:9px 0}.lead{font-size:17px}.muted{color:var(--muted)}
+  .studynote{background:#eef4fb;border:1px solid #cfe0f0;border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:16px 20px;margin:20px 0}
+  .studynote h2{font-size:18px;margin:0 0 6px}.studynote p{font-size:14.5px;margin:6px 0}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin:14px 0}
+  .stat{background:#f1f6fa;border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  .stat b{display:block;font-size:17px;color:var(--blue)}.stat span{font-size:12.5px;color:var(--muted)}
+  .timeline{position:relative;margin:18px 0 4px;padding-left:30px}
+  .timeline::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:var(--line)}
+  .era{position:relative;margin:0 0 18px}
+  .era::before{content:"";position:absolute;left:-26px;top:5px;width:14px;height:14px;border-radius:50%;background:var(--blue);border:3px solid #fff;box-shadow:0 0 0 1px var(--line)}
+  .era.hl::before{background:var(--red)}
+  .era .yr{font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+  .era h3{margin:2px 0 4px;font-size:15.5px}.era p{margin:5px 0}
+  details.paper{border:1px solid var(--line);border-radius:11px;margin:12px 0;background:#fff;overflow:hidden}
+  details.paper>summary{list-style:none;cursor:pointer;padding:14px 16px}
+  details.paper>summary::-webkit-details-marker{display:none}
+  details.paper>summary::before{content:"\25B8\00a0";color:var(--blue);font-weight:700}
+  details.paper[open]>summary::before{content:"\25BE\00a0"}
+  details.paper>summary h3{display:inline;font-size:16px;margin:0}
+  details.paper>summary .concept{display:block;font-size:13px;color:var(--muted);margin:5px 0 0 16px}
+  details.paper .body{padding:2px 16px 14px;border-top:1px solid var(--line);margin-top:10px}
+  details.paper h4{margin:14px 0 3px;font-size:12.5px;color:var(--purple);text-transform:uppercase;letter-spacing:.04em}
+  details.paper .body p{margin:4px 0;font-size:14px}
+  .badge{display:inline-block;font-size:11px;border-radius:999px;padding:1px 8px;margin-left:6px;background:#eaf4ea;color:#2c6b34;border:1px solid #bfe0c2;vertical-align:middle}
+  .badge.first{background:#fde9ec;color:#a83246;border-color:#f3c4cc}
+  .miss{border-left:4px solid var(--red);background:#fdeef0;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:13.5px}
+  .unv{background:#fff3cd;border:1px solid #f0d98c;border-radius:4px;padding:0 5px;font-size:11.5px;color:#7a5a00}
+  .cite-line{font-size:12.5px;color:var(--muted);margin-top:12px;border-top:1px dashed var(--line);padding-top:8px}
+  .formula{background:#11161d;color:#e6edf3;border-radius:8px;padding:8px 12px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;margin:6px 0;overflow:auto}
+  table{border-collapse:collapse;width:100%;font-size:13.5px;margin:12px 0}
+  th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}th{background:#f1f6fa}
+  ol.qbox{counter-reset:q;list-style:none;padding:0;margin:12px 0}
+  ol.qbox li{position:relative;background:#f7fafc;border:1px solid var(--line);border-radius:10px;padding:12px 16px 12px 52px;margin:10px 0}
+  ol.qbox li::before{counter-increment:q;content:"Q" counter(q);position:absolute;left:14px;top:12px;font-weight:800;color:var(--blue)}
+  .callout{border-left:4px solid var(--amber);background:#fff8ec;padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0}
+  .callout.warn{border-color:var(--red);background:#fdeef0}
+  nav.toc{font-size:14px}nav.toc a{display:inline-block;margin:0 14px 6px 0}
+  footer{max-width:940px;margin:0 auto;padding:0 24px 50px;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>Rana M. Shahroz Khan &mdash; research reading notes</h1>
+    <p class="sub">A guided tour of an efficient-ML / NLP researcher: what he keeps trying to solve, the arc, and what to read first.</p>
+    <p class="meta">PhD student, UNC Chapel Hill (CS), advised by <strong>Tianlong Chen</strong>; <strong>Anthropic Research Fellow</strong> (May 2026–present). Undergrad: Vanderbilt (Soheil Kolouri lab). <a href="https://rana-shahroz.github.io/" style="color:#bfe0f2">homepage</a> · <a href="https://dblp.org/pid/339/7435.html" style="color:#bfe0f2">DBLP</a> · <a href="https://scholar.google.com/citations?user=pdmMa3UAAAAJ" style="color:#bfe0f2">Scholar</a></p>
+    <div class="tags"><span class="tag">LLM efficiency</span><span class="tag">LoRA / PEFT</span><span class="tag">multi-agent LLM safety</span><span class="tag">reward-free fine-tuning</span></div>
+  </div>
+</header>
+
+<main>
+
+<div class="studynote">
+  <h2>📚 For our study group</h2>
+  <p>Reading notes on <strong>Rana M. Shahroz Khan</strong>. Read the <a href="#arc">arc</a> first to see how the work connects, then use <a href="#start">&ldquo;Start here&rdquo;</a> for a reading order. Each paper folds open into a full Intro / Method / Results / Future breakdown with a &ldquo;what&rsquo;s missing&rdquo; box.</p>
+  <p class="muted">🛠 How these were researched &amp; built (v0.7 method, evidence in <a href="_research/">_research/</a>): <a href="methodology.html">methodology.html</a>.</p>
+</div>
+
+<section style="border-left:5px solid var(--amber)">
+  <h2>💡 What I find most interesting</h2>
+  <p class="lead">One agenda runs through his papers: <strong>make large models cheap to adapt &mdash; and stress-test where adaptation and coordination break.</strong> Three works are about <em>cheap / portable / generated</em> adaptation (<a href="#papers">PortLLM</a>, <a href="#papers">ORAL</a>, and CAR-LoRA all live in the LoRA + &ldquo;evolving LLMs&rdquo; world); the others push the same efficiency instinct into <em>trustworthiness</em> (<a href="#papers">Agents Under Siege</a>) and <em>reward-free training</em> (<a href="#papers">TMS</a>).</p>
+  <p>The instinct has clear roots: his undergrad work under Soheil Kolouri was <strong>optimal transport + model compression</strong> (PRANC, Linear Optimal Partial Transport) &mdash; the &ldquo;compact representations in parameter space&rdquo; idea that PortLLM and ORAL inherit. So the multi-agent-attack and SFT papers aren&rsquo;t detours: they&rsquo;re the trustworthiness and training-efficiency arms of one efficiency-of-deployed-LLMs program. <span class="muted">(Synthesis from his <a href="https://rana-shahroz.github.io/">homepage</a> + the papers below.)</span></p>
+</section>
+
+<section>
+  <h2>Who they are</h2>
+  <div class="grid"><div class="stat"><b>UNC + Anthropic</b><span>PhD (Tianlong Chen lab); Research Fellow at Anthropic, 2026</span></div><div class="stat"><b>Theme</b><span>efficient + trustworthy LLM adaptation</span></div><div class="stat"><b>Roots</b><span>optimal transport &amp; model compression (Vanderbilt)</span></div><div class="stat"><b>~72 / ~54 cites</b><span>Semantic Scholar / Scholar, approx., mid-2026</span></div></div>
+  <p class="muted">Education: B.S. Computer Science &amp; Math, Vanderbilt (Kolouri lab) → PhD, UNC Chapel Hill (Tianlong Chen).</p>
+  <nav class="toc"><div style="height:1px;background:var(--line);margin:8px 0 10px"></div><strong>Contents:</strong> <a href="#arc">Research arc</a> <a href="#start">Start here</a> <a href="#papers">Signature papers</a> <a href="#list">Full publication list</a> <a href="#discuss">Your turn</a> <a href="#complete">What&rsquo;s not covered</a> <a href="#sources">Sources &amp; honesty</a></nav>
+</section>
+
+<section id="arc">
+  <h2>The research arc</h2>
+  <div class="timeline">
+    <div class="era"><div class="yr">2023 · undergrad (Vanderbilt, Kolouri lab)</div>
+      <h3>Optimal transport &amp; model compression</h3>
+      <p>Foundations in compact / efficient representations: <strong>Linear Optimal Partial Transport Embedding</strong> (ICML 2023) and <strong>PRANC</strong> (ICCV 2023, compacting deep models with pseudo-random networks). This &ldquo;parameter-space efficiency&rdquo; instinct seeds everything later.</p></div>
+    <div class="era"><div class="yr">2024 · transition</div>
+      <h3>Toward LLM evaluation</h3>
+      <p>A CVPR-workshop benchmark on LLM image geolocation (LLMGeo) &mdash; a pivot toward LLMs.</p></div>
+    <div class="era hl"><div class="yr">2025–2026 · UNC (Tianlong Chen lab)</div>
+      <h3>Efficient + trustworthy LLM adaptation</h3>
+      <p>Consolidates on <strong>LoRA / PEFT for evolving LLMs</strong> (<strong>PortLLM</strong> ICLR 2025, <strong>ORAL</strong> EMNLP 2025 Findings, and <strong>CAR-LoRA</strong> ICLR 2026 &mdash; all <em>first-author</em>), plus <strong>multi-agent LLM safety</strong> (<strong>Agents Under Siege</strong>, ACL 2025), <strong>reward-free on-policy SFT</strong> (<strong>TMS</strong>, 2026), efficient reasoning / CoT distillation (2nd author), and on-device personalization (EdgeTune, SenSys 2026). Recurring co-authors: Tianlong Chen, Zhen Tan, Pingzhi Li, Charles Fleming.</p></div>
+  </div>
+</section>
+
+<section id="start">
+  <h2>Start here (a reading order)</h2>
+  <ol>
+    <li><strong><a href="#papers">PortLLM</a></strong> (2025) — the cleanest idea: a fine-tune as a training-free, portable patch.</li>
+    <li><strong><a href="#papers">ORAL</a></strong> (2025) — going further: <em>generate</em> LoRA adapters with diffusion.</li>
+    <li><strong><a href="#papers">Agents Under Siege</a></strong> (2025) — the trustworthiness arm: breaking multi-agent LLM systems.</li>
+    <li><strong><a href="#papers">TMS</a></strong> (2026) — the training arm: RL-like stability without a reward model.</li>
+  </ol>
+</section>
+
+<section id="papers">
+  <h2>Signature papers — deep dive</h2>
+  <p class="muted">Folded by default &mdash; <strong>click a title</strong> to expand Intro → Method → Results → Discussion &amp; future + a red &ldquo;most important thing missing&rdquo; box.</p>
+  <details class="paper">
+    <summary><h3>PortLLM: Training-Free, Portable Model Patches <span class="badge first">1st</span></h3>
+      <span class="concept">Carry a fine-tuned model’s knowledge forward to a newer base-model version by saving the fine-tune as a small reusable patch (a LoRA delta) and just adding it — no retraining.</span></summary>
+    <div class="body">
+      <h4>Intro &mdash; why</h4>
+      <p>LoRA fine-tuning freezes W₀ and learns a low-rank ΔW = B·A (cheap, but still needs GPU training). When the provider ships an <em>updated</em> base model (modeled as continued pretraining, θ' = θ + Δθ), you&rsquo;d normally re-fine-tune &mdash; costly, recurring, and sometimes impossible if the original data is access-locked. PortLLM asks: can the patch from the <em>old</em> model just be reused on the <em>new</em> one?</p>
+      <h4>Method &mdash; how</h4>
+      <p>Save the LoRA delta Δθᵢ = B·A as a portable <strong>patch</strong>. Apply it to the new model with a plain weight add &mdash; no retraining: <div class="formula">θ'ᵢ  ≈  θ' + Δθᵢ   (vs the gold standard: actually re-fine-tuning the new model)</div> Why it works (theory): the true result decomposes into the naive add plus a residual R = (Δθ'ᵢ − Δθᵢ); R is negligible because task patches are <em>low-rank</em> while base models are full-rank &mdash; empirically R&rsquo;s Frobenius norm is ~<strong>136×</strong> smaller than the naive term.</p>
+      <h4>Results</h4>
+      <p>Mistral-7B / Llama2-7B / Llama3.1-8B / Gemma2-9B, 7 tasks, zero-shot. Lands within ~1 point of real re-fine-tuning on most tasks and <em>beats</em> it on WNLI and <strong>GSM8K (41.32 vs 34.95</strong>; the un-patched updated model scored only 15.16). Gap ≤ 0.73%, sometimes +5.53%. Cost vs LoRA fine-tuning: <strong>0</strong> trainable params, ~<strong>12.2×</strong> less GPU memory, ~<strong>4897×</strong> fewer GPU hours (merge runs in seconds).</p>
+      <h4>Discussion &amp; future</h4>
+      <p>Future: extend across <em>different architectures</em> (via model merging). It already works even if the provider&rsquo;s continued pretraining was full-weight, not LoRA.</p>
+      <div class="miss"><strong>⚠ Most important thing missing:</strong> Only validated when the <em>same</em> model lineage evolves via continued pretraining (same architecture &amp; weight shape). A real version jump that changes architecture/tokenizer/hidden-size has no coordinate correspondence &mdash; you can&rsquo;t add the old delta. So PortLLM = cheap portability across successive <em>same-architecture</em> checkpoints, not a universal patch surviving an architectural change (the paper&rsquo;s own future work names this as open).</div>
+      <p class="cite-line"><strong>Rana M. Shahroz Khan</strong> (1st), P. Li, S. Yun, Z. Wang, S. Nirjon, C.-W. Wong, T. Chen. ICLR 2025. <a href="https://arxiv.org/abs/2410.10870">arXiv</a> · <a href="_research/portllm.md">evidence</a></p>
+    </div>
+  </details>
+  <details class="paper">
+    <summary><h3>ORAL: Generating Large-Scale LoRAs via Conditional Recurrent Diffusion <span class="badge first">1st</span></h3>
+      <span class="concept">A diffusion model that GENERATES task-specific LoRA adapter weights from a text prompt + a target-model description, instead of training each one — scaling to 7B-parameter LLMs.</span></summary>
+    <div class="body">
+      <h4>Intro &mdash; why</h4>
+      <p>Instead of producing a LoRA adapter by gradient descent, <em>synthesize</em> its weights with a generative model. Motivation = evolving LLMs again: when the base model updates, regenerate adapters from a prompt rather than re-training every task adapter. Prior weight-generation methods couldn&rsquo;t get both <em>scalability</em> and <em>controllability</em>.</p>
+      <h4>Method &mdash; how</h4>
+      <p>Three pieces. (1) <strong>Tokenize the weights</strong>: slice each layer&rsquo;s ΔW into fixed-size tokens + positions → a sequence (the key to scaling). (2) <strong>Recurrent processing</strong> (a Mamba module) walks the sequence carrying a hidden state → handles huge LoRA sets. (3) <strong>Diffusion</strong> denoises noise into real weight-tokens, <em>conditioned</em> on <div class="formula">c = [ c_model ; c_text ]   (target-model architecture + task description)</div> The c_model encoding is what lets generated adapters transfer across evolving base models. Output reassembles into B, A and merges normally.</p>
+      <h4>Results</h4>
+      <p>14 tasks (7 language, 4 vision, 3 multimodal), 5 base models incl. Mistral-7B, Qwen-VL-7B, SD 2.1; scales to 7B (prior baselines did not). Generated LoRAs are ≈ or &gt; trained ones (e.g. GSM8K 34.67 vs 32.04; image FID mostly wins). Cross-model transfer: train on base versions t=0,1,2 → generate adapters for unseen evolved versions t=3,4.</p>
+      <h4>Discussion &amp; future</h4>
+      <p>No dedicated limitations section. Future: interpretability of generated parameters.</p>
+      <div class="miss"><strong>⚠ Most important thing missing:</strong> It doesn&rsquo;t <em>beat</em> a single trained LoRA (≈ tied). The value is <strong>amortization + transfer</strong>: you must first collect many real trained LoRAs to train the generator (training is front-loaded once), then produce new adapters by prompting; the real win is regenerating adapters when the base model evolves. If you only need one adapter for one fixed model, plain LoRA training is simpler.</div>
+      <p class="cite-line"><strong>Rana M. Shahroz Khan</strong> (1st), D. Tang, P. Li, K. Wang, T. Chen. EMNLP 2025 Findings. <a href="https://arxiv.org/abs/2503.24354">arXiv</a> · <a href="_research/oral.md">evidence</a></p>
+    </div>
+  </details>
+  <details class="paper">
+    <summary><h3>Agents Under Siege: Optimized Prompt Attacks on Multi-Agent LLM Systems <span class="badge first">1st</span></h3>
+      <span class="concept">A jailbreak that splits a malicious request into pieces, routes them through a team of cooperating agents along the safest path, and reassembles the attack at the target — defeating filters that only see harmless fragments.</span></summary>
+    <div class="body">
+      <h4>Intro &mdash; why</h4>
+      <p>A multi-agent LLM system wires several LLMs that pass messages over a graph. Almost all safety work studies a <em>single</em> agent &mdash; but multi-agent systems have new attack surfaces: inter-agent messages, per-link <em>token-bandwidth</em> limits (so chop a request below filter size), <em>latency/asynchrony</em> (messages arrive in any order), and <em>partial</em> defenses (some paths are barely guarded). These &ldquo;pragmatic&rdquo; constraints become attacker advantages.</p>
+      <h4>Method &mdash; how</h4>
+      <p>Threat model: partial knowledge of the comm graph + gradient access to the target. Two pieces: <strong>(1) MFMC routing</strong> &mdash; treat the network as a flow graph with link capacity F (bandwidth) and cost G (detection risk); minimize Σ G·f to route the payload through the least-defended, highest-capacity links, chunked to fit bandwidth. <strong>(2) PIEL</strong> (Permutation-Invariant Evasion Loss) &mdash; optimize the chunks (via GCG) so the attack works under <em>any</em> arrival order by averaging the success loss over all orderings (stochastic S-PIEL samples a few). No single guarded link ever sees enough to refuse.</p>
+      <h4>Results</h4>
+      <p>Up to <strong>7×</strong> over the best baseline. Llama2-7B / JailbreakBench: ASR <strong>72.6%</strong> vs GCG 1.7%. Most vulnerable Mistral-7B (81.2%), most resistant DeepSeek-R1-Distilled (41.3%); range ~38–84%. Defeats Llama-Guard / Prompt-Guard (best guard&rsquo;s F1 drops ~30%). Complete-graph topologies most vulnerable (~78%), chains most resilient (~60%).</p>
+      <h4>Discussion &amp; future</h4>
+      <p>Open-source models ≤9B only; assumes partial topology/defense knowledge; static defenses; text-only. Proposes no concrete defense &mdash; argues single-agent filters are the wrong abstraction; calls for multi-agent-specific defenses. Red-team ethics disclosure.</p>
+      <div class="miss"><strong>⚠ Most important thing missing:</strong> Every result is on small open-source models under favorable assumptions (attacker knows the topology + where defenses sit), so it does <em>not</em> show production systems (GPT-4/Claude, hidden topology) are breakable at these rates. Read 72–84% as an upper-bound demo. The transferable contribution is conceptual: structural properties (bandwidth, asynchrony, partial defense) are exploitable attack vectors, and <strong>per-message single-agent filters are the wrong abstraction</strong> because they never see the whole payload.</div>
+      <p class="cite-line"><strong>Rana M. Shahroz Khan</strong> (1st), Z. Tan, S. Yun, C. Fleming, T. Chen. ACL 2025 (Main). <a href="https://arxiv.org/abs/2504.00218">arXiv</a> · <a href="_research/agents-under-siege.md">evidence</a></p>
+    </div>
+  </details>
+  <details class="paper">
+    <summary><h3>TMS: Trajectory-Mixed Supervision for Reward-Free, On-Policy SFT <span class="badge first">1st</span></h3>
+      <span class="concept">Fine-tune an LLM to get most of RL’s stability benefit WITHOUT a reward model — by training it on samples drawn from its own past training checkpoints.</span></summary>
+    <div class="body">
+      <h4>Intro &mdash; why</h4>
+      <p>Plain SFT (fixed labels) is cheap but brittle &mdash; it forgets. RLHF (reward model + RL) retains capability better but is costly and unstable. The root cause TMS names is <strong>Supervision Mismatch</strong>: as the model trains, its policy drifts away from the static labels, causing mode collapse and forgetting. Avoiding a reward model is desirable (less cost, no reward-hacking, no preference data).</p>
+      <h4>Method &mdash; how</h4>
+      <p>Three stages. (1) Run an ordinary SFT and save T=10 checkpoints; have each checkpoint <em>generate its own</em> answer to each question. (2) Build a mixture over those self-generated answers (optionally blending 25% original human labels). (3) Train the final model to imitate the mixture (next-token loss). It&rsquo;s <em>on-policy yet reward-free</em>: targets are text the model itself plausibly produces (near its own support → RL-like stability), but the signal is just &ldquo;imitate your own past samples&rdquo; &mdash; no reward, verifier, or RL loop. The trajectory acts as a curriculum (early = diverse, late = refined).</p>
+      <h4>Results</h4>
+      <p>Qwen-2.5 (1.5/3/7B), LLaMA-3.1-8B; math / instruction tasks. Matches SFT target accuracy while nearly eliminating forgetting: average cross-task drop is <strong>−26 to −41 for SFT</strong> vs <strong>only −2.3 to −2.9 for TMS</strong> (GRPO/RL: −0.9 to −1.9). Safety retention also improves toward RL. Cost: harvest 10 checkpoints + one student pass &mdash; no reward models or verifiers.</p>
+      <h4>Discussion &amp; future</h4>
+      <p>Largest gains on non-unique solution spaces (math, instruction-following); modest on rigid formats (MMLU). Optimal T ≈ 8–10. Safety gains require careful data curation.</p>
+      <div class="miss"><strong>⚠ Most important thing missing:</strong> TMS does <em>not</em> beat RL &mdash; it only <strong>narrows</strong> the gap; &ldquo;approaches RL retention&rdquo; can be mis-read as &ldquo;matches RL.&rdquo; The paper is explicit that RL is the gold standard and TMS incurs a modestly larger cross-task drop than GRPO. Correct takeaway: a cheap, reward-free drop-in that recovers <em>most</em> of RL&rsquo;s stability at near-SFT cost. Secondary risk: targets are the model&rsquo;s own generations, so latent base-model biases can be reinforced.</div>
+      <p class="cite-line"><strong>Rana M. Shahroz Khan</strong> (1st), Z. Liu, Z. Tan, C. Fleming, T. Chen. 2026 preprint <span class="unv">venue unconfirmed</span>. <a href="https://arxiv.org/abs/2602.03073">arXiv</a> · <a href="_research/tms.md">evidence</a></p>
+    </div>
+  </details>
+</section>
+
+<section id="list">
+  <h2>Full publication list (newest first)</h2>
+  <table>
+    <tr><th>Year</th><th>Paper</th><th>Venue</th><th>Role</th><th>~Cites</th></tr>
+    <tr><td>2026</td><td><a href="https://arxiv.org/abs/2602.03073">TMS: Trajectory-Mixed Supervision (reward-free SFT)</a></td><td>arXiv</td><td><strong>1st</strong></td><td>—</td></tr>
+    <tr><td>2026</td><td>CAR-LoRA: Compression-Aware &amp; Robust LoRA for Evolving LLMs</td><td>ICLR</td><td><strong>1st</strong></td><td>—</td></tr>
+    <tr><td>2026</td><td>EdgeTune: Efficient On-Device LLM Personalization</td><td>SenSys</td><td>2nd</td><td>—</td></tr>
+    <tr><td>2026</td><td>The Quest for Efficient Reasoning (CoT-distillation benchmark)</td><td>ICLR</td><td>2nd</td><td>—</td></tr>
+    <tr><td>2025</td><td><a href="https://arxiv.org/abs/2503.24354">ORAL: Large-Scale LoRAs via Conditional Recurrent Diffusion</a></td><td>EMNLP Findings</td><td><strong>1st</strong></td><td>—</td></tr>
+    <tr><td>2025</td><td><a href="https://arxiv.org/abs/2504.00218">Agents Under Siege</a></td><td>ACL (Main)</td><td><strong>1st</strong></td><td>—</td></tr>
+    <tr><td>2025</td><td><a href="https://arxiv.org/abs/2410.10870">PortLLM</a></td><td>ICLR</td><td><strong>1st</strong></td><td>~?</td></tr>
+    <tr><td>2024</td><td>LLMGeo: Benchmarking LLMs on Image Geolocation</td><td>CVPR Workshop</td><td>3rd</td><td>—</td></tr>
+    <tr><td>2023</td><td>PRANC: Pseudo-Random Networks for Compacting Deep Models</td><td>ICCV</td><td>5th</td><td>—</td></tr>
+    <tr><td>2023</td><td>Linear Optimal Partial Transport Embedding</td><td>ICML</td><td>4th</td><td>—</td></tr>
+  </table>
+</section>
+
+<section id="discuss">
+  <h2>Your turn: discussion questions</h2>
+  <ol class="qbox">
+    <li><strong>Generate vs train adapters.</strong> ORAL <em>generates</em> LoRAs and PortLLM <em>reuses</em> them; both only ≈ match a trained LoRA. When is &ldquo;cheaper, equally good&rdquo; worth a whole new method &mdash; and when is it premature optimization?</li>
+    <li><strong>Is per-message filtering doomed?</strong> Agents Under Siege shows fragment-and-route attacks defeat single-agent guards. What would a defense that &ldquo;sees the whole payload&rdquo; across a multi-agent system actually look like &mdash; and what does it cost?</li>
+    <li><strong>Cheap stability vs the real thing.</strong> TMS recovers ~most of RL&rsquo;s retention with no reward model, but training on your own outputs can amplify your own biases. When is &ldquo;imitate your past self&rdquo; a safe training signal, and when isn&rsquo;t it?</li>
+  </ol>
+</section>
+
+<section id="complete">
+  <h2>What these notes don&rsquo;t cover (completeness)</h2>
+  <p class="muted">A scope note (v0.7 completeness check). We deep-read his four strongest first-author papers; gaps a reader should know:</p>
+  <ul>
+    <li><strong>CAR-LoRA (ICLR 2026) is also first-author</strong> and in the exact PortLLM/ORAL lineage (&ldquo;compression-aware, robust LoRA for evolving LLMs&rdquo;) &mdash; mentioned but not deep-read; it&rsquo;s the most recent node of the LoRA arc.</li>
+    <li><strong>The optimal-transport / compression roots</strong> (PRANC, Linear Optimal Partial Transport, under Kolouri at Vanderbilt) are the origin of his parameter-space-efficiency instinct &mdash; summarized in the arc, not deep-read.</li>
+    <li>The notes lean toward <strong>LoRA/PEFT</strong>; a reader might wrongly conclude he&rsquo;s &ldquo;a LoRA-only person&rdquo; and that the multi-agent-attack paper is a one-off. It isn&rsquo;t &mdash; it&rsquo;s the <em>trustworthiness</em> arm of one efficiency agenda.</li>
+  </ul>
+</section>
+
+<section id="sources">
+  <h2>Sources &amp; honesty</h2>
+  <p>Identity and list from his <a href="https://rana-shahroz.github.io/">homepage</a>, <a href="https://dblp.org/pid/339/7435.html">DBLP (pid 339/7435)</a>, the Semantic Scholar API, and arXiv; each signature paper was deep-read into <a href="_research/">_research/</a>.</p>
+  <div class="callout warn"><strong>Caveats (verify before citing):</strong>
+    <ul>
+      <li><strong>Name collision:</strong> there is a prominent <em>unrelated</em> &ldquo;Shahroz Khan&rdquo; in naval / ship-hull generative design (Compute Maritime; Scholar HRC0hPIAAAAJ) &mdash; a <strong>different person</strong>. All papers here trace to DBLP pid 339/7435 / Scholar pdmMa3UAAAAJ.</li>
+      <li><strong>Citation counts</strong> (~72 Semantic Scholar / ~54 Scholar) are approximate and move fast for an early-career researcher (as of mid-2026).</li>
+      <li><strong>TMS</strong> is a 2026 preprint (venue unconfirmed); <strong>CAR-LoRA</strong> ICLR-2026 acceptance/track worth confirming.</li>
+      <li><strong>Anthropic Research Fellow</strong> is a fellowship starting summer 2026 (May 2026–present) &mdash; not a multi-year staff role.</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div style="height:1px;background:var(--line);margin:0 0 14px"></div>
+  <p>Reading notes prepared for an undergraduate study group &mdash; a learning aid, not an official bibliography. Every paper links its primary source; please check the claims.</p>
+</footer>
+
+</body>
+</html>

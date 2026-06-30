@@ -27,6 +27,7 @@ Each direction is a self-contained folder with its own **`README.md`**, **`index
 | 2 | **Alisa Liu** — NLP researcher paper-history | [`alisa-liu/index.html`](alisa-liu/index.html) | [`alisa-liu/methodology.html`](alisa-liu/methodology.html) |
 | 3 | **Alisa Liu (fresh run)** — same researcher, rebuilt from scratch as a reproducibility test | [`alisa-liu-v2/index.html`](alisa-liu-v2/index.html) | [`alisa-liu-v2/methodology.html`](alisa-liu-v2/methodology.html) |
 | 4 | **Chen-Yu (Robin) Yen** — RL congestion control + ML for MRI (*first v0.6 direction*) | [`chen-yu-yen/index.html`](chen-yu-yen/index.html) | [`chen-yu-yen/methodology.html`](chen-yu-yen/methodology.html) |
+| 5 | **Rana M. Shahroz Khan** — efficient + trustworthy LLM adaptation (*first v0.7 generator direction*) | [`rana-shahroz-khan/index.html`](rana-shahroz-khan/index.html) | [`rana-shahroz-khan/methodology.html`](rana-shahroz-khan/methodology.html) |
 
 …more directions coming as the workflow is applied to new papers and researchers.
 

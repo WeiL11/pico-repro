@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How the Rana M. Shahroz Khan notes were made — method (v0.7)</title>
+<style>
+  :root{--blue:#2e86ab;--red:#d1495b;--amber:#e09f3e;--green:#3a7d44;--purple:#6a4c93;
+        --ink:#1c2430;--muted:#5b6776;--line:#e3e8ee;--bg:#f7f9fb;--card:#fff}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6}
+  a{color:var(--blue)}
+  header{background:linear-gradient(135deg,#221a33,#2e4a63);color:#fff;padding:48px 24px 34px}
+  header .wrap{max-width:900px;margin:0 auto}header h1{margin:0 0 6px;font-size:24px}header .sub{font-size:15px;opacity:.9;margin:0}
+  header .nav{font-size:13.5px;margin-top:6px}
+  main{max-width:900px;margin:0 auto;padding:8px 24px 60px}
+  section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 24px;margin:18px 0;box-shadow:0 1px 2px rgba(20,30,45,.04)}
+  h2{font-size:19px;margin:2px 0 10px}h3{font-size:14.5px;margin:14px 0 6px}
+  p{margin:9px 0}.lead{font-size:16px}.muted{color:var(--muted)}
+  code{background:#eef2f6;border:1px solid #dde4ec;border-radius:5px;padding:1px 6px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px}
+  .callout{border-left:4px solid var(--amber);background:#fff8ec;padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0}
+  .callout.ok{border-color:var(--green);background:#eef6ef}.callout.warn{border-color:var(--red);background:#fdeef0}
+  table{border-collapse:collapse;width:100%;font-size:13.5px;margin:12px 0}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}th{background:#f1f6fa}
+  ul,ol{margin:8px 0;padding-left:22px}li{margin:5px 0}
+  footer{max-width:900px;margin:0 auto;padding:0 24px 46px;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>How these notes were made — v0.7 method</h1>
+    <p class="sub">Built with the v0.7 method, and the first to use the <strong>HTML generator</strong>.</p>
+    <p class="nav"><a href="index.html" style="color:#bfe0f2">← Content (the reading notes)</a> · <a href="../methodology.html" style="color:#bfe0f2">project methodology tracker</a></p>
+  </div>
+</header>
+
+<main>
+
+<section>
+  <h2>TL;DR</h2>
+  <p class="lead">From only the name &ldquo;Rana M. Shahroz Khan&rdquo;: a <strong>slim</strong> Pass 1 (one agent) → verify →
+     <strong>pipelined</strong> 4-agent Pass 2 deep read → <strong>completeness critic + quality gate</strong> → the content page
+     <strong>generated from a spec</strong> (<code>notes.py</code> → <code>tools/build_notes.py</code>), with every deep-read
+     archived in <a href="_research/">_research/</a> and a <a href="DECISIONS.md">decision log</a>.</p>
+</section>
+
+<section>
+  <h2>What was new this run (v0.7)</h2>
+  <ul>
+    <li><strong>The HTML generator did the assembly.</strong> The page was produced from <code>rana-shahroz-khan/notes.py</code>
+        by <code>tools/build_notes.py</code> &mdash; no hand-writing of HTML. This cut the assembly time that dominated earlier runs.</li>
+    <li><strong>No paywall thrashing.</strong> All four signature papers are arXiv-available, so Pass 2 ran ~3× faster than the
+        previous (SIGCOMM-paywalled) direction. (The fail-fast-on-paywalls idea stays in the backlog for when it&rsquo;s needed.)</li>
+  </ul>
+</section>
+
+<section>
+  <h2>What the critic + quality gate caught (and we fixed)</h2>
+  <ul>
+    <li><strong>The unifying theme was implicit.</strong> The page now states it up front: &ldquo;make LLMs cheap to adapt &mdash;
+        and stress-test where adaptation and coordination break.&rdquo;</li>
+    <li><strong>CAR-LoRA is also first-author</strong> (the critic confirmed it, resolving an &ldquo;unverified&rdquo; flag) &mdash;
+        now surfaced in the arc, list, and completeness box as the most recent node of the LoRA arc.</li>
+    <li><strong>The optimal-transport / compression roots</strong> (PRANC, LOPT under Kolouri) are named, so the LoRA work
+        doesn&rsquo;t look like it appeared from nowhere.</li>
+    <li><strong>Guardrails:</strong> the unrelated naval / ship-hull &ldquo;Shahroz Khan&rdquo; is flagged as a different person;
+        citation counts are dated &amp; marked approximate; Anthropic Fellow dates tightened.</li>
+  </ul>
+  <div class="callout ok">The verify gate + quality gate again earned their keep: the selection held up, but the theme and a
+     5th first-author paper would have been missed without the critic.</div>
+</section>
+
+<section>
+  <h2>Provenance (per-claim sourcing)</h2>
+  <ul>
+    <li><a href="_research/portllm.md">_research/portllm.md</a></li>
+    <li><a href="_research/oral.md">_research/oral.md</a></li>
+    <li><a href="_research/agents-under-siege.md">_research/agents-under-siege.md</a></li>
+    <li><a href="_research/tms.md">_research/tms.md</a></li>
+  </ul>
+  <p class="muted">Decisions &amp; selection rationale: <a href="DECISIONS.md">DECISIONS.md</a>.</p>
+</section>
+
+<section>
+  <h2>Telemetry</h2>
+  <table>
+    <tr><th>Step</th><th>Agents</th><th>Wall-clock</th><th>Notes</th></tr>
+    <tr><td>Pass 1 (identify + map)</td><td>1</td><td>~115 s</td><td>after one transient rate-limit retry</td></tr>
+    <tr><td>Pass 2 (deep reads)</td><td>4 ∥</td><td>~108 s</td><td>all arXiv-available &mdash; no paywall thrashing (vs ~311 s last run)</td></tr>
+    <tr><td>Completeness critic + gate</td><td>1</td><td>~89 s</td><td>ran concurrently; confirmed CAR-LoRA first-author</td></tr>
+    <tr><td>Assemble</td><td>—</td><td>seconds</td><td>generated via <code>tools/build_notes.py</code></td></tr>
+    <tr><td><strong>Total</strong></td><td>6</td><td><strong>≈ 5 min parallel</strong></td><td>fastest direction so far</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>Honest limitations</h2>
+  <div class="callout warn">
+    <ul>
+      <li><strong>TMS</strong> is a 2026 preprint (venue unconfirmed); <strong>CAR-LoRA</strong> ICLR-2026 acceptance/track worth confirming in a browser.</li>
+      <li>Citation counts are approximate and date-stamped (mid-2026).</li>
+      <li>CAR-LoRA and the Vanderbilt-era optimal-transport papers were summarized, not deep-read.</li>
+    </ul>
+  </div>
+  <p class="muted">General method &amp; how it evolves: <a href="../methodology.html">the project methodology tracker</a>. This direction&rsquo;s notes: <a href="index.html">content page</a>.</p>
+</section>
+
+</main>
+
+<footer>
+  <div style="height:1px;background:var(--line);margin:0 0 14px"></div>
+  <p>Method report for the Rana M. Shahroz Khan reading notes &mdash; first direction built with the v0.7 generator.</p>
+</footer>
+
+</body>
+</html>
