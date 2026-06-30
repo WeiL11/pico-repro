@@ -53,7 +53,9 @@
   .badge.co{background:#eaf4ea;color:#2c6b34;border-color:#bfe0c2}
   .miss{border-left:4px solid var(--red);background:#fdeef0;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:13.5px}
   .cite-line{font-size:12.5px;color:var(--muted);margin-top:12px;border-top:1px dashed var(--line);padding-top:8px}
-  .formula{background:#11161d;color:#e6edf3;border-radius:8px;padding:8px 12px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;margin:6px 0;overflow:auto}
+  .formula{display:block;background:#f3f7fb;border:1px solid #d7e3ef;border-left:3px solid var(--blue);border-radius:8px;padding:11px 16px;margin:10px 0;text-align:center;font-family:Cambria,Georgia,"Times New Roman",serif;font-size:15.5px;line-height:1.9;color:#152233;overflow-x:auto}
+  .formula sub,.formula sup{font-size:.72em;line-height:0}
+  .formula em{color:#5b6776;font-size:13px;font-style:italic}
   table{border-collapse:collapse;width:100%;font-size:13.5px;margin:12px 0}
   th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}th{background:#f1f6fa}
   ol.qbox{counter-reset:q;list-style:none;padding:0;margin:12px 0}
@@ -177,7 +179,7 @@
       <p>Keep a frozen base <strong>M</strong>; add a small <strong>expert M⁺</strong> (trained on text <em>with</em> the wanted
          attribute) and <strong>anti-expert M⁻</strong> (the unwanted attribute). Combine their logits as a <em>product of
          experts</em> (multiplying distributions = a logical AND):</p>
-      <div class="formula">modified = softmax( z + α·(z⁺ − z⁻) )</div>
+      <div class="formula">softmax( z + α (z<sup>+</sup> &minus; z<sup>&minus;</sup>) )</div>
       <p>The difference (z⁺−z⁻) is where the attribute signal lives; α is the strength knob. They first truncate to the base
          model&rsquo;s top-k/top-p tokens so the experts can only re-rank plausible words (keeping fluency). An
          &ldquo;anti-only&rdquo; variant needs only <em>negative</em> examples.</p>
@@ -276,7 +278,7 @@
       <h4>Method &mdash; how</h4>
       <p>Three models sharing a vocabulary: large base <strong>M</strong>, small tuned <strong>M⁺</strong>, small untuned
          <strong>M⁻</strong>. At each step:</p>
-      <div class="formula">p(next) = softmax[ s_M + (s_M⁺ − s_M⁻) ]</div>
+      <div class="formula">p(next) = softmax[ s<sub>M</sub> + ( s<sub>M+</sub> &minus; s<sub>M&minus;</sub> ) ]</div>
       <p>The delta (s_M⁺−s_M⁻) isolates <em>what tuning changed</em> at small scale (it cancels the shared base behaviour); adding it
          transplants that change onto the big model while keeping its superior knowledge. It is exactly the DExperts arithmetic,
          repurposed so the &ldquo;experts&rdquo; are a tuned/untuned pair.</p>

@@ -70,7 +70,9 @@
   details.paper .body p{margin:4px 0;font-size:14px}
   .miss{border-left:4px solid var(--red);background:#fdeef0;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:13.5px}
   .cite-line{font-size:12.5px;color:var(--muted);margin-top:12px;border-top:1px dashed var(--line);padding-top:8px}
-  .formula{background:#11161d;color:#e6edf3;border-radius:8px;padding:8px 12px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;margin:6px 0;overflow:auto}
+  .formula{display:block;background:#f3f7fb;border:1px solid #d7e3ef;border-left:3px solid var(--blue);border-radius:8px;padding:11px 16px;margin:10px 0;text-align:center;font-family:Cambria,Georgia,"Times New Roman",serif;font-size:15.5px;line-height:1.9;color:#152233;overflow-x:auto}
+  .formula sub,.formula sup{font-size:.72em;line-height:0}
+  .formula em{color:#5b6776;font-size:13px;font-style:italic}
 </style>
 </head>
 <body>
@@ -224,7 +226,7 @@
       <p>Three models: the frozen base <strong>M</strong>, a small <strong>expert M⁺</strong> (fine-tuned on text <em>with</em>
          the wanted attribute) and a small <strong>anti-expert M⁻</strong> (fine-tuned on the unwanted attribute). At each step,
          combine their logits (a <em>product of experts</em> &mdash; multiplying distributions acts like a logical AND of vetoes):</p>
-      <div class="formula">new logits = z_base + α · (z⁺ − z⁻),  then softmax</div>
+      <div class="formula">softmax( z + α (z<sup>+</sup> &minus; z<sup>&minus;</sup>) )</div>
       <p>α is a single strength knob. They first truncate to the base model&rsquo;s top-k / top-p tokens, <em>then</em> apply the
          experts, so the experts can&rsquo;t resurrect low-quality tail tokens (preserving fluency). An &ldquo;anti-only&rdquo;
          variant reuses the base as the expert, needing only <em>negative</em> examples.</p>
@@ -321,7 +323,7 @@
          customises a big model using only its output logits &mdash; no weight updates.</p>
       <h4>Method &mdash; how</h4>
       <p>Three models: large base <strong>M</strong>, small tuned <strong>M⁺</strong>, small untuned <strong>M⁻</strong>. At each step:</p>
-      <div class="formula">p(next) = softmax[ s_M + (s_M⁺ − s_M⁻) ]</div>
+      <div class="formula">p(next) = softmax[ s<sub>M</sub> + ( s<sub>M+</sub> &minus; s<sub>M&minus;</sub> ) ]</div>
       <p>The delta <code>(s_M⁺ − s_M⁻)</code> is exactly what fine-tuning changed in the small model (subtracting M⁻ cancels its
          generic behaviour); adding it transplants that change onto the big model. Token analysis shows the delta is larger on
          <em>reasoning</em> tokens than factual ones &mdash; tuning shifts style/reasoning, not knowledge. (It is the DExperts

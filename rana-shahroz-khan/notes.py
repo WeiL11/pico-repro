@@ -68,7 +68,7 @@ NOTES = {
                      "re-fine-tune &mdash; costly, recurring, and sometimes impossible if the original data is access-locked. PortLLM "
                      "asks: can the patch from the <em>old</em> model just be reused on the <em>new</em> one?",
             "method": "Save the LoRA delta Δθᵢ = B·A as a portable <strong>patch</strong>. Apply it to the new model with a plain "
-                      "weight add &mdash; no retraining: <div class=\"formula\">θ'ᵢ  ≈  θ' + Δθᵢ   (vs the gold standard: actually re-fine-tuning the new model)</div> "
+                      "weight add &mdash; no retraining: <div class=\"formula\">θ&prime;<sub>i</sub> &asymp; θ&prime; + Δθ<sub>i</sub> <em>(vs. actually re-fine-tuning the new model)</em></div> "
                       "Why it works (theory): the true result decomposes into the naive add plus a residual R = (Δθ'ᵢ − Δθᵢ); R is "
                       "negligible because task patches are <em>low-rank</em> while base models are full-rank &mdash; empirically R&rsquo;s "
                       "Frobenius norm is ~<strong>136×</strong> smaller than the naive term.",
@@ -96,7 +96,7 @@ NOTES = {
             "method": "Three pieces. (1) <strong>Tokenize the weights</strong>: slice each layer&rsquo;s ΔW into fixed-size tokens + "
                       "positions → a sequence (the key to scaling). (2) <strong>Recurrent processing</strong> (a Mamba module) walks the "
                       "sequence carrying a hidden state → handles huge LoRA sets. (3) <strong>Diffusion</strong> denoises noise into real "
-                      "weight-tokens, <em>conditioned</em> on <div class=\"formula\">c = [ c_model ; c_text ]   (target-model architecture + task description)</div> "
+                      "weight-tokens, <em>conditioned</em> on <div class=\"formula\">c = [ c<sub>model</sub> ; c<sub>text</sub> ] <em>(target-model architecture + task description)</em></div> "
                       "The c_model encoding is what lets generated adapters transfer across evolving base models. Output reassembles into "
                       "B, A and merges normally.",
             "results": "14 tasks (7 language, 4 vision, 3 multimodal), 5 base models incl. Mistral-7B, Qwen-VL-7B, SD 2.1; scales to "

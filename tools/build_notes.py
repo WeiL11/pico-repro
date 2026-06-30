@@ -60,7 +60,9 @@ CSS = r"""
   .miss{border-left:4px solid var(--red);background:#fdeef0;padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:13.5px}
   .unv{background:#fff3cd;border:1px solid #f0d98c;border-radius:4px;padding:0 5px;font-size:11.5px;color:#7a5a00}
   .cite-line{font-size:12.5px;color:var(--muted);margin-top:12px;border-top:1px dashed var(--line);padding-top:8px}
-  .formula{background:#11161d;color:#e6edf3;border-radius:8px;padding:8px 12px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;margin:6px 0;overflow:auto}
+  .formula{display:block;background:#f3f7fb;border:1px solid #d7e3ef;border-left:3px solid var(--blue);border-radius:8px;padding:11px 16px;margin:10px 0;text-align:center;font-family:Cambria,Georgia,"Times New Roman",serif;font-size:15.5px;line-height:1.9;color:#152233;overflow-x:auto}
+  .formula sub,.formula sup{font-size:.72em;line-height:0}
+  .formula em{color:#5b6776;font-size:13px;font-style:italic}
   table{border-collapse:collapse;width:100%;font-size:13.5px;margin:12px 0}
   th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}th{background:#f1f6fa}
   ol.qbox{counter-reset:q;list-style:none;padding:0;margin:12px 0}
