@@ -128,7 +128,7 @@ def render(N):
           + N["hook_html"] + '\n</section>')
     # who
     if N.get("stats") or N.get("edu_html"):
-        A('\n<section>\n  <h2>Who they are</h2>')
+        A(f'\n<section>\n  <h2>{N.get("who_heading","Who they are")}</h2>')
         if N.get("stats"):
             A('  <div class="grid">' + "".join(
                 f'<div class="stat"><b>{b}</b><span>{s}</span></div>' for b, s in N["stats"]) + '</div>')
