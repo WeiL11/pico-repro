@@ -63,6 +63,10 @@ CSS = r"""
   .formula{display:block;background:#f3f7fb;border:1px solid #d7e3ef;border-left:3px solid var(--blue);border-radius:8px;padding:11px 16px;margin:10px 0;text-align:center;font-family:Cambria,Georgia,"Times New Roman",serif;font-size:15.5px;line-height:1.9;color:#152233;overflow-x:auto}
   .formula sub,.formula sup{font-size:.72em;line-height:0}
   .formula em{color:#5b6776;font-size:13px;font-style:italic}
+  .finding{background:#eef6ef;border:1px solid #cfe6cf;border-left:4px solid var(--green);border-radius:0 8px 8px 0;padding:10px 14px;margin:6px 0 12px;font-size:13.5px}
+  figure.paperfig{margin:14px 0 4px;text-align:center}
+  figure.paperfig svg{max-width:100%;height:auto;border:1px solid var(--line);border-radius:8px;background:#fff;padding:6px}
+  figure.paperfig figcaption{font-size:12.5px;color:var(--muted);margin-top:6px;text-align:left}
   table{border-collapse:collapse;width:100%;font-size:13.5px;margin:12px 0}
   th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}th{background:#f1f6fa}
   ol.qbox{counter-reset:q;list-style:none;padding:0;margin:12px 0}
@@ -80,10 +84,15 @@ def _paper(p):
     cls = "badge first" if badge in ("1st", "first") else "badge"
     badge_html = f' <span class="{cls}">{badge}</span>' if badge else ""
     body = []
+    if p.get("key_finding"):
+        body.append(f'      <div class="finding"><strong>🔑 Key finding.</strong> {p["key_finding"]}</div>')
     for label, key in [("Intro &mdash; why", "intro"), ("Method &mdash; how", "method"),
                        ("Results", "results"), ("Discussion &amp; future", "discussion")]:
         if p.get(key):
             body.append(f'      <h4>{label}</h4>\n      <p>{p[key]}</p>')
+    if p.get("figure"):
+        fig = p["figure"]
+        body.append(f'      <figure class="paperfig">{fig["svg"]}\n        <figcaption>{fig.get("caption","")}</figcaption></figure>')
     miss = f'      <div class="miss"><strong>⚠ Most important thing missing:</strong> {p["missing"]}</div>' if p.get("missing") else ""
     cite = f'      <p class="cite-line">{p["cite"]}</p>' if p.get("cite") else ""
     return (f'  <details class="paper">\n'
